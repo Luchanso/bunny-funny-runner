@@ -1,0 +1,7 @@
+{
+  "ecmaVersion": 6,
+  "libs": [],
+  "loadEagerly": [
+    "node_modules/phaser/build/custom/phaser-minimum.js"
+  ]
+}

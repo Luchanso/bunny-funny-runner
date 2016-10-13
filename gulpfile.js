@@ -56,6 +56,8 @@ gulp.task('js', () => {
     'src/loader/**/*.js',
 
     'src/game/components/**/*.js',
+    'src/game/services/**/*.js',
+    'src/game/actors/**/*.js',
     'src/game/game.js',
 
     'src/app.js',

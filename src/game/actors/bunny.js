@@ -31,8 +31,6 @@ class Bunny extends Phaser.Sprite {
     } else {
       this.animations.play('stand')
     }
-
-    this.game.debug.text('Vertical speed: ' + this.body.velocity.x, 15, 75, 'black')
   }
 
   inAir() {
@@ -77,7 +75,7 @@ class Bunny extends Phaser.Sprite {
   jump() {
     if (this.data.isDead) return
 
-    const jumpImpulse = 800
+    const jumpImpulse = 900
 
     if (this.data.countJump > 0)
       this.body.velocity.y = -jumpImpulse

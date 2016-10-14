@@ -13,7 +13,7 @@ class Bunny extends Phaser.Sprite {
     this.height *= 0.35
 
     this.body.gravity.setTo(0, 2500)
-    this.body.maxVelocity.setTo(500, 2000)
+    this.body.maxVelocity.setTo(400, 2000)
     this.body.collideWorldBounds = true
 
     this.createAnimation()

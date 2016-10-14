@@ -15,29 +15,36 @@ class Game extends Phaser.State {
     this.load.image('layer4', 'assets/sprites/backgrounds/layer4.png')
   }
 
+  init() {
+    this._groundStep = 0
+    this._groundVerticalMargin = 150
+  }
+
   create() {
     this.stage.backgroundColor = 0xADE6FF
     this.physics.startSystem(Phaser.Physics.ARCADE)
     this.world.setBounds(0, 0, Number.MAX_VALUE, this.game.height);
 
     this.createBackground()
-
-    this.grounds = this.add.group()
-
-    this.createStartGround()
-
-    window.bunny = this.bunny = new Engine.Bunny(this.game, 150, 150, 'bunny1')
-    this.add.existing(this.bunny)
-
+    this.createBunny()
+    this.initGrounds()
     this.configurateCamera()
     this.addControl()
-
-    this._groundStep = 0
   }
 
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
     this.updateGrounds()
+    this.checkDie()
+  }
+
+  checkDie() {
+    if (
+      this.bunny.y > this.game.height - 100 &&
+      !this.bunny.data.isDead
+    ) {
+      this.bunny.die()
+    }
   }
 
   render() {
@@ -47,11 +54,13 @@ class Game extends Phaser.State {
   }
 
   updateGrounds() {
-    let step = Math.round(this.bunny.x / 150)
+    let step = Math.round(this.bunny.x / this._groundVerticalMargin)
+    let margin = (this.game.width - 100)
 
     if (step % 2 === 0 && step !== this._groundStep) {
       this._groundStep = step
-      this.generateGrounds()
+      this.generateGrounds(margin)
+      console.log('generate')
     }
   }
 
@@ -66,7 +75,6 @@ class Game extends Phaser.State {
     }
     else {
       this.bunny.run()
-      this.bunny.jump()
     }
   }
 
@@ -90,20 +98,31 @@ class Game extends Phaser.State {
     this.grounds.add(startGround)
   }
 
-  generateGrounds() {
-    let margin = 0
+  createBunny() {
+    window.bunny = this.bunny = new Engine.Bunny(this.game, 150, 150, 'bunny2')
+    this.add.existing(this.bunny)
+  }
 
-    if (this.bunny.x < this.game.width) {
+  initGrounds() {
+    this.grounds = this.add.group()
+    this.createStartGround()
+    this.createFirstGrounds()
+  }
 
+  createFirstGrounds() {
+    for (let i = 1; i < this.game.width / this._groundVerticalMargin; i++) {
+      if (i % 2 == 0) this.generateGrounds(i * this._groundVerticalMargin)
     }
+  }
 
-    const SPLIT_VERTICAL = 5
+  generateGrounds(margin) {
+    const SPLIT_VERTICAL = 3
     const GRID_HEIGHT = this.game.height / SPLIT_VERTICAL
 
     for (let i = 1; i < SPLIT_VERTICAL; i++) {
       if (this.rnd.pick[true, false]) continue
 
-      const x = this.bunny.x + (this.game.width - 100) + this.rnd.between(-50, 50)
+      const x = this.bunny.x + margin + this.rnd.between(-50, 50)
       const y = GRID_HEIGHT * i + this.rnd.between(-50, 50)
 
       this.activateRandomGround(x, y)
@@ -170,9 +189,9 @@ class Game extends Phaser.State {
   }
 
   createBackground() {
-    // this.add.existing(new Engine.Background(this.game, 0, 0, 'layer2', -1))
+    this.add.existing(new Engine.Background(this.game, 0, 0, 'layer2', -1))
     this.add.existing(new Engine.Background(this.game, 0, 0, 'layer3', -2))
-    // this.add.existing(new Engine.Background(this.game, 0, 0, 'layer4', -3))
+    this.add.existing(new Engine.Background(this.game, 0, 0, 'layer4', -3))
   }
 }
 

@@ -45,6 +45,7 @@ class Bunny extends Phaser.Sprite {
     const upMove = 100
 
     this.body.velocity.setTo(0)
+    this.body.acceleration.setTo(0)
     this.body.collideWorldBounds = false
     this.data.isDead = true
     this.animations.play('hurt')
@@ -74,7 +75,9 @@ class Bunny extends Phaser.Sprite {
   }
 
   jump() {
-    const jumpImpulse = 1000
+    if (this.data.isDead) return
+
+    const jumpImpulse = 800
 
     if (this.data.countJump > 0)
       this.body.velocity.y = -jumpImpulse

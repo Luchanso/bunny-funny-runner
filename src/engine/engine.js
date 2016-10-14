@@ -6,4 +6,5 @@ let Engine = {
   maxHeight: window.innerHeight,
 
   spritesheet: 'jumper',
+  scaleRatio: 0.35
 }

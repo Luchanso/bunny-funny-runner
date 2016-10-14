@@ -18,6 +18,7 @@ class Game extends Phaser.State {
   init() {
     this._groundStep = 0
     this._groundVerticalMargin = 150
+    this._score = Engine.Service.get('Score')
   }
 
   create() {
@@ -30,12 +31,15 @@ class Game extends Phaser.State {
     this.initGrounds()
     this.configurateCamera()
     this.addControl()
+    this.createDistanceLabel()
   }
 
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
     this.updateGrounds()
     this.checkDie()
+
+    this._score.currentDistance = Math.round(this.bunny.x / 150)
   }
 
   checkDie() {
@@ -51,6 +55,22 @@ class Game extends Phaser.State {
     // this.grounds.children.map((sprite) => {
     //   this.game.debug.body(sprite, 'rgba(255, 255, 255, 0.5)')
     // })
+    this.game.debug.body(this.distanceLabel, 'rgba(255, 255, 255, 0.5)')
+  }
+
+  createDistanceLabel() {
+    const margin = 25
+
+    // this.test = this.add.text(125, 125, 'Hello world')
+
+    window.label = this.distanceLabel = new Engine.Distance(
+      this.game,
+      this.game.width - margin,
+      margin
+    )
+    this.distanceLabel.fixedToCamera = true
+    this.distanceLabel.anchor.setTo(1, 0)
+    this.add.existing(this.distanceLabel)
   }
 
   updateGrounds() {
@@ -60,7 +80,6 @@ class Game extends Phaser.State {
     if (step % 2 === 0 && step !== this._groundStep) {
       this._groundStep = step
       this.generateGrounds(margin)
-      console.log('generate')
     }
   }
 
@@ -123,7 +142,7 @@ class Game extends Phaser.State {
       if (this.rnd.pick[true, false]) continue
 
       const x = this.bunny.x + margin + this.rnd.between(-50, 50)
-      const y = GRID_HEIGHT * i + this.rnd.between(-50, 50)
+      const y = GRID_HEIGHT * i + this.rnd.between(-100, 100)
 
       this.activateRandomGround(x, y)
     }

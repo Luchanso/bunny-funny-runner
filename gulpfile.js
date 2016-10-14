@@ -50,14 +50,15 @@ gulp.task('html', () => {
 gulp.task('js', () => {
   const src = [
     'src/engine/engine.js',
-    'src/engine/**/*.js',
+    'src/engine/service/*.js',
+    'src/engine/service.js',
 
     'src/boot/**/*.js',
     'src/loader/**/*.js',
 
     'src/game/components/**/*.js',
-    'src/game/services/**/*.js',
     'src/game/actors/**/*.js',
+    'src/game/gui/**/*.js',
     'src/game/game.js',
 
     'src/app.js',

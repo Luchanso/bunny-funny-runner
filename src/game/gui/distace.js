@@ -7,6 +7,7 @@ class Distance extends Phaser.Text {
 
     super(game, x, y, 'Distance: 0 m.', style)
 
+    this.fixedToCamera = true
     this.score = Engine.Service.get('Score')
     this.score.onUpdate.add(this.updateDistance, this)
   }

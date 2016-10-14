@@ -2,37 +2,41 @@ class Bunny extends Phaser.Sprite {
   constructor(game, x, y, name) {
     super(game, x, y, Engine.spritesheet, name + '_stand.png')
 
-    this._name = name
-    this._inAir = false
-    this._isDead = false
+    this.data.name = name
+    this.data.isDead = false
+    this.data.running = false
+    this.data.countJump = Bunny.MAX_JUMPS
 
     this.game.physics.arcade.enable([ this ])
 
+    this.width *= 0.35
+    this.height *= 0.35
+
+    this.body.gravity.setTo(0, 2500)
+    this.body.maxVelocity.setTo(500, 2000)
     this.body.collideWorldBounds = true
-    this.body.gravity.setTo(0, 700)
-    this.body.bounce.set(0.15)
 
     this.createAnimation()
     this.animations.play('run')
   }
 
   update() {
-    if (this._isDead) return
-
-    const jumpTriggerSpeed = 100;
+    if (this.data.isDead) return
 
     if (this.inAir()) {
       this.animations.play('jump')
-    } else {
+    } else if (this.data.running){
       this.animations.play('run')
+      this.data.countJump = Bunny.MAX_JUMPS
+    } else {
+      this.animations.play('stand')
     }
 
-    this.game.debug.text('y: ' + this.body.velocity.y, 15, 75, 'white')
+    this.game.debug.text('Vertical speed: ' + this.body.velocity.x, 15, 75, 'black')
   }
 
   inAir() {
-    const trigger = 20
-    return Math.abs(this.body.velocity.y) > trigger
+    return !bunny.body.touching.down
   }
 
   die() {
@@ -42,7 +46,7 @@ class Bunny extends Phaser.Sprite {
 
     this.body.velocity.setTo(0)
     this.body.collideWorldBounds = false
-    this._isDead = true
+    this.data.isDead = true
     this.animations.play('hurt')
 
     this.game.add.tween(this)
@@ -55,20 +59,31 @@ class Bunny extends Phaser.Sprite {
       .start()
   }
 
+  run() {
+    this.data.running = true
+    this.body.velocity.setTo(Bunny.BASE_MAX_SPEED, 0)
+    this.body.acceleration.setTo(Bunny.ACCELERATION, 0)
+  }
+
   createAnimation() {
-    this.animations.add('jump', [this._name + '_jump.png'], 1, true)
-    this.animations.add('run', [this._name + '_walk1.png', this._name + '_walk2.png'], 10, true)
-    this.animations.add('hurt', [this._name + '_hurt.png'], 1, true)
-    this.animations.add('ready', [this._name + '_ready.png'], 1, true)
-    this.animations.add('stand', [this._name + '_stand.png'], 1, true)
+    this.animations.add('jump', [this.data.name + '_jump.png'], 1, true)
+    this.animations.add('run', [this.data.name + '_walk1.png', this.data.name + '_walk2.png'], 10, true)
+    this.animations.add('hurt', [this.data.name + '_hurt.png'], 1, true)
+    this.animations.add('ready', [this.data.name + '_ready.png'], 1, true)
+    this.animations.add('stand', [this.data.name + '_stand.png'], 1, true)
   }
 
   jump() {
-    const jumpImpulse = 500
+    const jumpImpulse = 1000
 
-    if (!this.inAir())
-      this.body.velocity.y -= jumpImpulse
+    if (this.data.countJump > 0)
+      this.body.velocity.y = -jumpImpulse
+      this.data.countJump--
   }
 }
+
+Bunny.MAX_JUMPS = 2
+Bunny.ACCELERATION = 2000
+Bunny.BASE_MAX_SPEED = 500
 
 Engine.Bunny = Bunny

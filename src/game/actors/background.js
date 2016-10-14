@@ -5,13 +5,16 @@ class Background extends Phaser.TileSprite {
     this.tileScale.setTo(this.game.height / this.height)
     this.fixedToCamera = true
     this.width = this.game.width
-    // this.height = this.game.height
 
     this._speed = speed
   }
 
   update() {
     this.tilePosition.x += this._speed
+  }
+
+  stop() {
+    this._speed = 0
   }
 }
 

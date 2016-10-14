@@ -32,22 +32,27 @@ class Game extends Phaser.State {
     this.configurateCamera()
     this.addControl()
     this.createDistanceLabel()
+    this.createLoseLabel()
   }
 
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
     this.updateGrounds()
-    this.checkDie()
+    this.updateDie()
 
     this._score.currentDistance = Math.round(this.bunny.x / 150)
   }
 
-  checkDie() {
+  updateDie() {
     if (
       this.bunny.y > this.game.height - 100 &&
       !this.bunny.data.isDead
     ) {
       this.bunny.die()
+      this.loseLabel.show()
+      this.backgrounds.forEach((bg) => {
+        bg.stop()
+      })
     }
   }
 
@@ -55,20 +60,27 @@ class Game extends Phaser.State {
     // this.grounds.children.map((sprite) => {
     //   this.game.debug.body(sprite, 'rgba(255, 255, 255, 0.5)')
     // })
-    this.game.debug.body(this.distanceLabel, 'rgba(255, 255, 255, 0.5)')
+  }
+
+  createLoseLabel() {
+    this.loseLabel = new Engine.Lose(
+      this.game,
+      this.game.width / 2,
+      this.game.height / 2
+    )
+
+    this.loseLabel.anchor.setTo(0.5)
+    this.add.existing(this.loseLabel)
   }
 
   createDistanceLabel() {
     const margin = 25
 
-    // this.test = this.add.text(125, 125, 'Hello world')
-
-    window.label = this.distanceLabel = new Engine.Distance(
+    this.distanceLabel = new Engine.Distance(
       this.game,
       this.game.width - margin,
       margin
     )
-    this.distanceLabel.fixedToCamera = true
     this.distanceLabel.anchor.setTo(1, 0)
     this.add.existing(this.distanceLabel)
   }
@@ -89,6 +101,9 @@ class Game extends Phaser.State {
   }
 
   jump() {
+    if (this.bunny.data.isDead) {
+      this.state.restart(true, false)
+    }
     if (this.bunny.data.running) {
       this.bunny.jump()
     }
@@ -208,9 +223,11 @@ class Game extends Phaser.State {
   }
 
   createBackground() {
-    this.add.existing(new Engine.Background(this.game, 0, 0, 'layer2', -1))
-    this.add.existing(new Engine.Background(this.game, 0, 0, 'layer3', -2))
-    this.add.existing(new Engine.Background(this.game, 0, 0, 'layer4', -3))
+    this.backgrounds = this.add.group()
+
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer2', -1))
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer3', -2))
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer4', -3))
   }
 }
 

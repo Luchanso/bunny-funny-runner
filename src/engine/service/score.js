@@ -12,12 +12,13 @@ class Score {
   }
 
   load() {
-    this._bestDistance = Number.parseInt(window.localStorage['bestDistance'])
+    this._bestDistance = Number.parseInt(window.localStorage['bestDistance']) || 0
   }
 
   set bestDistance(val) {
     this._bestDistance = val
     this.onUpdate.dispatch()
+    this.save()
 
     return this._bestDistance
   }
@@ -31,5 +32,7 @@ class Score {
   }
   get currentDistance() { return this._currentDistance }
 }
+
+Score.MULTIPER_DISTANCE = 150
 
 Engine.Score = Score

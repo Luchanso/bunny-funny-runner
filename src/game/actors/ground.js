@@ -8,7 +8,6 @@ class Ground extends Phaser.Sprite {
     this.height *= 0.45
 
     this.autoCull = true
-    this.outOfCameraBoundsKill = true
 
     this.game.physics.enable([this])
     this.body.immovable = true

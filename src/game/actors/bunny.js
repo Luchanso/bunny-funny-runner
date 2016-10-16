@@ -20,15 +20,23 @@ class Bunny extends Phaser.Sprite {
     this.animations.play('run')
   }
 
+  addTrail() {
+    this.data.trail = new Engine.Trail(this.game, 500, this)
+    this.game.add.existing(this.data.trail)
+  }
+
   update() {
     if (this.data.isDead) return
 
     if (this.inAir()) {
+      this.data.trail.startEmitt()
       this.animations.play('jump')
     } else if (this.data.running){
+      this.data.trail.startEmitt()
       this.animations.play('run')
       this.data.countJump = Bunny.MAX_JUMPS
     } else {
+      this.data.trail.stopEmitt()
       this.animations.play('stand')
     }
   }

@@ -1,20 +1,15 @@
-Time: 5:00:00
+Time creating: 9:30:00
 
 Plans
-* Add death trigger when u down
-* Add coins
-* Add distance counter
-  * Label and engine in single class
-* Add travel effect
+* Add trail effect
 * Add coins
   * Add coins class
   * Add label
-* Add bonuses
+* Add bonus system
 * Add enemy
   * Sow
   * Bird
   * Devil
-  * Dildo?
   * Helicopter
   * Cloud
 * Add jumpers
@@ -24,11 +19,7 @@ Plans
   * Grass
   * Other...
 * Add lives
-* Random generator levels
-* Remove sprites, when it leave camera
-* Create object pull
-* Add space
-
+* Add space (universe)
 
 * Simple menu
   * Play

@@ -40,11 +40,7 @@ class Game extends Phaser.State {
     this.addControl()
     this.createDistanceLabel()
     this.createLoseLabel()
-
-    // TEMP CODE
-    this.stripe = new Engine.BestDistanceStripe(this.game, 500)
-    this.add.existing(this.stripe)
-    // END TEMP CODE
+    this.createBestDistance()
   }
 
   update() {
@@ -52,19 +48,9 @@ class Game extends Phaser.State {
     this.updateGrounds()
     this.updateDie()
 
-    this._score.currentDistance = Math.round(this.bunny.x / 150)
+    this._score.currentDistance = Math.round(this.bunny.x / Engine.Score.MULTIPER_DISTANCE)
   }
 
-  updateDie() {
-    if (
-      this.bunny.y > this.game.height - 100 &&
-      !this.bunny.data.isDead
-    ) {
-      this.bunny.die()
-      this.loseLabel.show()
-      this.backgrounds.callAll('stop')
-    }
-  }
 
   render() {
     // this.grounds.children.map((sprite) => {
@@ -80,6 +66,28 @@ class Game extends Phaser.State {
     //     this.camera.y + zone.y,
     //     zone.width, zone.height
     //   ), 'rgba(255,0,0,0.6)')
+  }
+
+  updateDie() {
+    if (
+      this.bunny.y > this.game.height - 100 &&
+      !this.bunny.data.isDead
+    ) {
+      this.bunny.die()
+      this.lose()
+    }
+  }
+
+  createBestDistance() {
+    this.bestDistance = new Engine.BestDistance(this.game)
+  }
+
+  lose() {
+    this.loseLabel.show()
+    this.backgrounds.callAll('stop')
+    if (this._score.bestDistance < this._score.currentDistance) {
+      this._score.bestDistance = this._score.currentDistance
+    }
   }
 
   createLoseLabel() {

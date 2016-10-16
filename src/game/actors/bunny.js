@@ -54,6 +54,7 @@ class Bunny extends Phaser.Sprite {
     this.body.acceleration.setTo(0)
     this.body.collideWorldBounds = false
     this.data.isDead = true
+    this.data.trail.stopEmitt()
     this.animations.play('hurt')
 
     this.game.add.tween(this)

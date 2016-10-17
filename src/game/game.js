@@ -32,6 +32,7 @@ class Game extends Phaser.State {
 
     this.createBackground()
     this.createBunny()
+    this.createSpikes()
     this.initGrounds()
 
     this.bunny.addTrail()
@@ -40,32 +41,23 @@ class Game extends Phaser.State {
     this.addControl()
     this.createDistanceLabel()
     this.createLoseLabel()
+    this.createStartLabel()
     this.createBestDistance()
   }
 
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
     this.updateGrounds()
+    this.updateBottomSpikes()
     this.updateDie()
 
     this._score.currentDistance = Math.round(this.bunny.x / Engine.Score.MULTIPER_DISTANCE)
   }
 
-
   render() {
-    // this.grounds.children.map((sprite) => {
-    //   this.game.debug.body(sprite, 'rgba(255, 255, 255, 0.5)')
-    // })
+    // this.game.debug.spriteInfo(this.bunny, 90, 15, 'white')
 
-    this.game.debug.spriteInfo(this.bunny, 90, 15, 'white')
-
-    // let zone = this.camera.deadzone
-    // this.game.debug.geom(
-    //   new Phaser.Rectangle(
-    //     this.camera.x + zone.x,
-    //     this.camera.y + zone.y,
-    //     zone.width, zone.height
-    //   ), 'rgba(255,0,0,0.6)')
+    this.game.debug.text('Spikes count in Memory: ' + this.bottomSpikes.length, 150, 150, 'white')
   }
 
   updateDie() {
@@ -76,6 +68,58 @@ class Game extends Phaser.State {
       this.bunny.die()
       this.lose()
     }
+  }
+
+  createSpikes() {
+    const REFERENCE = new Engine.Spike(this.game, 0, 0)
+    const COUNT = (this.game.width + this.bunny.x) / REFERENCE.width
+    this._spikeWidth = REFERENCE.width
+
+    this.bottomSpikes = this.add.group()
+
+    for (let i = 0; i < COUNT; i++) {
+      let spike = new Engine.Spike(this.game, i * REFERENCE.width, this.game.height)
+      spike.anchor.setTo(0, 1)
+
+      this.bottomSpikes.add(spike)
+    }
+  }
+
+  updateBottomSpikes() {
+    let step = Math.round(this.bunny.x / this._spikeWidth)
+    let margin = (this.game.width)
+
+    if (step !== this._spikeStep) {
+      this._spikeStep = step
+      this.generateBottomSpikes(this.bunny.x + margin)
+    }
+
+    this.dieBottomSpikes()
+  }
+
+  dieBottomSpikes() {
+    this.bottomSpikes.children.forEach((item) => {
+      if (!item.inCamera && item.alive && item.x < this.bunny.x - this.camera.deadzone.x) {
+        item.kill()
+      }
+    })
+  }
+
+  generateBottomSpikes(x) {
+    const y = this.game.height
+
+    let spike = this.bottomSpikes.getFirstDead()
+
+    if (spike == null) {
+      spike = new Engine.Spike(this.game, x, y)
+      spike.anchor.setTo(0, 1)
+
+      this.bottomSpikes.add(spike)
+    } else {
+      spike.reset(x, y)
+    }
+
+    return spike
   }
 
   createBestDistance() {
@@ -90,15 +134,35 @@ class Game extends Phaser.State {
     }
   }
 
+  start() {
+    this.startLabel.hide()
+    this.backgrounds.callAll('resume')
+    this.bunny.run()
+  }
+
   createLoseLabel() {
-    this.loseLabel = new Engine.Lose(
+    this.loseLabel = new Engine.Message(
       this.game,
       this.game.width / 2,
-      this.game.height / 2
+      this.game.height / 2,
+      'You lose :-(\r\nPress spacebar'
     )
 
     this.loseLabel.anchor.setTo(0.5)
     this.add.existing(this.loseLabel)
+  }
+
+  createStartLabel() {
+    this.startLabel = new Engine.Message(
+      this.game,
+      this.game.width / 2,
+      this.game.height / 2,
+      'Press spacebar\r\nfor start'
+    )
+
+    this.startLabel.anchor.setTo(0.5)
+    this.startLabel.show()
+    this.add.existing(this.startLabel)
   }
 
   createDistanceLabel() {
@@ -135,10 +199,10 @@ class Game extends Phaser.State {
 
   addControl() {
     let hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR)
-    hotkey.onDown.add(this.jump, this)
+    hotkey.onDown.add(this.spacebarDown, this)
   }
 
-  jump() {
+  spacebarDown() {
     if (this.bunny.data.isDead) {
       this.state.restart(true, false)
     }
@@ -146,8 +210,7 @@ class Game extends Phaser.State {
       this.bunny.jump()
     }
     else {
-      this.backgrounds.callAll('resume')
-      this.bunny.run()
+      this.start()
     }
   }
 
@@ -189,18 +252,18 @@ class Game extends Phaser.State {
   }
 
   generateGrounds(margin) {
-    const SPLIT_VERTICAL = 3
-    const GRID_HEIGHT = this.game.height / SPLIT_VERTICAL
+    const SPLIT_VERTICAL = 6
+    const START_POINT = -(this.game.world.bounds.height - this.game.height)
+    const GRID_HEIGHT = this.game.world.bounds.height / SPLIT_VERTICAL
 
     for (let i = 1; i < SPLIT_VERTICAL; i++) {
       if (this.rnd.pick[true, false]) continue
 
       const x = this.bunny.x + margin + this.rnd.between(-25, 25)
-      const y = GRID_HEIGHT * i + this.rnd.between(-50, 50)
+      const y = START_POINT + GRID_HEIGHT * i + this.rnd.between(-50, 50)
 
       this.activateRandomGround(x, y)
     }
-
   }
 
   activateRandomGround(x, y) {
@@ -232,7 +295,7 @@ class Game extends Phaser.State {
   }
 
   configurateCamera() {
-    const paddingLeft = 300
+    const paddingLeft = 250
     const smoothMove = 0.15
     const deadZoneHeight = 50
 

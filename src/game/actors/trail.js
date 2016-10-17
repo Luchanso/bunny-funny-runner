@@ -5,8 +5,8 @@ class Trail extends Phaser.Particles.Arcade.Emitter {
     this.makeParticles('particles')
     this.lifespan = 500
 
-    this._particlesEmit = 20
-    this._delayEmit = 50
+    this._particlesEmit = 3
+    this._delayEmit = 35
     this._follow = follow
 
     this._timerEmmiting = this.game.time.create()

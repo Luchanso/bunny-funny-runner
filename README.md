@@ -1,8 +1,4 @@
-Time creating: 9:30:00
-
 Plans
-* Add message for start "Press space"
-* Add trail effect
 * Add coins
   * Add coins class
   * Add label

@@ -3,6 +3,7 @@ class Spike extends Phaser.Sprite {
     super(game, x, y, Engine.spritesheet, 'spikes_top.png')
 
     this.autoCull = true
+    this.anchor.setTo(0, 1)
 
     this.width *= 0.35
     this.height *= 0.35

@@ -9,6 +9,9 @@ class GroundsGenerator extends Engine.Component.Generator {
     super(game, bunny)
 
     this.distance = distance
+    this.signals = {
+      generate: new Phaser.Signal()
+    }
     this.currentStep = -1
   }
 
@@ -30,14 +33,18 @@ class GroundsGenerator extends Engine.Component.Generator {
     const SPLIT_VERTICAL = 6
     const START_POINT = -(this.game.world.bounds.height - this.game.height)
     const GRID_HEIGHT = this.game.world.bounds.height / SPLIT_VERTICAL
+    const RND_HORIZONTAL = 125
+    const RND_VERTICAL = 65
 
     for (let i = 1; i < SPLIT_VERTICAL; i++) {
       if (this.game.rnd.pick[true, false]) continue
 
-      const x = this.bunny.x + margin + this.game.rnd.between(-25, 25)
-      const y = START_POINT + GRID_HEIGHT * i + this.game.rnd.between(-50, 50)
+      const x = this.bunny.x + margin + this.game.rnd.between(-RND_HORIZONTAL, RND_HORIZONTAL)
+      const y = START_POINT + GRID_HEIGHT * i + this.game.rnd.between(-RND_VERTICAL, RND_VERTICAL)
 
-      this.addRandomGround(x, y)
+      let ground = this.addRandomGround(x, y)
+
+      this.signals.generate.dispatch(ground)
     }
   }
 

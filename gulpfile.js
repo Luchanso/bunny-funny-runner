@@ -70,7 +70,6 @@ gulp.task('js', () => {
     .on('error', err => {
       console.error('Error in compress task', err.toString());
     })
-    .pipe(concat('app.js'))
     .pipe(babel({
       "presets": ["es2015"]
     }))
@@ -78,6 +77,7 @@ gulp.task('js', () => {
       console.error('Error in babel task', err.toString());
     })
     .pipe(sourcemaps.write())
+    .pipe(concat('app.js'))
     .pipe(gulp.dest('public'))
     .pipe(connect.reload());
 });

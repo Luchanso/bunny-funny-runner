@@ -18,7 +18,7 @@ class Game extends Phaser.State {
   }
 
   init() {
-    this.distanceBetweenGrounds = 300
+    this.distanceBetweenGrounds = 500
 
     // TODO: Rename this
     this._score = Engine.Service.get('Score')
@@ -34,7 +34,8 @@ class Game extends Phaser.State {
     this.createBackground()
     this.createBunny()
     this.createSpikes()
-    this.initGrounds()
+    this.createGrounds()
+    this.createCoins()
 
     this.bunny.addTrail()
 
@@ -47,17 +48,28 @@ class Game extends Phaser.State {
 
     // TEMP
 
-    let coin = new Engine.Coin(this.game, 150, 150)
+    {
+      let coin = new Engine.Coin(this.game, 220, 370)
+      this.coins.add(coin)
+    }
+    {
+      let coin = new Engine.Coin(this.game, 250, 370, Engine.Coin.type.SILVER)
+      this.coins.add(coin)
+    }
+    {
+      let coin = new Engine.Coin(this.game, 280, 370, Engine.Coin.type.BRONZE)
+      this.coins.add(coin)
+    }
 
-    this.add.existing(coin)
 
     // END TEMP
   }
 
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
-    this.bottomSpikes.update()
-    this.grounds.update()
+    this.physics.arcade.collide(this.bunny, this.coins)
+    this.physics.arcade.collide(this.grounds, this.coins)
+    this.physics.arcade.collide(this.coins, this.coins)
     this.updateDie()
 
     // TODO: Need incapsulation
@@ -66,6 +78,9 @@ class Game extends Phaser.State {
 
   render() {
     // this.game.debug.spriteInfo(this.bunny, 90, 15, 'white')
+    // this.grounds.forEach((ground) => {
+    //   this.game.debug.body(ground, 'rgba(127, 0, 254, 0.51)')
+    // })
     // this.game.debug.text('Spikes count in memory: ' + this.bottomSpikes.length, 90, 15)
   }
 
@@ -118,6 +133,10 @@ class Game extends Phaser.State {
     this.startLabel.hide()
     this.backgrounds.callAll('resume')
     this.bunny.run()
+  }
+
+  createCoins() {
+    this.coins = new Engine.Component.CoinGenerator(this.game, this.bunny, this.grounds)
   }
 
   createLoseLabel() {
@@ -204,7 +223,7 @@ class Game extends Phaser.State {
     this.add.existing(this.bunny)
   }
 
-  initGrounds() {
+  createGrounds() {
     this.grounds = new Engine.Component.GroundsGenerator(
       this.game,
       this.bunny,

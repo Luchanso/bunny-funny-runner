@@ -43,21 +43,29 @@ class Game extends Phaser.State {
     this.createLoseLabel()
     this.createStartLabel()
     this.createBestDistance()
+
+    // TEMP
+
+    let coin = new Engine.Coin(this.game, 150, 150)
+
+    this.add.existing(coin)
+
+    // END TEMP
   }
 
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
+    this.bottomSpikes.update()
     this.updateGrounds()
-    this.updateBottomSpikes()
-    this.updateDie()
+    // this.updateDie()
 
+    // TODO: Need incapsulation
     this._score.currentDistance = Math.round(this.bunny.x / Engine.Score.MULTIPER_DISTANCE)
   }
 
   render() {
     // this.game.debug.spriteInfo(this.bunny, 90, 15, 'white')
-
-    this.game.debug.text('Spikes count in Memory: ' + this.bottomSpikes.length, 150, 150, 'white')
+    this.game.debug.text('Spikes count in memory: ' + this.bottomSpikes.length, 90, 15)
   }
 
   updateDie() {
@@ -71,55 +79,24 @@ class Game extends Phaser.State {
   }
 
   createSpikes() {
-    const REFERENCE = new Engine.Spike(this.game, 0, 0)
-    const COUNT = (this.game.width + this.bunny.x) / REFERENCE.width
-    this._spikeWidth = REFERENCE.width
+    const PROTOTYPE = new Engine.Spike(this.game, 0, 0)
+    const COUNT = (this.game.width + this.bunny.x) / PROTOTYPE.width
 
-    this.bottomSpikes = this.add.group()
+    this.bottomSpikes = new Engine.BottomSpikeGenerator(
+      this.game,
+      PROTOTYPE,
+      this.bunny
+    )
 
     for (let i = 0; i < COUNT; i++) {
-      let spike = new Engine.Spike(this.game, i * REFERENCE.width, this.game.height)
-      spike.anchor.setTo(0, 1)
+      let spike = new Engine.Spike(
+        this.game,
+        i * PROTOTYPE.width,
+        this.game.height
+      )
 
       this.bottomSpikes.add(spike)
     }
-  }
-
-  updateBottomSpikes() {
-    let step = Math.round(this.bunny.x / this._spikeWidth)
-    let margin = (this.game.width)
-
-    if (step !== this._spikeStep) {
-      this._spikeStep = step
-      this.generateBottomSpikes(this.bunny.x + margin)
-    }
-
-    this.dieBottomSpikes()
-  }
-
-  dieBottomSpikes() {
-    this.bottomSpikes.children.forEach((item) => {
-      if (!item.inCamera && item.alive && item.x < this.bunny.x - this.camera.deadzone.x) {
-        item.kill()
-      }
-    })
-  }
-
-  generateBottomSpikes(x) {
-    const y = this.game.height
-
-    let spike = this.bottomSpikes.getFirstDead()
-
-    if (spike == null) {
-      spike = new Engine.Spike(this.game, x, y)
-      spike.anchor.setTo(0, 1)
-
-      this.bottomSpikes.add(spike)
-    } else {
-      spike.reset(x, y)
-    }
-
-    return spike
   }
 
   createBestDistance() {
@@ -129,6 +106,8 @@ class Game extends Phaser.State {
   lose() {
     this.loseLabel.show()
     this.backgrounds.callAll('stop')
+
+    // TODO: Need incapsulation
     if (this._score.bestDistance < this._score.currentDistance) {
       this._score.bestDistance = this._score.currentDistance
     }

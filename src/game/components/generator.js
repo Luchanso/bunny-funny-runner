@@ -1,6 +1,8 @@
 class Generator extends Phaser.Group {
-  constructor(game) {
+  constructor(game, bunny) {
     super(game)
+
+    this.bunny = bunny
   }
 
   start() {
@@ -8,7 +10,9 @@ class Generator extends Phaser.Group {
   }
 
   update() {
+    super.update()
 
+    this.checkDie()
   }
 
   generate() {
@@ -17,6 +21,18 @@ class Generator extends Phaser.Group {
 
   stop() {
 
+  }
+
+  checkDie() {
+    this.children.forEach((item) => {
+      if (
+          !item.inCamera
+        && item.alive
+        && item.x < this.bunny.x - this.game.camera.deadzone.x
+      ) {
+        item.kill()
+      }
+    })
   }
 }
 

@@ -1,15 +1,15 @@
 class BottomSpikeGenerator extends Engine.Component.Generator {
-  constructor(game, prototype, bunny) {
-    super(game)
+  constructor(game, bunny, prototype) {
+    super(game, bunny)
 
-    this.game = game
-    this.bunny = bunny
     this.prototype = prototype
     this.currentStep = -1
     this.lastX = 0
   }
 
   update() {
+    super.update()
+
     let step = Math.floor(this.bunny.x / this.prototype.width)
     let margin = (this.game.width)
 
@@ -17,11 +17,11 @@ class BottomSpikeGenerator extends Engine.Component.Generator {
       this.currentStep = step
       this.generate(margin)
     }
-
-    this.checkDie()
   }
 
   generate(margin) {
+    super.generate()
+
     const y = this.game.height
     const x = this.lastX + this.prototype.width
 
@@ -35,8 +35,6 @@ class BottomSpikeGenerator extends Engine.Component.Generator {
     }
 
     this.lastX = x
-
-    return spike
   }
 
   add(spike) {
@@ -44,18 +42,6 @@ class BottomSpikeGenerator extends Engine.Component.Generator {
 
     this.lastX = spike.x
   }
-
-  checkDie() {
-    this.children.forEach((item) => {
-      if (
-          !item.inCamera
-        && item.alive
-        && item.x < this.bunny.x - this.game.camera.deadzone.x
-      ) {
-        item.kill()
-      }
-    })
-  }
 }
 
-Engine.BottomSpikeGenerator = BottomSpikeGenerator
+Engine.Component.BottomSpikeGenerator = BottomSpikeGenerator

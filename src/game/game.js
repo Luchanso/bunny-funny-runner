@@ -18,8 +18,9 @@ class Game extends Phaser.State {
   }
 
   init() {
-    this._groundStep = 0
-    this._groundVerticalMargin = 300
+    this.distanceBetweenGrounds = 300
+
+    // TODO: Rename this
     this._score = Engine.Service.get('Score')
 
     window.game = this
@@ -56,8 +57,8 @@ class Game extends Phaser.State {
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
     this.bottomSpikes.update()
-    this.updateGrounds()
-    // this.updateDie()
+    this.grounds.update()
+    this.updateDie()
 
     // TODO: Need incapsulation
     this._score.currentDistance = Math.round(this.bunny.x / Engine.Score.MULTIPER_DISTANCE)
@@ -65,7 +66,7 @@ class Game extends Phaser.State {
 
   render() {
     // this.game.debug.spriteInfo(this.bunny, 90, 15, 'white')
-    this.game.debug.text('Spikes count in memory: ' + this.bottomSpikes.length, 90, 15)
+    // this.game.debug.text('Spikes count in memory: ' + this.bottomSpikes.length, 90, 15)
   }
 
   updateDie() {
@@ -82,10 +83,10 @@ class Game extends Phaser.State {
     const PROTOTYPE = new Engine.Spike(this.game, 0, 0)
     const COUNT = (this.game.width + this.bunny.x) / PROTOTYPE.width
 
-    this.bottomSpikes = new Engine.BottomSpikeGenerator(
+    this.bottomSpikes = new Engine.Component.BottomSpikeGenerator(
       this.game,
-      PROTOTYPE,
-      this.bunny
+      this.bunny,
+      PROTOTYPE
     )
 
     for (let i = 0; i < COUNT; i++) {
@@ -156,29 +157,14 @@ class Game extends Phaser.State {
     this.add.existing(this.distanceLabel)
   }
 
-  updateGrounds() {
-    let step = Math.round(this.bunny.x / this._groundVerticalMargin)
-    let margin = (this.game.width)
-
-    if (step !== this._groundStep) {
-      this._groundStep = step
-      this.generateGrounds(margin)
-    }
-
-    this.dieGrounds()
-  }
-
-  dieGrounds() {
-    this.grounds.children.forEach((ground) => {
-      if (!ground.inCamera && ground.alive && ground.x < this.bunny.x - this.camera.deadzone.x) {
-        ground.kill()
-      }
-    })
-  }
-
   addControl() {
     let hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR)
     hotkey.onDown.add(this.spacebarDown, this)
+
+    let mouse = this.input.mouse
+    mouse.mouseDownCallback = () => {
+      this.spacebarDown()
+    }
   }
 
   spacebarDown() {
@@ -219,58 +205,19 @@ class Game extends Phaser.State {
   }
 
   initGrounds() {
-    this.grounds = this.add.group()
+    this.grounds = new Engine.Component.GroundsGenerator(
+      this.game,
+      this.bunny,
+      this.distanceBetweenGrounds
+    )
     this.createStartGround()
     this.createFirstGrounds()
   }
 
   createFirstGrounds() {
-    for (let i = 1; i < this.game.width / this._groundVerticalMargin; i++) {
-      this.generateGrounds(i * this._groundVerticalMargin)
+    for (let i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {
+      this.grounds.generate(i * this.distanceBetweenGrounds)
     }
-  }
-
-  generateGrounds(margin) {
-    const SPLIT_VERTICAL = 6
-    const START_POINT = -(this.game.world.bounds.height - this.game.height)
-    const GRID_HEIGHT = this.game.world.bounds.height / SPLIT_VERTICAL
-
-    for (let i = 1; i < SPLIT_VERTICAL; i++) {
-      if (this.rnd.pick[true, false]) continue
-
-      const x = this.bunny.x + margin + this.rnd.between(-25, 25)
-      const y = START_POINT + GRID_HEIGHT * i + this.rnd.between(-50, 50)
-
-      this.activateRandomGround(x, y)
-    }
-  }
-
-  activateRandomGround(x, y) {
-    const marginBottom = 100
-
-    const types = Object.keys(Engine.Ground.type).map(val => {
-      return Engine.Ground.type[val]
-    })
-    const type = this.rnd.pick(types)
-    const small = this.rnd.pick([true, false])
-    const broken = this.rnd.pick([true, false])
-
-    let ground = this.grounds.getFirstDead()
-    if (ground == null) {
-      ground = new Engine.Ground(
-        this.game,
-        x,
-        y,
-        type,
-        small,
-        broken,
-      )
-      this.grounds.add(ground)
-    } else {
-      ground.reset(x, y, type, small, broken)
-    }
-
-    return ground
   }
 
   configurateCamera() {

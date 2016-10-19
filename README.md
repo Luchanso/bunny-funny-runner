@@ -1,9 +1,6 @@
 Plans
+* Fix bug with double grounds - add overlap for grounds and coins
 * Fix camera - change dieZone (more upper)
-* Change size and text in Distance label
-* Add coins
-  * Add coins class
-  * Add label
 * Add bonus system
 * Add enemy
   * Sow
@@ -19,6 +16,7 @@ Plans
   * Other...
 * Add lives
 * Add space (universe)
+* Add biom system
 
 * Simple menu
   * Play

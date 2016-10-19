@@ -15,7 +15,7 @@ class BestDistance {
       font: '26px Arial'
     }
     const marginLeft = 10
-    const marginTop = 25
+    const marginTop = 150
 
     this.label = this.game.add.text(this.x + marginLeft, 0, `Best ${this.score.bestDistance} m.`, style)
     this.label.update = () => {

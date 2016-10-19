@@ -11,16 +11,7 @@ class Background extends Phaser.TileSprite {
   }
 
   update() {
-    if (!this.data.isStoped)
-      this.tilePosition.x += this.data.speed
-  }
-
-  stop() {
-    this.data.isStoped = true
-  }
-
-  resume() {
-    this.data.isStoped = false
+    this.tilePosition.x = this.game.camera.x * this.data.speed
   }
 }
 

@@ -2,7 +2,7 @@ class Trail extends Phaser.Particles.Arcade.Emitter {
   constructor(game, maxParticles, follow) {
     super(game, 0, 0, maxParticles)
 
-    this.makeParticles('particles')
+    this.makeParticles('particles', 0, maxParticles, true)
     this.lifespan = 500
 
     this._particlesEmit = 3
@@ -20,7 +20,7 @@ class Trail extends Phaser.Particles.Arcade.Emitter {
 
       this.emitParticle(
         this._follow.x,
-        this._follow.y + this._follow.height,
+        this._follow.y + this._follow.height / 1.1,
         'particles',
         particleFram
       )

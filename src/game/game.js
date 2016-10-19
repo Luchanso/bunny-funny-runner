@@ -22,6 +22,7 @@ class Game extends Phaser.State {
 
     // TODO: Rename this
     this._score = Engine.Service.get('Score')
+    this._score.coins = 0
 
     window.game = this
   }
@@ -42,6 +43,7 @@ class Game extends Phaser.State {
     this.configurateCamera()
     this.addControl()
     this.createDistanceLabel()
+    this.createCoinsLabel()
     this.createLoseLabel()
     this.createStartLabel()
     this.createBestDistance()
@@ -67,13 +69,29 @@ class Game extends Phaser.State {
 
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
-    this.physics.arcade.collide(this.bunny, this.coins)
-    this.physics.arcade.collide(this.grounds, this.coins)
-    this.physics.arcade.collide(this.coins, this.coins)
+    this.physics.arcade.collide(this.bunny.data.trail, this.grounds)
+    this.physics.arcade.overlap(this.bunny, this.coins, this.takeCoin, null, this)
     this.updateDie()
 
     // TODO: Need incapsulation
     this._score.currentDistance = Math.round(this.bunny.x / Engine.Score.MULTIPER_DISTANCE)
+  }
+
+  takeCoin(bunny, coin) {
+
+    switch(coin.data.type) {
+      case Engine.Coin.type.GOLD:
+        this._score.coins += 10
+        break
+      case Engine.Coin.type.SILVER:
+        this._score.coins += 5
+        break
+      case Engine.Coin.type.BRONZE:
+        this._score.coins += 1
+        break
+    }
+
+    coin.kill()
   }
 
   render() {
@@ -121,7 +139,6 @@ class Game extends Phaser.State {
 
   lose() {
     this.loseLabel.show()
-    this.backgrounds.callAll('stop')
 
     // TODO: Need incapsulation
     if (this._score.bestDistance < this._score.currentDistance) {
@@ -131,7 +148,6 @@ class Game extends Phaser.State {
 
   start() {
     this.startLabel.hide()
-    this.backgrounds.callAll('resume')
     this.bunny.run()
   }
 
@@ -165,15 +181,30 @@ class Game extends Phaser.State {
   }
 
   createDistanceLabel() {
-    const margin = 25
+    const marginLeft = 15
+    const marginTop = 10
 
     this.distanceLabel = new Engine.Distance(
       this.game,
-      this.game.width - margin,
-      margin
+      this.game.width - marginLeft,
+      marginTop
     )
     this.distanceLabel.anchor.setTo(1, 0)
     this.add.existing(this.distanceLabel)
+  }
+
+  createCoinsLabel() {
+    const padding = 20
+    const marginTop = this.distanceLabel.y + this.distanceLabel.height / 2 + padding
+    const marginLeft = 15
+
+    this.coinsLabel = new Engine.CoinCounter(
+      this.game,
+      this.game.width - marginLeft,
+      marginTop
+    )
+    this.coinsLabel.anchor.setTo(1, 0)
+    this.add.existing(this.coinsLabel)
   }
 
   addControl() {
@@ -252,9 +283,9 @@ class Game extends Phaser.State {
   createBackground() {
     this.backgrounds = this.add.group()
 
-    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer2', -1))
-    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer3', -2))
-    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer4', -3))
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer2', -0.05))
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer3', -0.1))
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer4', -0.25))
   }
 }
 

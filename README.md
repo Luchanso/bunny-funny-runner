@@ -1,4 +1,6 @@
 Plans
+* Fix camera - change dieZone (more upper)
+* Change size and text in Distance label
 * Add coins
   * Add coins class
   * Add label

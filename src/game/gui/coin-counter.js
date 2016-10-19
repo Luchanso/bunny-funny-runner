@@ -18,21 +18,21 @@ class CoinCounter extends Phaser.Text {
     let x = this.width * 2
     let y = 1
 
-    let sprite = this.game.make.sprite(
+    let coin = this.game.make.sprite(
       x,
       y,
       Engine.spritesheet,
-      'coin_bronze.png'
+      'coin_gold.png'
     )
 
-    sprite.anchor.setTo(1, 0)
+    coin.anchor.setTo(1, 0)
 
-    sprite.width = this.fontSize
-    sprite.height = this.fontSize
+    coin.width = this.fontSize
+    coin.height = this.fontSize
 
-    this.addChild(sprite)
+    this.addChild(coin)
 
-    const offsetX = this.cameraOffset.x - sprite.width
+    const offsetX = this.cameraOffset.x - coin.width
     const offsetY = this.cameraOffset.y
 
     this.cameraOffset.setTo(offsetX, offsetY)

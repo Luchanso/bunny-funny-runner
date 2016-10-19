@@ -2,9 +2,11 @@ class Score {
   constructor() {
     this._bestDistance = 0
     this._currentDistance = 0
+    this._coins = 0
 
     this.load()
     this.onUpdate = new Phaser.Signal()
+    this.updateCoins = new Phaser.Signal()
   }
 
   save() {
@@ -14,6 +16,15 @@ class Score {
   load() {
     this._bestDistance = Number.parseInt(window.localStorage['bestDistance']) || 0
   }
+
+  set coins(val) {
+    this._coins = val
+
+    this.updateCoins.dispatch()
+
+    return this._coins
+  }
+  get coins() { return this._coins }
 
   set bestDistance(val) {
     this._bestDistance = val

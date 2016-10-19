@@ -7,9 +7,20 @@ class Coin extends Phaser.Sprite {
     this.anchor.setTo(0.5)
 
     this.game.physics.enable([this])
-    // this.body.immovable = true
 
     this.data.type = type
+
+    switch(type) {
+      case Engine.Coin.type.BRONZE:
+        this.data.nominal = 1
+      break
+      case Engine.Coin.type.SILVER:
+        this.data.nominal = 4
+      break
+      case Engine.Coin.type.GOLD:
+        this.data.nominal = 8
+      break
+    }
 
     this.createAnimation()
   }

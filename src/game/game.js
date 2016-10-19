@@ -47,6 +47,7 @@ class Game extends Phaser.State {
     this.createLoseLabel()
     this.createStartLabel()
     this.createBestDistance()
+    this.createNominals()
 
     // TEMP
 
@@ -78,18 +79,12 @@ class Game extends Phaser.State {
   }
 
   takeCoin(bunny, coin) {
+    const x = this.bunny.x + this.bunny.width / 2
+    const y = this.bunny.y
 
-    switch(coin.data.type) {
-      case Engine.Coin.type.GOLD:
-        this._score.coins += 10
-        break
-      case Engine.Coin.type.SILVER:
-        this._score.coins += 5
-        break
-      case Engine.Coin.type.BRONZE:
-        this._score.coins += 1
-        break
-    }
+    this.nominals.generate(x, y, coin.data.nominal)
+
+    this._score.coins += coin.data.nominal
 
     coin.kill()
   }
@@ -97,9 +92,9 @@ class Game extends Phaser.State {
   render() {
     // this.game.debug.spriteInfo(this.bunny, 90, 15, 'white')
     // this.grounds.forEach((ground) => {
-    //   this.game.debug.body(ground, 'rgba(127, 0, 254, 0.51)')
+    //   this.game.debug.body(ground, 'rgba(127, 0, 254, 0.0)')
     // })
-    // this.game.debug.text('Spikes count in memory: ' + this.bottomSpikes.length, 90, 15)
+    this.game.debug.text('Nominals in memory: ' + this.nominals.length, 90, 15)
   }
 
   updateDie() {
@@ -131,6 +126,13 @@ class Game extends Phaser.State {
 
       this.bottomSpikes.add(spike)
     }
+  }
+
+  createNominals() {
+    this.nominals = new Engine.Component.NominalGenerator(
+      this.game,
+      this.bunny
+    )
   }
 
   createBestDistance() {

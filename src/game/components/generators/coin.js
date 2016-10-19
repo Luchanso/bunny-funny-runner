@@ -22,10 +22,12 @@ class CoinGenerator extends Generator {
     ])
 
     this.templates.push([
-        [1, 1, 1],
-        [1, 0, 1],
-        [1, 0, 1],
-        [1, 1, 1]
+        [1, 1, 1, 1],
+        [1, 0, 0, 1],
+        [1, 0, 0, 1],
+        [1, 0, 0, 1],
+        [1, 0, 0, 1],
+        [1, 1, 1, 1]
     ])
 
     this.templates.push([
@@ -42,7 +44,7 @@ class CoinGenerator extends Generator {
   createdNewGround(ground) {
     // if (this.game.rnd.pick([true, true, false])) return
 
-    const margin = 0
+    const margin = -5
     const padding = 1
 
     let offsetX = ground.x + ground.width / 2 + this.prototype.width / 2

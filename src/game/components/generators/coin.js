@@ -14,30 +14,38 @@ class CoinGenerator extends Generator {
     this.templates = []
 
     this.templates.push([
-        [0, 0, 1, 1, 0],
-        [0, 0, 1, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 1, 1, 1, 0],
+        [0, 0, 2, 3, 0],
+        [0, 0, 2, 0, 0],
+        [0, 0, 2, 0, 0],
+        [0, 1, 3, 1, 0],
         [1, 1, 1, 1, 1]
     ])
 
     this.templates.push([
-        [1, 1, 1, 1],
+        [3, 1, 1, 3],
         [1, 0, 0, 1],
         [1, 0, 0, 1],
         [1, 0, 0, 1],
         [1, 0, 0, 1],
-        [1, 1, 1, 1]
+        [2, 1, 1, 2]
     ])
 
     this.templates.push([
-        [0, 1, 0],
-        [1, 0, 1],
-        [0, 1, 0]
+        [0, 3, 0],
+        [2, 0, 2],
+        [0, 3, 0]
     ])
 
     this.templates.push([
-        [1]
+        [3]
+    ])
+
+    this.templates.push([
+        [0, 0, 0, 3, 0, 0, 0],
+        [0, 0, 2, 0, 2, 0, 0],
+        [0, 2, 0, 0, 0, 2, 0],
+        [2, 0, 0, 0, 0, 0, 2],
+        [1, 1, 1, 1, 1, 1, 1]
     ])
   }
 
@@ -62,21 +70,29 @@ class CoinGenerator extends Generator {
 
     for (let i in template) {
       for (let j in template[i]) {
-        if (template[i][j] === 1) {
+        if (template[i][j] > 0) {
           this.generate(
             offsetX + j * (this.prototype.width + padding) - templateWidth / 2,
-            offsetY + i * (this.prototype.height + padding) - templateHeight
+            offsetY + i * (this.prototype.height + padding) - templateHeight,
+            template[i][j]
           )
         }
       }
     }
   }
 
-  generate(x, y) {
-    const types = Object.keys(Engine.Coin.type).map(val => {
-      return Engine.Coin.type[val]
-    })
-    const type = this.game.rnd.pick(types)
+  generate(x, y, maxType) {
+    const number = Math.random()
+    let type = 0
+
+
+    if (number < 0.15 && maxType > 2) { // 15%
+      type = Engine.Coin.type.GOLD
+    } else if (number > 0.15 && number < 0.5 && maxType > 1) { // %35
+      type = Engine.Coin.type.SILVER
+    } else { // 50%
+      type = Engine.Coin.type.BRONZE
+    }
 
     let coin = this.getFirstDead()
     if (coin == null) {

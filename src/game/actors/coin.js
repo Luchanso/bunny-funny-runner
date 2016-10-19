@@ -2,13 +2,12 @@ class Coin extends Phaser.Sprite {
   constructor(game, x, y, type = Coin.type.GOLD) {
     super(game, x, y, Engine.spritesheet, type + '_1.png')
 
-    this.width *= 0.35
-    this.height *= 0.35
+    this.width *= 0.25
+    this.height *= 0.25
     this.anchor.setTo(0.5)
 
     this.game.physics.enable([this])
     // this.body.immovable = true
-    this.body.gravity.setTo(this.game.rnd.between(-100, 100), this.game.rnd.between(-100, 100))
 
     this.data.type = type
 
@@ -16,7 +15,7 @@ class Coin extends Phaser.Sprite {
   }
 
   createAnimation() {
-    const countCoinsFrame = 5
+    const countCoinsFrame = 7
 
     let animationFrames = []
 
@@ -24,7 +23,7 @@ class Coin extends Phaser.Sprite {
       animationFrames.push(`${this.data.type}_${i}.png`)
     }
 
-    this.animations.add('rotate', animationFrames, 5, true)
+    this.animations.add('rotate', animationFrames, 15, true)
     this.animations.play('rotate')
   }
 

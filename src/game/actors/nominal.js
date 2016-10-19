@@ -31,7 +31,7 @@ class Nominal extends Phaser.Text {
   }
 
   addAnimation() {
-    const animationTime = 500
+    const animationTime = 400
     const animationDistance = 50
 
     this.alpha = 1

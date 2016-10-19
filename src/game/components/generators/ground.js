@@ -33,8 +33,8 @@ class GroundsGenerator extends Engine.Component.Generator {
     const SPLIT_VERTICAL = 6
     const START_POINT = -(this.game.world.bounds.height - this.game.height)
     const GRID_HEIGHT = this.game.world.bounds.height / SPLIT_VERTICAL
-    const RND_HORIZONTAL = 125
-    const RND_VERTICAL = 65
+    const RND_HORIZONTAL = 120
+    const RND_VERTICAL = 75
 
     for (let i = 1; i < SPLIT_VERTICAL; i++) {
       if (this.game.rnd.pick[true, false]) continue

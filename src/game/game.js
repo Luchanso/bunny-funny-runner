@@ -90,11 +90,6 @@ class Game extends Phaser.State {
   }
 
   render() {
-    // this.game.debug.spriteInfo(this.bunny, 90, 15, 'white')
-    // this.grounds.forEach((ground) => {
-    //   this.game.debug.body(ground, 'rgba(127, 0, 254, 0.0)')
-    // })
-    this.game.debug.text('Nominals in memory: ' + this.nominals.length, 90, 15)
   }
 
   updateDie() {
@@ -279,7 +274,7 @@ class Game extends Phaser.State {
 
     this.camera.roundPx = false
     this.camera.follow(this.bunny, Phaser.Camera.FOLLOW_LOCKON, 1, smoothMove)
-    this.camera.deadzone = new Phaser.Rectangle(paddingLeft, this.game.height / 2, 1, deadZoneHeight)
+    this.camera.deadzone = new Phaser.Rectangle(paddingLeft, this.game.height / 2 - this.bunny.height * 1.5, 1, deadZoneHeight)
   }
 
   createBackground() {

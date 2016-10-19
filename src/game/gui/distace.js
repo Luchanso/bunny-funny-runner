@@ -1,11 +1,11 @@
 class Distance extends Phaser.Text {
   constructor(game, x, y) {
     const style = {
-      fill: 'rgb(168, 0, 210)',
-      font: '25px Arial'
+      fill: '#00BCD4',
+      font: '43px Arial'
     }
 
-    super(game, x, y, 'Distance: 0 m.', style)
+    super(game, x, y, '0m', style)
 
     this.fixedToCamera = true
     this.score = Engine.Service.get('Score')
@@ -13,7 +13,7 @@ class Distance extends Phaser.Text {
   }
 
   updateDistance() {
-    this.text = `Distance: ${this.score.currentDistance} m.`
+    this.text = `${this.score.currentDistance}m`
   }
 }
 

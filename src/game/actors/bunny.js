@@ -16,8 +16,16 @@ class Bunny extends Phaser.Sprite {
     this.body.maxVelocity.setTo(400, 2000)
     this.body.collideWorldBounds = true
 
+    this.onDied = new Phaser.Signal()
+
     this.createAnimation()
     this.animations.play('run')
+
+    this.addSounds()
+  }
+
+  addSounds() {
+    this.dieSound = this.game.sound.add('die')
   }
 
   addTrail() {
@@ -47,9 +55,15 @@ class Bunny extends Phaser.Sprite {
   }
 
   die() {
+    if (this.data.isDead) return
+
+    this.dieSound.play()
+
     const animationDownTime = 1000
     const animationUpTime = 400
     const upMove = 100
+
+    this.game.camera.unfollow()
 
     this.body.velocity.setTo(0)
     this.body.acceleration.setTo(0)
@@ -66,6 +80,8 @@ class Bunny extends Phaser.Sprite {
         y: this.game.height + this.height
       }, animationUpTime, Phaser.Easing.Quadratic.In)
       .start()
+
+    this.onDied.dispatch()
   }
 
   run() {

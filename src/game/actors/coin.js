@@ -23,6 +23,11 @@ class Coin extends Phaser.Sprite {
     }
 
     this.createAnimation()
+    this.createSounds()
+  }
+
+  createSounds() {
+    this.sound = this.game.sound.add('coin', 0.4)
   }
 
   createAnimation() {
@@ -31,6 +36,7 @@ class Coin extends Phaser.Sprite {
     let animationFrames = []
 
     for (let i = 1; i < countCoinsFrame; i++) {
+      // if (i === 4) continue
       animationFrames.push(`${this.data.type}_${i}.png`)
     }
 
@@ -46,6 +52,10 @@ class Coin extends Phaser.Sprite {
     // this.animations.currentAnim.destroy()
 
     this.createAnimation()
+  }
+
+  take() {
+    this.sound.play()
   }
 }
 

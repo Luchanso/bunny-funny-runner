@@ -2,6 +2,8 @@ class BestDistance {
   constructor(game) {
     this.score = Engine.Service.get('Score')
 
+    if (this.score.bestDistance === 0) return
+
     this.game = game
     this.x = this.score.bestDistance * Engine.Score.MULTIPER_DISTANCE
 

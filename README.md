@@ -1,7 +1,8 @@
 Plans
+
+* Maybe add AIR tail?
+* Add DIE effect like a BOOOOOMM!!!!
 * Fix bug with double grounds - add overlap for grounds and coins
-* Fix camera - change dieZone (more upper)
-* Add bonus system
 * Add enemy
   * Sow
   * Bird
@@ -16,9 +17,24 @@ Plans
   * Other...
 * Add lives
 * Add space (universe)
+* Add bonus system
 * Add biom system
 
 * Simple menu
   * Play
   * Settings (simple)
   * Shop
+
+---
+Install:
+```sh
+git clone https://github.com/Luchanso/bunny-funny-runner
+cd bunny-funny-runner
+npm install
+npm install gulp -g
+```
+Run command:
+```sh
+gulp
+```
+It will be run on http://localhost:8080 or http://127.0.0.1:8080

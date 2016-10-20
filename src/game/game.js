@@ -14,6 +14,10 @@ class Game extends Phaser.State {
     this.load.image('layer3', 'assets/sprites/backgrounds/layer3.png')
     this.load.image('layer4', 'assets/sprites/backgrounds/layer4.png')
 
+
+    this.load.audio('die', ['assets/sounds/die.mp3', 'assets/sounds/die.ogg'])
+    this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
+
     this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8)
   }
 
@@ -37,6 +41,7 @@ class Game extends Phaser.State {
     this.createSpikes()
     this.createGrounds()
     this.createCoins()
+    this.createEnemies()
 
     this.bunny.addTrail()
 
@@ -49,29 +54,19 @@ class Game extends Phaser.State {
     this.createBestDistance()
     this.createNominals()
 
-    // TEMP
+    // TEMP Code
 
-    {
-      let coin = new Engine.Coin(this.game, 220, 370)
-      this.coins.add(coin)
-    }
-    {
-      let coin = new Engine.Coin(this.game, 250, 370, Engine.Coin.type.SILVER)
-      this.coins.add(coin)
-    }
-    {
-      let coin = new Engine.Coin(this.game, 280, 370, Engine.Coin.type.BRONZE)
-      this.coins.add(coin)
-    }
+    let test = new Engine.FlyMan(this.game, this.bunny.x + 200, this.bunny.y + 150)
+    this.enemies.add(test)
 
-
-    // END TEMP
+    // TEMP END Code
   }
 
   update() {
     this.physics.arcade.collide(this.bunny, this.grounds)
     this.physics.arcade.collide(this.bunny.data.trail, this.grounds)
     this.physics.arcade.overlap(this.bunny, this.coins, this.takeCoin, null, this)
+    this.physics.arcade.overlap(this.bunny, this.enemies, this.collideEnemies, null, this)
     this.updateDie()
 
     // TODO: Need incapsulation
@@ -86,6 +81,7 @@ class Game extends Phaser.State {
 
     this._score.coins += coin.data.nominal
 
+    coin.take()
     coin.kill()
   }
 
@@ -98,8 +94,22 @@ class Game extends Phaser.State {
       !this.bunny.data.isDead
     ) {
       this.bunny.die()
-      this.lose()
     }
+  }
+
+  createEnemies() {
+    this.enemies = new Engine.Component.EnemyGenerator(
+      this.game,
+      this.bunny,
+      this.grounds
+    )
+  }
+
+  collideEnemies(bunny, enemy) {
+    if (this.bunny.data.isDead) return
+
+    this.bunny.die()
+    enemy.die()
   }
 
   createSpikes() {
@@ -247,7 +257,8 @@ class Game extends Phaser.State {
   }
 
   createBunny() {
-    window.bunny = this.bunny = new Engine.Bunny(this.game, 150, 150, 'bunny1')
+    window.bunny = this.bunny = new Engine.Bunny(this.game, 150, 150, 'bunny2')
+    this.bunny.onDied.add(this.lose, this)
     this.add.existing(this.bunny)
   }
 

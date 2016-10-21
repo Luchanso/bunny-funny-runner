@@ -7,10 +7,12 @@ class EnemyGenerator extends Generator {
 
     this.flyMans = this.game.add.group()
     this.springMans = this.game.add.group()
+    this.spikeBalls = this.game.add.group()
 
     this.types = [
       Engine.SpringMan,
-      Engine.FlyMan
+      Engine.FlyMan,
+      Engine.SpikeBall
     ]
   }
 
@@ -23,7 +25,7 @@ class EnemyGenerator extends Generator {
     let y = 0
 
     x = ground.x + ground.width + marginLeft
-    y = ground.y + this.game.rnd.between(-50, 50)
+    y = ground.y + this.game.rnd.between(-75, 75)
 
     let type = this.game.rnd.pick(this.types)
     let enemy
@@ -42,6 +44,14 @@ class EnemyGenerator extends Generator {
         enemy = this.flyMans.getFirstDead()
         if (enemy == null) {
           enemy = new Engine.FlyMan(this.game, x, y)
+        } else {
+          enemy.reset(x, y)
+        }
+      break
+      case Engine.SpikeBall:
+        enemy = this.spikeBalls.getFirstDead()
+        if (enemy == null) {
+          enemy = new Engine.SpikeBall(this.game, x, y)
         } else {
           enemy.reset(x, y)
         }

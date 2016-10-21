@@ -50,7 +50,7 @@ class CoinGenerator extends Generator {
   }
 
   createdNewGround(ground) {
-    // if (this.game.rnd.pick([true, true, false])) return
+    if (Math.random() < 0.3) return
 
     const margin = -5
     const padding = 1

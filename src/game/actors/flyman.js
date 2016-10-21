@@ -1,11 +1,6 @@
 class FlyMan extends Engine.Enemy {
   constructor(game, x, y) {
-    super(game, x, y, 'flyMan_still_stand.png')
-
-    this.width *= 0.35
-    this.height *= 0.35
-
-    this.game.physics.arcade.enable([ this ])
+    super(game, x, y, 'flyMan_fly.png')
 
     this.verticaleTween = this.addVerticaleMove()
   }

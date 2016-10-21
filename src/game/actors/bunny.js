@@ -13,19 +13,22 @@ class Bunny extends Phaser.Sprite {
     this.height *= 0.35
 
     this.body.gravity.setTo(0, 2500)
-    this.body.maxVelocity.setTo(400, 2000)
+    this.body.maxVelocity.setTo(400, 20000)
     this.body.collideWorldBounds = true
+    this.body.checkCollision.top = false
 
     this.onDied = new Phaser.Signal()
 
     this.createAnimation()
+    this.createDieAnimation()
     this.animations.play('run')
 
     this.addSounds()
   }
 
   addSounds() {
-    this.dieSound = this.game.sound.add('die')
+    this.dieSound = this.game.sound.add('lose')
+    this.jumpSound = this.game.sound.add('jump')
   }
 
   addTrail() {
@@ -55,33 +58,36 @@ class Bunny extends Phaser.Sprite {
   }
 
   die() {
+    return
     if (this.data.isDead) return
 
     this.dieSound.play()
+    this.playDieAnimation()
 
     const animationDownTime = 1000
-    const animationUpTime = 400
+    const animationUpTime = 100
     const upMove = 100
 
     this.game.camera.unfollow()
 
-    this.body.velocity.setTo(0)
+    this.body.velocity.setTo(0, -1200)
     this.body.acceleration.setTo(0)
+    this.body.gravity.setTo(0, 4000)
     this.body.collideWorldBounds = false
     this.data.isDead = true
     this.data.trail.stopEmitt()
     this.animations.play('hurt')
 
-    this.game.add.tween(this)
-      .to({
-        y: this.y - upMove
-      }, animationDownTime)
-      .to({
-        y: this.game.height + this.height
-      }, animationUpTime, Phaser.Easing.Quadratic.In)
-      .start()
-
     this.onDied.dispatch()
+  }
+
+  createDieAnimation() {
+    this.data.blood = new Engine.Blood(this.game, this)
+    this.game.add.existing(this.data.blood)
+  }
+
+  playDieAnimation() {
+    this.data.blood.playAnimation()
   }
 
   run() {
@@ -103,13 +109,15 @@ class Bunny extends Phaser.Sprite {
 
     const jumpImpulse = 900
 
-    if (this.data.countJump > 0)
+    if (this.data.countJump > 0) {
       this.body.velocity.y = -jumpImpulse
       this.data.countJump--
+      this.jumpSound.play()
+    }
   }
 }
 
-Bunny.MAX_JUMPS = 2
+Bunny.MAX_JUMPS = 20
 Bunny.ACCELERATION = 2000
 Bunny.BASE_MAX_SPEED = 500
 

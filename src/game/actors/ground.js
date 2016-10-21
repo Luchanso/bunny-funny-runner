@@ -11,6 +11,8 @@ class Ground extends Phaser.Sprite {
 
     this.game.physics.enable([this])
     this.body.immovable = true
+    this.body.checkCollision.bottom = false
+    this.body.checkCollision.left = false
 
     this.data.name = name
     this.data.type = type
@@ -29,6 +31,8 @@ class Ground extends Phaser.Sprite {
     this.data.type = type
     this.data.small = small
     this.data.broken = broken
+
+    this.body.checkCollision.left = false
   }
 }
 

@@ -14,9 +14,9 @@ class Game extends Phaser.State {
     this.load.image('layer3', 'assets/sprites/backgrounds/layer3.png')
     this.load.image('layer4', 'assets/sprites/backgrounds/layer4.png')
 
-
-    this.load.audio('die', ['assets/sounds/die.mp3', 'assets/sounds/die.ogg'])
+    this.load.audio('lose', ['assets/sounds/lose.mp3', 'assets/sounds/lose.ogg'])
     this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
+    this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg'])
 
     this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8)
   }
@@ -32,14 +32,16 @@ class Game extends Phaser.State {
   }
 
   create() {
+    const worldHeight = this.game.height * 3
     this.stage.backgroundColor = 0xADE6FF
     this.physics.startSystem(Phaser.Physics.ARCADE)
-    this.world.setBounds(0, -this.game.height, Number.MAX_VALUE, this.game.height * 2);
+    this.world.setBounds(0, -(worldHeight - this.game.height), Number.MAX_VALUE, worldHeight);
 
     this.createBackground()
     this.createBunny()
     this.createSpikes()
     this.createGrounds()
+    this.createJumpers()
     this.createCoins()
     this.createEnemies()
 
@@ -54,19 +56,31 @@ class Game extends Phaser.State {
     this.createBestDistance()
     this.createNominals()
 
-    // TEMP Code
+    // TEMP
 
-    let test = new Engine.FlyMan(this.game, this.bunny.x + 200, this.bunny.y + 150)
-    this.enemies.add(test)
+    let jumper = new Engine.Jumper(
+      this.game,
+      this.bunny.x + this.bunny.width + 15,
+      this.startGround.y
+    )
+    this.jumpers.add(jumper)
 
-    // TEMP END Code
+    // END TEMP
   }
 
   update() {
+    if (this.bunny.data.isDead) {
+      this.physics.arcade.collide(this.bunny.data.blood, this.grounds)
+      this.physics.arcade.collide(this.bunny.data.blood, this.enemies)
+
+      return
+    }
+
     this.physics.arcade.collide(this.bunny, this.grounds)
     this.physics.arcade.collide(this.bunny.data.trail, this.grounds)
     this.physics.arcade.overlap(this.bunny, this.coins, this.takeCoin, null, this)
     this.physics.arcade.overlap(this.bunny, this.enemies, this.collideEnemies, null, this)
+    this.physics.arcade.overlap(this.bunny, this.jumpers, this.overlapJumper, null, this)
     this.updateDie()
 
     // TODO: Need incapsulation
@@ -86,6 +100,15 @@ class Game extends Phaser.State {
   }
 
   render() {
+    let summ = 0
+
+    summ += this.grounds.length
+    summ += this.coins.length
+    summ += this.enemies.length
+    summ += this.jumpers.length
+    summ += this.bottomSpikes.length
+
+    this.game.debug.text('Objects in memory: ' + summ, 19, 65)
   }
 
   updateDie() {
@@ -95,6 +118,14 @@ class Game extends Phaser.State {
     ) {
       this.bunny.die()
     }
+  }
+
+  createJumpers() {
+    this.jumpers = new Engine.Component.JumperGenerator(
+      this.game,
+      this.bunny,
+      this.grounds
+    )
   }
 
   createEnemies() {
@@ -110,6 +141,13 @@ class Game extends Phaser.State {
 
     this.bunny.die()
     enemy.die()
+  }
+
+  overlapJumper(bunny, jumper) {
+    if (jumper.data.activated) return
+
+    jumper.activate()
+    bunny.body.velocity.setTo(9000, -2000)
   }
 
   createSpikes() {
@@ -215,6 +253,11 @@ class Game extends Phaser.State {
   }
 
   addControl() {
+    let hotkey2 = this.input.keyboard.addKey(Phaser.KeyCode.Q)
+    hotkey2.onDown.add(() => {
+      this.bunny.playDieAnimation()
+    }, this)
+
     let hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR)
     hotkey.onDown.add(this.spacebarDown, this)
 
@@ -244,7 +287,7 @@ class Game extends Phaser.State {
     const small = false
     const broken = false
 
-    let startGround = new Engine.Ground(
+    this.startGround = new Engine.Ground(
       this.game,
       x,
       y,
@@ -253,7 +296,7 @@ class Game extends Phaser.State {
       broken,
     )
 
-    this.grounds.add(startGround)
+    this.grounds.add(this.startGround)
   }
 
   createBunny() {
@@ -273,9 +316,26 @@ class Game extends Phaser.State {
   }
 
   createFirstGrounds() {
-    for (let i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {
-      this.grounds.generate(i * this.distanceBetweenGrounds)
+    const marginTop = 100
+    const style = {
+      fill: '#00BCD4',
+      font: '31px Arial'
     }
+
+    for (let i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {
+      let ground = new Engine.Ground(this.game, this.distanceBetweenGrounds * i, 400)
+      this.grounds.add(ground)
+    }
+
+    let label = this.add.text(
+      this.game.width / 2,
+      marginTop,
+      `Best ${this._score.bestDistance}m.`,
+      style
+    )
+    label.anchor.setTo(0.5)
+
+    this.bunny.bringToTop()
   }
 
   configurateCamera() {

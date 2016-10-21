@@ -2,11 +2,6 @@ class SpringMan extends Engine.Enemy {
   constructor(game, x, y) {
     super(game, x, y, 'springMan_stand.png')
 
-    this.width *= 0.35
-    this.height *= 0.35
-
-    this.game.physics.arcade.enable([ this ])
-
     this.shakeTween = this.addShake()
   }
 

@@ -15,7 +15,6 @@ class Bunny extends Phaser.Sprite {
     this.body.gravity.setTo(0, 2500)
     this.body.maxVelocity.setTo(400, 20000)
     this.body.collideWorldBounds = true
-    this.body.checkCollision.top = false
 
     this.onDied = new Phaser.Signal()
 
@@ -58,7 +57,7 @@ class Bunny extends Phaser.Sprite {
   }
 
   die() {
-    return
+    // return
     if (this.data.isDead) return
 
     this.dieSound.play()
@@ -117,7 +116,7 @@ class Bunny extends Phaser.Sprite {
   }
 }
 
-Bunny.MAX_JUMPS = 20
+Bunny.MAX_JUMPS = 2
 Bunny.ACCELERATION = 2000
 Bunny.BASE_MAX_SPEED = 500
 

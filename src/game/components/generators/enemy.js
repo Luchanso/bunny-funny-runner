@@ -17,7 +17,7 @@ class EnemyGenerator extends Generator {
   }
 
   generate(ground) {
-    if (!Phaser.Utils.chanceRoll(30)) return
+    if (!Phaser.Utils.chanceRoll(25)) return
 
     const marginLeft = this.game.rnd.between(50, 150)
 

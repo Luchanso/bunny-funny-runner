@@ -5,7 +5,8 @@ class Service {
 }
 
 Service.list = {
-  "Score": new Engine.Score()
+  "Score": new Engine.Score(),
+  "Profiler": new Engine.Profiler()
 }
 
 Engine.Service = Service

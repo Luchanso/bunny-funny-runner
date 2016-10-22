@@ -9,7 +9,10 @@ class JumperGenerator extends Engine.Component.Generator {
   }
 
   generate(ground) {
-    if (Math.random() > 0.1) return // 10%
+    const absoluteY = this.game.world.height - this.game.height + ground.y
+
+    if (absoluteY < JumperGenerator.MIN_HEIGHT) return
+    if (!Phaser.Utils.chanceRoll(15)) return
 
     const x = this.game.rnd.between(
       ground.x,
@@ -30,5 +33,10 @@ class JumperGenerator extends Engine.Component.Generator {
   }
 }
 
+/**
+ * Minimal height of generation by Y
+ * @type {[type]}
+ */
+JumperGenerator.MIN_HEIGHT = 750
 
 Engine.Component.JumperGenerator = JumperGenerator

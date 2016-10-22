@@ -30,13 +30,13 @@ class GroundsGenerator extends Engine.Component.Generator {
   generate(margin) {
     super.generate()
 
-    const SPLIT_VERTICAL = 5
+    const VERTICAL_COUNT = 5
     const START_POINT = -(this.game.world.bounds.height - this.game.height)
-    const GRID_HEIGHT = this.game.world.bounds.height / SPLIT_VERTICAL
+    const GRID_HEIGHT = 335//this.game.world.bounds.height / SPLIT_VERTICAL
     const RND_HORIZONTAL = 120
-    const RND_VERTICAL = 75
+    const RND_VERTICAL = 100
 
-    for (let i = 1; i < SPLIT_VERTICAL; i++) {
+    for (let i = 1; i < VERTICAL_COUNT; i++) {
       if (this.game.rnd.pick[true, false]) continue
 
       const x = this.bunny.x + margin + this.game.rnd.between(-RND_HORIZONTAL, RND_HORIZONTAL)

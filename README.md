@@ -26,6 +26,12 @@ Plans
   * Shop
 
 ---
+Configurations:
+* Jump distance x: 280px - 560px
+* Jump distance y: 154px - 250px
+* Jump distance y from jumper: 783px
+
+---
 Install:
 ```sh
 git clone https://github.com/Luchanso/bunny-funny-runner

@@ -22,7 +22,7 @@ class Game extends Phaser.State {
   }
 
   init() {
-    this.distanceBetweenGrounds = 500
+    this.distanceBetweenGrounds = 450
 
     // TODO: Rename this
     this._score = Engine.Service.get('Score')
@@ -32,6 +32,8 @@ class Game extends Phaser.State {
   }
 
   create() {
+    this.profiler = Engine.Service.get('Profiler')
+
     const worldHeight = this.game.height * 3
     this.stage.backgroundColor = 0xADE6FF
     this.physics.startSystem(Phaser.Physics.ARCADE)
@@ -55,17 +57,6 @@ class Game extends Phaser.State {
     this.createStartLabel()
     this.createBestDistance()
     this.createNominals()
-
-    // TEMP
-
-    let jumper = new Engine.Jumper(
-      this.game,
-      this.bunny.x + this.bunny.width + 15,
-      this.startGround.y
-    )
-    this.jumpers.add(jumper)
-
-    // END TEMP
   }
 
   update() {
@@ -77,7 +68,6 @@ class Game extends Phaser.State {
     }
 
     this.physics.arcade.collide(this.bunny, this.grounds)
-    this.physics.arcade.collide(this.bunny.data.trail, this.grounds)
     this.physics.arcade.overlap(this.bunny, this.coins, this.takeCoin, null, this)
     this.physics.arcade.overlap(this.bunny, this.enemies, this.collideEnemies, null, this)
     this.physics.arcade.overlap(this.bunny, this.jumpers, this.overlapJumper, null, this)
@@ -108,7 +98,7 @@ class Game extends Phaser.State {
     summ += this.jumpers.length
     summ += this.bottomSpikes.length
 
-    this.game.debug.text('Objects in memory: ' + summ, 19, 65)
+    this.game.debug.text('Objects in memory: ' + summ, 90, 15)
   }
 
   updateDie() {
@@ -339,7 +329,7 @@ class Game extends Phaser.State {
   }
 
   configurateCamera() {
-    const paddingLeft = 250
+    const paddingLeft = 200
     const smoothMove = 0.15
     const deadZoneHeight = 50
 

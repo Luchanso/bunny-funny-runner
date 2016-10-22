@@ -4,14 +4,14 @@ class Ground extends Phaser.Sprite {
 
     super(game, x, y, Engine.spritesheet, name)
 
-    this.width *= 0.45
-    this.height *= 0.45
+    this.width *= Engine.scaleRatio
+    this.height *= Engine.scaleRatio
 
     this.autoCull = true
 
     this.game.physics.enable([this])
     this.body.immovable = true
-    this.body.checkCollision.bottom = false
+    this.body.checkCollision.down = false
     this.body.checkCollision.left = false
 
     this.data.name = name
@@ -31,8 +31,6 @@ class Ground extends Phaser.Sprite {
     this.data.type = type
     this.data.small = small
     this.data.broken = broken
-
-    this.body.checkCollision.left = false
   }
 }
 

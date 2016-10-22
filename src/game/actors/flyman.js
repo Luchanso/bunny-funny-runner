@@ -3,6 +3,34 @@ class FlyMan extends Engine.Enemy {
     super(game, x, y, 'flyMan_fly.png')
 
     this.verticaleTween = this.addVerticaleMove()
+    this.addEmitter()
+  }
+
+  addEmitter() {
+    const maxSmoke = 20
+    const burstInterval = 100
+
+    this.smoke = this.game.add.emitter(0, 0, maxSmoke)
+    this.smoke.makeParticles(Engine.spritesheet, ['smoke.png'], maxSmoke)
+    this.smoke.gravity = 0
+    this.smoke.setAlpha(1, 0, 2000)
+    this.smoke.setScale(0, Engine.scaleRatio, 0, Engine.scaleRatio, 2000)
+    this.smoke.forEach((item) => {
+      item.tint = 0x777777
+    })
+    this.smoke.lifespan = 2000
+    this.smoke.setXSpeed(1, 15)
+    this.smoke.setYSpeed(1, 15)
+
+    this.smoke.timer = this.game.time.create()
+    this.smoke.timer.loop(burstInterval, this.burst, this)
+    this.smoke.timer.start()
+  }
+
+  burst() {
+    for (let i = 0; i < 1; i++) {
+      this.smoke.emitParticle(this.x + this.height / 2, this.y + this.width / 2, Engine.spritesheet, 'smoke.png')
+    }
   }
 
   addVerticaleMove() {

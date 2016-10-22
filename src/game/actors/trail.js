@@ -4,6 +4,7 @@ class Trail extends Phaser.Particles.Arcade.Emitter {
 
     this.makeParticles('particles', 0, maxParticles, true)
     this.lifespan = 500
+    this.setAlpha(1, 0, this.lifespan)
     this.bounce.setTo(1)
 
     this._particlesEmit = 2

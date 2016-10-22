@@ -30,7 +30,7 @@ class GroundsGenerator extends Engine.Component.Generator {
   generate(margin) {
     super.generate()
 
-    const VERTICAL_COUNT = 5
+    const VERTICAL_COUNT = 8
     const START_POINT = -(this.game.world.bounds.height - this.game.height)
     const GRID_HEIGHT = 335//this.game.world.bounds.height / SPLIT_VERTICAL
     const RND_HORIZONTAL = 120

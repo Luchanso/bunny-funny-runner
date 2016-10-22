@@ -1,24 +1,20 @@
 Plans
-
-* Maybe add AIR tail?
-* Add DIE effect like a BOOOOOMM!!!!
-* Fix bug with double grounds - add overlap for grounds and coins
+* Add minimal distance of generation enemies
+* Change cicle of generation grounds this.game.height -> 0
 * Add enemy
-  * Sow
   * Bird
   * Devil
-  * Helicopter
   * Cloud
-* Add jumpers
 * Add thorns
 * Add environment
   * Cactus
   * Grass
   * Other...
 * Add lives
-* Add space (universe)
 * Add bonus system
 * Add biom system
+* Add ADS for lives
+* Maybe add AIR tail?
 
 * Simple menu
   * Play
@@ -30,6 +26,8 @@ Configurations:
 * Jump distance x: 280px - 560px
 * Jump distance y: 154px - 250px
 * Jump distance y from jumper: 783px
+* Better height = 600px
+* Better height >  1024px
 
 ---
 Install:

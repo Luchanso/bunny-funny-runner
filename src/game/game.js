@@ -34,7 +34,7 @@ class Game extends Phaser.State {
   create() {
     this.profiler = Engine.Service.get('Profiler')
 
-    const worldHeight = this.game.height * 3
+    const worldHeight = 550 * 5
     this.stage.backgroundColor = 0xADE6FF
     this.physics.startSystem(Phaser.Physics.ARCADE)
     this.world.setBounds(0, -(worldHeight - this.game.height), Number.MAX_VALUE, worldHeight);

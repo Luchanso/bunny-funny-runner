@@ -31,9 +31,9 @@ class CoinGenerator extends Generator {
     ])
 
     this.templates.push([
-        [0, 3, 0],
-        [2, 0, 2],
-        [0, 3, 0]
+        [0, 1, 0],
+        [1, 3, 1],
+        [0, 1, 0]
     ])
 
     this.templates.push([
@@ -47,23 +47,46 @@ class CoinGenerator extends Generator {
         [2, 0, 0, 0, 0, 0, 2],
         [1, 1, 1, 1, 1, 1, 1]
     ])
+
+    this.templates.push([
+      [0, 0, 1],
+      [0, 3, 0],
+      [1, 0, 0]
+    ])
+
+    this.templates.push([
+      [1, 0, 0],
+      [0, 3, 0],
+      [0, 0, 1]
+    ])
+
+    this.templates.push([
+      [1, 0, 0],
+      [0, 3, 0],
+      [0, 0, 1]
+    ])
   }
 
   createdNewGround(ground) {
     if (!Phaser.Utils.chanceRoll(30)) return
 
-    const margin = -5
     const padding = 1
 
-    let offsetX = ground.x + ground.width / 2 + this.prototype.width / 2
-    let offsetY = ground.y + margin + + this.prototype.height / 2
+    let template = this.game.rnd.pick(this.templates)
 
-    let template
-    if (ground.data.small) {
-      template = this.templates[this.game.rnd.pick([1, 2, 3])]
-    } else {
-      template = this.game.rnd.pick(this.templates)
-    }
+    // if (ground.data.small) {
+    //   template = this.templates[this.game.rnd.pick([1, 2, 3])]
+    // } else {
+    // }
+
+    let direction = this.game.rnd.pick([
+      this.getOffsetRight,
+      this.getOffsetTop,
+      this.getOffsetTopRight
+    ]).bind(this)(ground, template)
+
+    let offsetX = direction.x
+    let offsetY = direction.y
 
     let templateWidth = template[0].length * this.prototype.width
     let templateHeight = template.length * this.prototype.height
@@ -71,11 +94,10 @@ class CoinGenerator extends Generator {
     for (let i in template) {
       for (let j in template[i]) {
         if (template[i][j] > 0) {
-          this.generate(
-            offsetX + j * (this.prototype.width + padding) - templateWidth / 2,
-            offsetY + i * (this.prototype.height + padding) - templateHeight,
-            template[i][j]
-          )
+          let x = offsetX + j * (this.prototype.width + padding) - templateWidth / 2
+          let y = offsetY + i * (this.prototype.height + padding) - templateHeight
+
+          this.generate(x, y, template[i][j])
         }
       }
     }
@@ -103,6 +125,41 @@ class CoinGenerator extends Generator {
     }
 
     return coin
+  }
+
+  getOffsetRight(ground, template) {
+    const margin = -5
+    const marginLeft = 25
+
+    let result = {
+      x: ground.x + ground.width + template[0].length * this.prototype.width + marginLeft,
+      y: ground.y + margin + this.prototype.height / 2
+    }
+
+    return result
+  }
+
+  getOffsetTop(ground, template) {
+    const margin = -5
+
+    let result = {
+      x: ground.x + ground.width / 2 + this.prototype.width / 2,
+      y: ground.y + margin + this.prototype.height / 2
+    }
+
+    return result
+  }
+
+  getOffsetTopRight(ground, template) {
+    const margin = template.length * this.prototype.height
+    const marginLeft = 25
+
+    let result = {
+      x: ground.x + ground.width + template[0].length * this.prototype.width + marginLeft,
+      y: ground.y + margin + this.prototype.height / 2
+    }
+
+    return result
   }
 }
 

@@ -50,7 +50,7 @@ class CoinGenerator extends Generator {
   }
 
   createdNewGround(ground) {
-    if (Math.random() < 0.3) return
+    if (!Phaser.Utils.chanceRoll(30)) return
 
     const margin = -5
     const padding = 1

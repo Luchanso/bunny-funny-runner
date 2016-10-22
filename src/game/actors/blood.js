@@ -1,6 +1,7 @@
 class Blood extends Phaser.Particles.Arcade.Emitter {
   constructor(game, follow) {
     const particles = 500
+    const lifespan = 5000
     const speed = 1000
 
     super(game, 0, 0, particles)
@@ -12,6 +13,7 @@ class Blood extends Phaser.Particles.Arcade.Emitter {
     this.gravity = 0
     this.minParticleSpeed.setTo(-speed, -speed)
     this.maxParticleSpeed.setTo(speed, speed)
+    this.setAlpha(1, 0, lifespan)
   }
 
   playAnimation() {

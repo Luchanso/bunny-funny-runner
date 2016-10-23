@@ -1,5 +1,7 @@
 class Trail extends Phaser.Particles.Arcade.Emitter {
-  constructor(game, maxParticles, follow) {
+  constructor(game, follow) {
+    const maxParticles = 20
+
     super(game, 0, 0, maxParticles)
 
     this.makeParticles('particles', 0, maxParticles, true)

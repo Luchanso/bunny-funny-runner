@@ -4,6 +4,8 @@ class Nominal extends Phaser.Text {
 
     this.anchor.setTo(0.5)
 
+    this.autoCull = true
+
     this.addAnimation()
   }
 

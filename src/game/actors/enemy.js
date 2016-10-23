@@ -5,6 +5,8 @@ class Enemy extends Phaser.Sprite {
     this.game.physics.arcade.enable([ this ])
     this.body.immovable = true
 
+    this.autoCull = true
+
     this.width *= Engine.scaleRatio
     this.height *= Engine.scaleRatio
   }

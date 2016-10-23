@@ -9,6 +9,8 @@ class Jumper extends Phaser.Sprite {
 
     this.game.physics.arcade.enable([ this ])
 
+    this.autoCull = true
+
     this.addAnimations()
   }
 

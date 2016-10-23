@@ -90,6 +90,10 @@ class Game extends Phaser.State {
   }
 
   render() {
+
+  }
+
+  debugCountObject() {
     let summ = 0
 
     for (let item of this.world.children) {
@@ -105,7 +109,6 @@ class Game extends Phaser.State {
     this.game.debug.text('Jumpers objects: ' + this.jumpers.length, 90, 135)
     this.game.debug.text('Blood objects: ' + this.bunny.data.blood.length, 90, 155)
     this.game.debug.text('Trail objects: ' + this.bunny.data.trail.length, 90, 175)
-
   }
 
   updateDie() {

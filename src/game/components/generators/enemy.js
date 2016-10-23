@@ -5,10 +5,6 @@ class EnemyGenerator extends Generator {
     this.grounds = grounds
     this.grounds.signals.generate.add(this.generate, this)
 
-    this.flyMans = this.game.add.group()
-    this.springMans = this.game.add.group()
-    this.spikeBalls = this.game.add.group()
-
     this.types = [
       Engine.SpringMan,
       Engine.FlyMan,
@@ -27,38 +23,19 @@ class EnemyGenerator extends Generator {
     x = ground.x + ground.width + marginLeft
     y = ground.y + this.game.rnd.between(-75, 75)
 
-    let type = this.game.rnd.pick(this.types)
-    let enemy
+    let TypeClass = this.game.rnd.pick(this.types)
+    let enemy = this.children.find(item => {
+      return item.constructor === TypeClass && !item.alive
+    })
 
-    // TODO: Need refactoring and incapsulations
-    switch(type) {
-      case Engine.SpringMan:
-        enemy = this.springMans.getFirstDead()
-        if (enemy == null) {
-          enemy = new Engine.SpringMan(this.game, x, y)
-        } else {
-          enemy.reset(x, y)
-        }
-      break
-      case Engine.FlyMan:
-        enemy = this.flyMans.getFirstDead()
-        if (enemy == null) {
-          enemy = new Engine.FlyMan(this.game, x, y)
-        } else {
-          enemy.reset(x, y)
-        }
-      break
-      case Engine.SpikeBall:
-        enemy = this.spikeBalls.getFirstDead()
-        if (enemy == null) {
-          enemy = new Engine.SpikeBall(this.game, x, y)
-        } else {
-          enemy.reset(x, y)
-        }
-      break
+    if (enemy == null) {
+      enemy = new TypeClass(this.game, x, y)
+      this.add(enemy)
+    } else {
+      enemy.reset(x, y)
     }
 
-    this.add(enemy)
+    return enemy
   }
 }
 

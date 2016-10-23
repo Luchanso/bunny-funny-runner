@@ -92,13 +92,20 @@ class Game extends Phaser.State {
   render() {
     let summ = 0
 
-    summ += this.grounds.length
-    summ += this.coins.length
-    summ += this.enemies.length
-    summ += this.jumpers.length
-    summ += this.bottomSpikes.length
+    for (let item of this.world.children) {
+      summ += item.children.length + 1
+    }
 
     this.game.debug.text('Objects in memory: ' + summ, 90, 15)
+    this.game.debug.text('Rendered objects: ' + this.camera.totalInView, 90, 35)
+    this.game.debug.text('Coins objects: ' + this.coins.length, 90, 55)
+    this.game.debug.text('Enemies objects: ' + this.enemies.length, 90, 75)
+    this.game.debug.text('Grounds objects: ' + this.grounds.length, 90, 95)
+    this.game.debug.text('Nominals objects: ' + this.nominals.length, 90, 115)
+    this.game.debug.text('Jumpers objects: ' + this.jumpers.length, 90, 135)
+    this.game.debug.text('Blood objects: ' + this.bunny.data.blood.length, 90, 155)
+    this.game.debug.text('Trail objects: ' + this.bunny.data.trail.length, 90, 175)
+
   }
 
   updateDie() {

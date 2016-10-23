@@ -32,7 +32,9 @@ class Bunny extends Phaser.Sprite {
 
   addTrail() {
     this.data.trail = new Engine.Trail(this.game, this)
+    this.data.airTrail = new Engine.AirTrail(this.game, this)
     this.game.add.existing(this.data.trail)
+    this.game.add.existing(this.data.airTrail)
   }
 
   update() {

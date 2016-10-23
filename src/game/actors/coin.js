@@ -6,6 +6,8 @@ class Coin extends Phaser.Sprite {
     this.height *= 0.25
     this.anchor.setTo(0.5)
 
+    this.autoCull = true
+
     this.game.physics.enable([this])
 
     this.data.type = type

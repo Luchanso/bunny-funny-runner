@@ -5,6 +5,8 @@ class EnemyGenerator extends Generator {
     this.grounds = grounds
     this.grounds.signals.generate.add(this.generate, this)
 
+    this.score = Engine.Service.get('Score')
+
     this.types = [
       Engine.SpringMan,
       Engine.FlyMan,
@@ -13,7 +15,12 @@ class EnemyGenerator extends Generator {
   }
 
   generate(ground) {
-    if (!Phaser.Utils.chanceRoll(25)) return
+    const maxChance = 25
+    const maxDistance = 100
+    const currentDistance = this.score.currentDistance
+    const currentChance = this.cubicInOut(currentDistance / maxDistance) * maxChance
+
+    if (!Phaser.Utils.chanceRoll(currentChance)) return
 
     const marginLeft = this.game.rnd.between(50, 150)
 
@@ -36,6 +43,11 @@ class EnemyGenerator extends Generator {
     }
 
     return enemy
+  }
+
+  cubicInOut(t) {
+    if (t > 1) return 1
+    return t
   }
 }
 

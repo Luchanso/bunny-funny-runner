@@ -1,6 +1,5 @@
 Plans
-* Add minimal distance of generation enemies
-* Change cicle of generation grounds this.game.height -> 0
+
 * Add enemy
   * Bird
   * Devil
@@ -14,7 +13,6 @@ Plans
 * Add bonus system
 * Add biom system
 * Add ADS for lives
-* Maybe add AIR tail?
 
 * Simple menu
   * Play

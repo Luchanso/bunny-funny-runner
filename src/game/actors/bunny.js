@@ -31,8 +31,7 @@ class Bunny extends Phaser.Sprite {
   }
 
   addTrail() {
-    const particlse = 250
-    this.data.trail = new Engine.Trail(this.game, particlse, this)
+    this.data.trail = new Engine.Trail(this.game, this)
     this.game.add.existing(this.data.trail)
   }
 
@@ -57,7 +56,7 @@ class Bunny extends Phaser.Sprite {
   }
 
   die() {
-    // return
+    if (this.data.god) return
     if (this.data.isDead) return
 
     this.dieSound.play()
@@ -101,6 +100,11 @@ class Bunny extends Phaser.Sprite {
     this.animations.add('hurt', [this.data.name + '_hurt.png'], 1, true)
     this.animations.add('ready', [this.data.name + '_ready.png'], 1, true)
     this.animations.add('stand', [this.data.name + '_stand.png'], 1, true)
+  }
+
+  activateGod() {
+    this.data.god = true
+    Bunny.MAX_JUMPS = 2000
   }
 
   jump() {

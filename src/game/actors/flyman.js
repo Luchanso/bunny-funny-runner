@@ -29,7 +29,7 @@ class FlyMan extends Engine.Enemy {
 
   burst() {
     for (let i = 0; i < 1; i++) {
-      this.smoke.emitParticle(this.x + this.height / 2, this.y + this.width / 2, Engine.spritesheet, 'smoke.png')
+      this.smoke.emitParticle(this.x + this.width / 2, this.y + this.height / 2, Engine.spritesheet, 'smoke.png')
     }
   }
 

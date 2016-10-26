@@ -41,6 +41,10 @@ class CoinGenerator extends Generator {
     ])
 
     this.templates.push([
+        [3, 3, 3]
+    ])
+
+    this.templates.push([
         [0, 0, 0, 3, 0, 0, 0],
         [0, 0, 2, 0, 2, 0, 0],
         [0, 2, 0, 0, 0, 2, 0],

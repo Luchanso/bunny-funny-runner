@@ -24,9 +24,8 @@ class Game extends Phaser.State {
   init() {
     this.distanceBetweenGrounds = 450
 
-    // TODO: Rename this
-    this._score = Engine.Service.get('Score')
-    this._score.coins = 0
+    this.score = Engine.Service.get('Score')
+    this.score.coins = 0
 
     window.game = this
   }
@@ -35,7 +34,7 @@ class Game extends Phaser.State {
     this.profiler = Engine.Service.get('Profiler')
 
     const worldHeight = 550 * 5
-    this.stage.backgroundColor = 0xADE6FF
+    this.stage.backgroundColor = 0xADE6FF // 0x555555//
     this.physics.startSystem(Phaser.Physics.ARCADE)
     this.world.setBounds(0, -(worldHeight - this.game.height), Number.MAX_VALUE, worldHeight);
 
@@ -46,6 +45,7 @@ class Game extends Phaser.State {
     this.createJumpers()
     this.createCoins()
     this.createEnemies()
+    this.createPowerUps()
 
     this.bunny.addTrail()
 
@@ -57,6 +57,15 @@ class Game extends Phaser.State {
     this.createStartLabel()
     this.createBestDistance()
     this.createNominals()
+
+    // this.createDatGui()
+
+    // TEMP
+
+    let powerUp = new Engine.PowerUp(this.game, this.startGround.x + 150, this.startGround.y - 50)
+    this.powerUps.add(powerUp)
+
+    // END TEMP
   }
 
   update() {
@@ -71,10 +80,62 @@ class Game extends Phaser.State {
     this.physics.arcade.overlap(this.bunny, this.coins, this.takeCoin, null, this)
     this.physics.arcade.overlap(this.bunny, this.enemies, this.collideEnemies, null, this)
     this.physics.arcade.overlap(this.bunny, this.jumpers, this.overlapJumper, null, this)
+    this.physics.arcade.overlap(this.bunny, this.powerUps, this.takePowerUp, null, this)
     this.updateDie()
+    this.updateMagnet()
 
     // TODO: Need incapsulation
-    this._score.currentDistance = Math.round(this.bunny.x / Engine.Score.MULTIPER_DISTANCE)
+    this.score.currentDistance = Math.round(this.bunny.x / Engine.Score.MULTIPER_DISTANCE)
+  }
+
+  render() {
+    // this.game.debug.body(this.cloud, 'rgba(20, 0, 255, 0.35)')
+  }
+
+  createDatGui() {
+    let gui = new dat.GUI()
+
+    let dg = document.getElementsByClassName('dg ac')[0]
+    dg.style.right = (this.game.width / 2 - 245) + 'px'
+
+    this.speed = {
+      speed: 50000,
+      maxX: 750,
+      maxY: 900
+    }
+
+    gui.add(this.speed, 'speed')
+    gui.add(this.speed, 'maxX', 0, 50000)
+    gui.add(this.speed, 'maxY', 0, 50000)
+  }
+
+  updateMagnet() {
+    if (!this.bunny.data.magnet) return
+
+    const speed = 50000
+    const minSpeed = 600
+    const maxSpeed = 1000
+
+    // TODO: Need optimization
+    this.coins.forEach(coin => {
+      let distance = this.game.physics.arcade.distanceBetween(this.bunny, coin)
+      if (distance < Engine.magnetDistace) {
+        this.game.physics.arcade.accelerateToObject(
+          coin,
+          this.bunny,
+          speed,
+          this.rnd.between(minSpeed, maxSpeed),
+          this.rnd.between(minSpeed, maxSpeed)
+        )
+      }
+    })
+  }
+
+  takePowerUp(bunny, powerUp) {
+    if (powerUp.type === Engine.PowerUp.types.MAGNET) {
+      this.bunny.activateMagnet()
+    }
+    powerUp.kill()
   }
 
   takeCoin(bunny, coin) {
@@ -83,14 +144,10 @@ class Game extends Phaser.State {
 
     this.nominals.generate(x, y, coin.data.nominal)
 
-    this._score.coins += coin.data.nominal
+    this.score.coins += coin.data.nominal
 
     coin.take()
     coin.kill()
-  }
-
-  render() {
-
   }
 
   debugCountObject() {
@@ -186,14 +243,22 @@ class Game extends Phaser.State {
     this.loseLabel.show()
 
     // TODO: Need incapsulation
-    if (this._score.bestDistance < this._score.currentDistance) {
-      this._score.bestDistance = this._score.currentDistance
+    if (this.score.bestDistance < this.score.currentDistance) {
+      this.score.bestDistance = this.score.currentDistance
     }
   }
 
   start() {
     this.startLabel.hide()
     this.bunny.run()
+  }
+
+  createPowerUps() {
+    this.powerUps = new Engine.Component.PowerUpGenerator(
+      this.game,
+      this.bunny,
+      this.grounds
+    )
   }
 
   createCoins() {
@@ -217,7 +282,7 @@ class Game extends Phaser.State {
       this.game,
       this.game.width / 2,
       this.game.height / 2,
-      'Press spacebar\r\nfor start'
+      'Press spacebar\r\nto start'
     )
 
     this.startLabel.anchor.setTo(0.5)
@@ -330,7 +395,7 @@ class Game extends Phaser.State {
     let label = this.add.text(
       this.game.width / 2,
       marginTop,
-      `Best ${this._score.bestDistance}m.`,
+      `Best ${this.score.bestDistance}m.`,
       style
     )
     label.anchor.setTo(0.5)

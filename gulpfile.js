@@ -58,6 +58,7 @@ gulp.task('js', () => {
 
     'src/game/components/generator.js',
     'src/game/components/**/*.js',
+    'src/game/actors/enemy.js',
     'src/game/actors/**/*.js',
     'src/game/gui/**/*.js',
     'src/game/game.js',

@@ -2,7 +2,10 @@ class Bunny extends Phaser.Sprite {
   constructor(game, x, y, name) {
     super(game, x, y, Engine.spritesheet, name + '_stand.png')
 
+    this.activateGod()
+
     this.data.name = name
+    this.data.magnet = false
     this.data.isDead = false
     this.data.running = false
     this.data.countJump = Bunny.MAX_JUMPS
@@ -23,6 +26,7 @@ class Bunny extends Phaser.Sprite {
     this.animations.play('run')
 
     this.addSounds()
+    this.addMagnetEffect()
   }
 
   addSounds() {
@@ -37,8 +41,18 @@ class Bunny extends Phaser.Sprite {
     this.game.add.existing(this.data.airTrail)
   }
 
+  addMagnetEffect() {
+    this.magnetEffect = new Engine.MagnetEffect(this.game)
+    this.game.add.existing(this.magnetEffect)
+  }
+
   update() {
     if (this.data.isDead) return
+
+    if (this.data.magnet) {
+      this.magnetEffect.x = this.x + this.width / 2
+      this.magnetEffect.y = this.y + this.height / 2
+    }
 
     if (this.inAir()) {
       this.data.trail.startEmitt()
@@ -51,6 +65,28 @@ class Bunny extends Phaser.Sprite {
       this.data.trail.stopEmitt()
       this.animations.play('stand')
     }
+  }
+
+  activateMagnet() {
+    this.data.magnet = true
+
+    this.game.add.tween(this.magnetEffect)
+      .to({
+        alpha: 1
+      })
+      .start()
+
+    setTimeout(this.diactivateMagnet, Bunny.MAGNET_TIME)
+  }
+
+  diactivateMagnet() {
+    this.bunny.data.magnet = false
+
+    this.game.add.tween(this.magnetEffect)
+      .to({
+        alpha: 0
+      })
+      .start()
   }
 
   inAir() {
@@ -125,5 +161,6 @@ class Bunny extends Phaser.Sprite {
 Bunny.MAX_JUMPS = 2
 Bunny.ACCELERATION = 2000
 Bunny.BASE_MAX_SPEED = 500
+Bunny.MAGNET_TIME = 15000
 
 Engine.Bunny = Bunny

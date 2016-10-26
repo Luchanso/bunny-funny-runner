@@ -1,16 +1,11 @@
 Plans
 
-* Add enemy
-  * Bird
-  * Devil
-  * Cloud
-* Add thorns
-* Add environment
-  * Cactus
-  * Grass
-  * Other...
-* Add lives
-* Add bonus system
+* Add powers
+  * Not touchable - blinking and remove overlap with enemies
+  * Jet Pack - flying system, replace hotkey ???
+  * Coin magnet - take coins in radius
+  * Infinite jumps
+
 * Add biom system
 * Add ADS for lives
 
@@ -18,6 +13,7 @@ Plans
   * Play
   * Settings (simple)
   * Shop
+
 
 ---
 Configurations:

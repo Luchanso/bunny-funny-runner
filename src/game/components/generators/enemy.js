@@ -10,7 +10,8 @@ class EnemyGenerator extends Generator {
     this.types = [
       Engine.SpringMan,
       Engine.FlyMan,
-      Engine.SpikeBall
+      Engine.SpikeBall,
+      Engine.Cloud
     ]
   }
 

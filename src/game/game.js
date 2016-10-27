@@ -197,10 +197,12 @@ class Game extends Phaser.State {
 
   collideEnemies(bunny, enemy) {
     if (this.bunny.data.isDead) return
+
+    enemy.die()
+
     if (this.bunny.data.god) return
 
     this.bunny.die()
-    enemy.die()
   }
 
   overlapJumper(bunny, jumper) {

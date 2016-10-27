@@ -25,6 +25,7 @@ class Bunny extends Phaser.Sprite {
 
     this.addSounds()
     this.addMagnetEffect()
+    this.addWings()
   }
 
   addSounds() {
@@ -44,8 +45,19 @@ class Bunny extends Phaser.Sprite {
     this.game.add.existing(this.magnetEffect)
   }
 
+  addWings() {
+    this.wings = new Engine.Wings(this.game, this)
+  }
+
   update() {
     if (this.data.isDead) return
+
+    if (this.data.wings) {
+      const offsetX = 8
+
+      this.wings.x = this.x + offsetX
+      this.wings.y = this.y
+    }
 
     if (this.data.magnet) {
       const offsetX = 5

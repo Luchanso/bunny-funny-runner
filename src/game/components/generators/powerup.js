@@ -9,7 +9,7 @@ class PowerUpGenerator extends Generator {
   }
 
   generate(ground) {
-    if (!Phaser.Utils.chanceRoll(3)) return
+    if (!Phaser.Utils.chanceRoll(0.3)) return
 
     const x = this.game.rnd.between(
       ground.x,

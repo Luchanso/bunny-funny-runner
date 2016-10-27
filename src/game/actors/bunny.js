@@ -2,7 +2,7 @@ class Bunny extends Phaser.Sprite {
   constructor(game, x, y, name) {
     super(game, x, y, Engine.spritesheet, name + '_stand.png')
 
-    this.activateGod()
+    // this.activateGod()
 
     this.data.name = name
     this.data.magnet = false
@@ -50,8 +50,11 @@ class Bunny extends Phaser.Sprite {
     if (this.data.isDead) return
 
     if (this.data.magnet) {
-      this.magnetEffect.x = this.x + this.width / 2
-      this.magnetEffect.y = this.y + this.height / 2
+      const offsetX = 5
+      const offsetY = 10
+
+      this.magnetEffect.x = this.x + this.width / 2 + offsetX
+      this.magnetEffect.y = this.y + this.height / 2 + offsetY
     }
 
     if (this.inAir()) {
@@ -70,23 +73,22 @@ class Bunny extends Phaser.Sprite {
   activateMagnet() {
     this.data.magnet = true
 
-    this.game.add.tween(this.magnetEffect)
-      .to({
-        alpha: 1
-      })
-      .start()
+    this.magnetEffect.show()
 
-    setTimeout(this.diactivateMagnet, Bunny.MAGNET_TIME)
+    if (this.magnetTimeout != null) {
+      clearTimeout(this.magnetTimeout)
+    }
+
+    this.magnetTimeout = setTimeout(
+      this.diactivateMagnet.bind(this),
+      Bunny.MAGNET_TIME
+    )
   }
 
   diactivateMagnet() {
-    this.bunny.data.magnet = false
+    this.data.magnet = false
 
-    this.game.add.tween(this.magnetEffect)
-      .to({
-        alpha: 0
-      })
-      .start()
+    this.magnetEffect.hide()
   }
 
   inAir() {
@@ -161,6 +163,6 @@ class Bunny extends Phaser.Sprite {
 Bunny.MAX_JUMPS = 2
 Bunny.ACCELERATION = 2000
 Bunny.BASE_MAX_SPEED = 500
-Bunny.MAGNET_TIME = 15000
+Bunny.MAGNET_TIME = 8000
 
 Engine.Bunny = Bunny

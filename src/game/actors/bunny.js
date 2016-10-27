@@ -2,8 +2,6 @@ class Bunny extends Phaser.Sprite {
   constructor(game, x, y, name) {
     super(game, x, y, Engine.spritesheet, name + '_stand.png')
 
-    // this.activateGod()
-
     this.data.name = name
     this.data.magnet = false
     this.data.isDead = false
@@ -96,7 +94,6 @@ class Bunny extends Phaser.Sprite {
   }
 
   die() {
-    if (this.data.god) return
     if (this.data.isDead) return
 
     this.dieSound.play()
@@ -144,7 +141,30 @@ class Bunny extends Phaser.Sprite {
 
   activateGod() {
     this.data.god = true
-    Bunny.MAX_JUMPS = 2000
+
+    this.godTimeout = setTimeout(this.diactivateGod.bind(this), Bunny.GODMODE_TIME)
+
+    const animationTime = 400
+
+    this.godAnimation = this.game.add.tween(this)
+      .to({
+        alpha: 0.1
+      }, animationTime)
+      .to({
+        alpha: 1
+      }, animationTime)
+      .loop()
+      .start()
+
+    this.godAnimation.onComplete.add(() => {
+      this.alpha = 1
+    }, this)
+  }
+
+  diactivateGod() {
+    this.data.god = false
+
+    this.godAnimation.stop(true)
   }
 
   jump() {
@@ -164,5 +184,6 @@ Bunny.MAX_JUMPS = 2
 Bunny.ACCELERATION = 2000
 Bunny.BASE_MAX_SPEED = 500
 Bunny.MAGNET_TIME = 8000
+Bunny.GODMODE_TIME = 5000
 
 Engine.Bunny = Bunny

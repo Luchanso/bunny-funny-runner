@@ -1,9 +1,11 @@
 class PowerUp extends Phaser.Sprite {
-  constructor(game, x, y, type = PowerUp.types.MAGNET) {
+  constructor(game, x, y, type = PowerUp.types.GOD) {
     super(game, x, y, Engine.spritesheet, type)
 
-    this.width *= Engine.scaleRatio
-    this.height *= Engine.scaleRatio
+    const customRatio = 0.25
+
+    this.width *= Engine.scaleRatio + customRatio
+    this.height *= Engine.scaleRatio + customRatio
 
     this.type = type
 
@@ -15,6 +17,7 @@ class PowerUp extends Phaser.Sprite {
 
 PowerUp.types = {
   MAGNET: 'powerup_bubble.png',
+  GOD: 'powerup_bunny.png',
 }
 
 Engine.PowerUp = PowerUp

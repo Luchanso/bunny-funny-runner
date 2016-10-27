@@ -134,6 +134,8 @@ class Game extends Phaser.State {
   takePowerUp(bunny, powerUp) {
     if (powerUp.type === Engine.PowerUp.types.MAGNET) {
       this.bunny.activateMagnet()
+    } else if (powerUp.type === Engine.PowerUp.types.GOD) {
+      this.bunny.activateGod()
     }
     powerUp.kill()
   }
@@ -195,6 +197,7 @@ class Game extends Phaser.State {
 
   collideEnemies(bunny, enemy) {
     if (this.bunny.data.isDead) return
+    if (this.bunny.data.god) return
 
     this.bunny.die()
     enemy.die()

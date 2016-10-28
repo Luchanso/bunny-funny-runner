@@ -1,72 +1,70 @@
 class Wings extends Phaser.Group {
   constructor(game, bunny) {
-    const wingsOffset = 50
+    const wingsOffset = 35
 
     super(game)
 
+    this.data = {
+      visible: false
+    }
+    this.alpha = 0
     this.bunny = bunny
 
-    this.leftWing = this.game.make.sprite(
-      0,
-      this.bunny.height / 2,
-      Engine.spritesheet,
+    this.leftWing = new Engine.Wing(
+      this.game,
       'wing_left.png'
     )
-    this.leftWing.width *= Engine.scaleRatio
-    this.leftWing.height *= Engine.scaleRatio
-
-    this.leftWing.x = (this.bunny.width) / 2 - wingsOffset
-
-    this.rightWing = this.game.make.sprite(
-      (this.bunny.width) / 2 + wingsOffset,
-      this.bunny.height / 2,
-      Engine.spritesheet,
+    this.rightWing = new Engine.Wing(
+      this.game,
       'wing_right.png'
     )
 
-    this.rightWing.width *= Engine.scaleRatio
-    this.rightWing.height *= Engine.scaleRatio
+    this.leftWing.x = (this.bunny.width) / 2 - wingsOffset
+    this.rightWing.x = (this.bunny.width) / 2 + wingsOffset
+    this.rightWing.y = this.leftWing.y = (this.bunny.height) / 2
+
 
     this.leftWing.anchor.setTo(1, 0.611)
     this.rightWing.anchor.setTo(0, 0.611)
 
-    this.leftWing.tint = 0x0000FF
-    this.rightWing.tint = 0x0000FF
-
     this.add(this.leftWing)
     this.add(this.rightWing)
 
-    this.leftWing.rotation = Math.PI / 80
-    this.rightWing.rotation = -Math.PI / 80
-
-    this.game.add.tween(this.leftWing)
-      .to({
-        rotation: -Math.PI / 4
-      }, 200)
-      .to({
-        rotation: Math.PI / 80
-      }, 200)
-      .loop(-1)
-      // .delay(1000)
-      .start()
-
-    this.game.add.tween(this.rightWing)
-      .to({
-        rotation: Math.PI / 4
-      }, 200)
-      .to({
-        rotation: -Math.PI / 80
-      }, 200)
-      .loop(-1)
-      // .delay(1000)
-      .start()
+    this.leftWing.rotateNegative()
+    this.rightWing.rotatePositive()
 
     this.bunny.bringToTop()
   }
 
   update() {
-    // this.x = this.bunny.x
-    // this.y = this.bunny.y
+    if (!this.data.visible) return
+
+    const offsetX = 7
+
+    this.x = this.bunny.x + offsetX
+    this.y = this.bunny.y
+  }
+
+  show() {
+    this.fade(1)
+
+    this.data.visible = true
+  }
+
+  hide() {
+    this.fade(0)
+
+    this.data.visible = false
+  }
+
+  fade(alpha) {
+    const time = 100
+
+    this.game.add.tween(this)
+      .to({
+        alpha: alpha
+      }, time)
+      .start()
   }
 }
 

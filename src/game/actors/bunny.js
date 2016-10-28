@@ -28,6 +28,26 @@ class Bunny extends Phaser.Sprite {
     this.addWings()
   }
 
+  activateWings() {
+    const wingsJumps = 100
+
+    this.wings.show()
+
+    this.data.countJump = Bunny.MAX_JUMPS = wingsJumps
+
+    if (this.wingTimeout != null) {
+      clearTimeout(this.wingTimeout)
+    }
+
+    this.wingTimeout = setTimeout(this.diactivateWings.bind(this), Bunny.WINGS_TIME)
+  }
+
+  diactivateWings() {
+    this.data.countJump = Bunny.MAX_JUMPS = Bunny.BASE_MAX_JUMPS
+
+    this.wings.hide()
+  }
+
   addSounds() {
     this.dieSound = this.game.sound.add('lose')
     this.jumpSound = this.game.sound.add('jump')
@@ -51,13 +71,6 @@ class Bunny extends Phaser.Sprite {
 
   update() {
     if (this.data.isDead) return
-
-    if (this.data.wings) {
-      const offsetX = 8
-
-      this.wings.x = this.x + offsetX
-      this.wings.y = this.y
-    }
 
     if (this.data.magnet) {
       const offsetX = 5
@@ -192,10 +205,12 @@ class Bunny extends Phaser.Sprite {
   }
 }
 
-Bunny.MAX_JUMPS = 2
+Bunny.BASE_MAX_JUMPS = 2
+Bunny.MAX_JUMPS = Bunny.BASE_MAX_JUMPS
 Bunny.ACCELERATION = 2000
 Bunny.BASE_MAX_SPEED = 500
 Bunny.MAGNET_TIME = 8000
 Bunny.GODMODE_TIME = 5000
+Bunny.WINGS_TIME = 6000
 
 Engine.Bunny = Bunny

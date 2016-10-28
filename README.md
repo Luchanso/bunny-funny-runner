@@ -1,10 +1,8 @@
 Plans
 
+* Add timer bar for powers
 * Add powers
-  * Not touchable - blinking and remove overlap with enemies
   * Jet Pack - flying system, replace hotkey ???
-  * Coin magnet - take coins in radius
-  * Infinite jumps
 
 * Add biom system
 * Add ADS for lives

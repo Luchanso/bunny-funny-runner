@@ -1,5 +1,5 @@
 class PowerUp extends Phaser.Sprite {
-  constructor(game, x, y, type = PowerUp.types.GOD) {
+  constructor(game, x, y, type = PowerUp.types.WINGS) {
     super(game, x, y, Engine.spritesheet, type)
 
     const customRatio = 0.25
@@ -18,6 +18,7 @@ class PowerUp extends Phaser.Sprite {
 PowerUp.types = {
   MAGNET: 'powerup_bubble.png',
   GOD: 'powerup_bunny.png',
+  WINGS: 'powerup_wings.png',
 }
 
 Engine.PowerUp = PowerUp

@@ -1,8 +1,8 @@
 Plans
 
+* Fix bug, when take jetpack with other powers - not correct work
+* Add achievements
 * Add timer bar for powers
-* Add powers
-  * Jet Pack - flying system, replace hotkey ???
 
 * Add biom system
 * Add ADS for lives
@@ -12,7 +12,7 @@ Plans
   * Settings (simple)
   * Shop
 
-
+Убойные каникулы
 ---
 Configurations:
 * Jump distance x: 280px - 560px

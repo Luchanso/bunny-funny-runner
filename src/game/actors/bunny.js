@@ -6,6 +6,7 @@ class Bunny extends Phaser.Sprite {
     this.data.magnet = false
     this.data.isDead = false
     this.data.running = false
+    this.data.jetPack = false
     this.data.countJump = Bunny.MAX_JUMPS
 
     this.game.physics.arcade.enable([ this ])
@@ -26,6 +27,63 @@ class Bunny extends Phaser.Sprite {
     this.addSounds()
     this.addMagnetEffect()
     this.addWings()
+    this.addFire()
+
+    this.jetPackSprite = this.game.make.sprite(0, 0, Engine.spritesheet, 'jetpack.png')
+
+    this.addChild(this.jetPackSprite)
+    this.jetPackSprite.alpha = 0
+  }
+
+  activateJetPack() {
+    this.data.jetPack = true
+    this.data.trail.stopEmitt()
+
+    this.body.velocity.setTo(0)
+    this.body.maxVelocity.setTo(40000, 20000)
+    this.body.gravity.setTo(0, 0)
+
+    this.jetPackSprite.alpha = 1
+
+    this.activateGod()
+    this.fire.show()
+
+    this.game.add.tween(this)
+      .to({
+        rotation: Math.PI / 2
+      }, 100)
+      .start()
+
+    setTimeout(this.diactivateJetPack.bind(this), Bunny.JETPACK_TIME)
+  }
+
+  diactivateJetPack() {
+    let tween = this.game.add.tween(this.body.maxVelocity)
+      .to({
+        x: 400
+      }, 500)
+      .start()
+
+    tween.onComplete.add(() => {
+      this.data.jetPack = false
+      this.data.trail.startEmitt()
+      this.body.gravity.setTo(0, 2500)
+
+      this.body.velocity.setTo(Bunny.BASE_MAX_SPEED, 0)
+      this.body.acceleration.setTo(Bunny.ACCELERATION, 0)
+
+      this.jetPackSprite.alpha = 0
+
+      this.diactivateGod()
+      this.fire.hide()
+      this.rotation = 0
+
+      this.game.add.tween(this)
+        .to({
+          rotation: 0
+        }, 100)
+        .start()
+    }, this)
   }
 
   activateWings() {
@@ -39,7 +97,9 @@ class Bunny extends Phaser.Sprite {
       clearTimeout(this.wingTimeout)
     }
 
-    this.wingTimeout = setTimeout(this.diactivateWings.bind(this), Bunny.WINGS_TIME)
+    if (!this.data.jetPack) {
+      this.wingTimeout = setTimeout(this.diactivateWings.bind(this), Bunny.WINGS_TIME)
+    }
   }
 
   diactivateWings() {
@@ -81,16 +141,25 @@ class Bunny extends Phaser.Sprite {
     }
 
     if (this.inAir()) {
-      this.data.trail.startEmitt()
+      if (!this.data.jetPack) this.data.trail.startEmitt()
       this.animations.play('jump')
     } else if (this.data.running){
-      this.data.trail.startEmitt()
+      if (!this.data.jetPack) this.data.trail.startEmitt()
       this.animations.play('run')
       this.data.countJump = Bunny.MAX_JUMPS
     } else {
       this.data.trail.stopEmitt()
       this.animations.play('stand')
     }
+  }
+
+  addFire() {
+    this.fire = new Engine.Fire(this.game)
+    this.fire.y = this.height / Engine.scaleRatio
+    this.fire.x = this.width / 2
+    this.fire.alpha = 0
+
+    this.addChild(this.fire)
   }
 
   activateMagnet() {
@@ -167,18 +236,27 @@ class Bunny extends Phaser.Sprite {
   activateGod() {
     this.data.god = true
 
-    this.godTimeout = setTimeout(this.diactivateGod.bind(this), Bunny.GODMODE_TIME)
+    if (!this.data.jetPack) {
+      this.godTimeout = setTimeout(
+        this.diactivateGod.bind(this),
+        Bunny.GODMODE_TIME
+      )
+    }
 
     const animationTime = 400
 
+    if (this.godAnimation) {
+      this.godAnimation.stop(true)
+    }
+
     this.godAnimation = this.game.add.tween(this)
       .to({
-        alpha: 0.1
+        alpha: 0.2
       }, animationTime)
       .to({
         alpha: 1
       }, animationTime)
-      .loop()
+      .loop(-1)
       .start()
 
     this.godAnimation.onComplete.add(() => {
@@ -193,7 +271,7 @@ class Bunny extends Phaser.Sprite {
   }
 
   jump() {
-    if (this.data.isDead) return
+    if (this.data.isDead || this.data.jetPack) return
 
     const jumpImpulse = 900
 
@@ -209,8 +287,10 @@ Bunny.BASE_MAX_JUMPS = 2
 Bunny.MAX_JUMPS = Bunny.BASE_MAX_JUMPS
 Bunny.ACCELERATION = 2000
 Bunny.BASE_MAX_SPEED = 500
+
 Bunny.MAGNET_TIME = 8000
-Bunny.GODMODE_TIME = 5000
+Bunny.GODMODE_TIME = 10000
 Bunny.WINGS_TIME = 6000
+Bunny.JETPACK_TIME = 5000
 
 Engine.Bunny = Bunny

@@ -67,7 +67,7 @@ gulp.task('js', () => {
   ];
 
   gulp.src(src)
-    .pipe(sourcemaps.init())
+    // .pipe(sourcemaps.init())
     .on('error', err => {
       console.error('Error in compress task', err.toString());
     })
@@ -77,7 +77,7 @@ gulp.task('js', () => {
     .on('error', err => {
       console.error('Error in babel task', err.toString());
     })
-    .pipe(sourcemaps.write())
+    // .pipe(sourcemaps.write())
     .pipe(concat('app.js'))
     .pipe(gulp.dest('public'))
     .pipe(connect.reload());

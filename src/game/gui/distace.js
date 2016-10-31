@@ -2,7 +2,7 @@ class Distance extends Phaser.Text {
   constructor(game, x, y) {
     const style = {
       fill: '#00BCD4',
-      font: '43px Arial'
+      font: '43px Open Sans'
     }
 
     super(game, x, y, '0m', style)

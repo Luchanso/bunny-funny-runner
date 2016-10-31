@@ -9,26 +9,36 @@ class PowerUpGenerator extends Generator {
   }
 
   generate(ground) {
-    if (!Phaser.Utils.chanceRoll(1)) return
+    if (this.bunny.data.jetPack) return
+    if (!Phaser.Utils.chanceRoll(3)) return
 
     const x = this.game.rnd.between(
       ground.x,
       ground.x + ground.width - this.prototype.width
     )
     const y = ground.y - this.prototype.height
+    const types = [
+      Engine.PowerUp.type.MAGNET,
+      Engine.PowerUp.type.GOD,
+      Engine.PowerUp.type.WINGS,
+    ]
+    let type = this.game.rnd.pick(types)
+
+    if (Phaser.Utils.chanceRoll(10)) {
+      type = Engine.PowerUp.type.JETPACK
+    }
 
     let powerUp = this.getFirstDead()
 
     if (powerUp == null) {
-      powerUp = new Engine.PowerUp(this.game, x, y)
+      powerUp = new Engine.PowerUp(this.game, x, y, type)
       this.add(powerUp)
     } else {
-      powerUp.reset(x, y)
+      powerUp.reset(x, y, type)
     }
 
     return powerUp
   }
 }
-
 
 Engine.Component.PowerUpGenerator = PowerUpGenerator

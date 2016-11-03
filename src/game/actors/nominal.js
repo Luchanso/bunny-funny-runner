@@ -25,7 +25,7 @@ class Nominal extends Phaser.Text {
     }
 
     const style = {
-      font: '31px Arial',
+      font: `${35 + nominal * 6}px Open Sans`,
       fill: color
     }
 
@@ -33,7 +33,7 @@ class Nominal extends Phaser.Text {
   }
 
   addAnimation() {
-    const animationTime = 400
+    const animationTime = 700
     const animationDistance = 50
 
     this.alpha = 1

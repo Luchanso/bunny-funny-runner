@@ -1,11 +1,12 @@
 class ProgressBar extends Phaser.Graphics {
-  constructor(game, x, y, text) {
+  constructor(game, x, y, text, color) {
     super(game, x, y)
 
-    this.color = 0x8661ff
+    this.color = color
 
     this.progress = 1
     this.fixedToCamera = true
+    this.alpha = 0
 
     this.addLabel(text)
     this.draw(this.progress)
@@ -44,11 +45,32 @@ class ProgressBar extends Phaser.Graphics {
 
   animate(time) {
     this.value = 1
+    this.show()
 
     this.tween = this.game.add.tween(this)
       .to({
         value: 0
       }, time)
+      .start()
+
+    this.tween.onComplete.add(this.hide, this)
+  }
+
+  show() {
+    this.animateAlpha(1)
+  }
+
+  hide() {
+    this.animateAlpha(0)
+  }
+
+  animateAlpha(alpha) {
+    const animationTime = 150
+
+    this.game.add.tween(this)
+      .to({
+        alpha
+      }, animationTime)
       .start()
   }
 }

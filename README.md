@@ -1,8 +1,6 @@
 Plans
 
-* Fix bug, when take jetpack with other powers - not correct work
 * Add achievements
-* Add timer bar for powers
 
 * Add biom system
 * Add ADS for lives
@@ -11,6 +9,7 @@ Plans
   * Play
   * Settings (simple)
   * Shop
+    * Create money boxes
 
 Убойные каникулы
 ---

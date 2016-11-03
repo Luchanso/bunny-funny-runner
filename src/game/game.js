@@ -48,6 +48,7 @@ class Game extends Phaser.State {
     this.createCoins()
     this.createEnemies()
     this.createPowerUps()
+    this.createProgressBars()
 
     this.bunny.addTrail()
 
@@ -62,25 +63,11 @@ class Game extends Phaser.State {
 
     // TEMP CODE
 
-    this.progress = new Engine.ProgressBar(
-      this.game,
-      this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
-      150,
-      "Infinity jumps"
-    )
-
-    this.progress2 = new Engine.ProgressBar(
-      this.game,
-      this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
-      150,
-      "Infinity jumps"
-    )
-
     this.powerUps.add(new Engine.PowerUp(
       this.game,
       this.startGround.x + 150,
       this.startGround.y - 50,
-      Engine.PowerUp.type.WINGS
+      Engine.PowerUp.type.GOD
     ))
 
     this.powerUps.add(new Engine.PowerUp(
@@ -89,18 +76,6 @@ class Game extends Phaser.State {
       this.startGround.y - 50,
       Engine.PowerUp.type.WINGS
     ))
-
-    // let tween = this.game.add.tween(this.progress)
-    //   .to({
-    //     value: 1
-    //   })
-    //   .to({
-    //     value: 0
-    //   })
-    //   .loop(-1)
-    //   .start()
-
-    this.add.existing(this.progress)
 
     // END TEMP CODE
 
@@ -115,11 +90,14 @@ class Game extends Phaser.State {
       return
     }
 
-    this.physics.arcade.collide(this.bunny, this.grounds)
     this.physics.arcade.overlap(this.bunny, this.coins, this.takeCoin, null, this)
-    this.physics.arcade.overlap(this.bunny, this.enemies, this.collideEnemies, null, this)
-    this.physics.arcade.overlap(this.bunny, this.jumpers, this.overlapJumper, null, this)
-    this.physics.arcade.overlap(this.bunny, this.powerUps, this.takePowerUp, null, this)
+
+    if (!this.bunny.data.jetPack) {
+      this.physics.arcade.collide(this.bunny, this.grounds)
+      this.physics.arcade.overlap(this.bunny, this.enemies, this.collideEnemies, null, this)
+      this.physics.arcade.overlap(this.bunny, this.jumpers, this.overlapJumper, null, this)
+      this.physics.arcade.overlap(this.bunny, this.powerUps, this.takePowerUp, null, this)
+    }
     this.updateDie()
     this.updateMagnet()
 
@@ -132,6 +110,39 @@ class Game extends Phaser.State {
   render() {
     // this.game.debug.body(this.cloud, 'rgba(20, 0, 255, 0.35)')
     // this.debugCountObject()
+  }
+
+  createProgressBars() {
+    const paddingTop = 50
+    const margin = 50
+
+    this.progressJumps = new Engine.ProgressBar(
+      this.game,
+      this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
+      paddingTop,
+      "Infinity Jumps",
+       0x8661ff
+    )
+
+    this.progressMagnet = new Engine.ProgressBar(
+      this.game,
+      this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
+      this.progressJumps.y + margin,
+      "Coin Magnet",
+       0xff8000
+    )
+
+    this.progressUntouch = new Engine.ProgressBar(
+      this.game,
+      this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
+      this.progressMagnet.y + margin,
+      "Untouchability",
+       0xFF0000
+    )
+
+    this.add.existing(this.progressJumps)
+    this.add.existing(this.progressMagnet)
+    this.add.existing(this.progressUntouch)
   }
 
   createDatGui() {
@@ -167,11 +178,13 @@ class Game extends Phaser.State {
 
   takePowerUp(bunny, powerUp) {
     if (powerUp.type === Engine.PowerUp.type.MAGNET) {
+      this.progressMagnet.animate(Engine.Bunny.MAGNET_TIME)
       this.bunny.activateMagnet()
     } else if (powerUp.type === Engine.PowerUp.type.GOD) {
+      this.progressUntouch.animate(Engine.Bunny.GODMODE_TIME)
       this.bunny.activateGod()
     } else if (powerUp.type === Engine.PowerUp.type.WINGS) {
-      this.progress.animate(Engine.Bunny.WINGS_TIME)
+      this.progressJumps.animate(Engine.Bunny.WINGS_TIME)
       this.bunny.activateWings()
     } else if (powerUp.type === Engine.PowerUp.type.JETPACK) {
       this.bunny.activateJetPack()

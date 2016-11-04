@@ -49,6 +49,8 @@ gulp.task('html', () => {
 
 gulp.task('js', () => {
   const src = [
+    'src/fix.js',
+
     'src/engine/engine.js',
     'src/engine/service/*.js',
     'src/engine/service.js',

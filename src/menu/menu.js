@@ -15,6 +15,23 @@ class Menu extends Phaser.State {
     this.createPlayBtn()
     this.createSettingsBtn()
     this.createShopBtn()
+    this.createLogo()
+  }
+
+  createLogo() {
+    const style = {
+      font: '50px Open Sans',
+      fill: 'white'
+    }
+
+    this.logo = this.add.text(
+      this.game.width / 2,
+      this.game.height / 4,
+      '🐰 Bunny Funny Runner 🐰 ',
+      style
+    )
+
+    this.logo.anchor.setTo(0.5)
   }
 
   createSettingsBtn() {

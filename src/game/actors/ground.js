@@ -67,9 +67,9 @@ class Ground extends Phaser.Sprite {
     const x = this.game.rnd.between(0, this.width * 1.5)
     const y = 0
 
-    let cactus = new Phaser.Sprite(this.game, x, y, Engine.spritesheet, name)
-    cactus.anchor.setTo(0, 1)
-    this.addChild(cactus)
+    let env = new Phaser.Sprite(this.game, x, y, Engine.spritesheet, name)
+    env.anchor.setTo(0, 1)
+    this.addChild(env)
   }
 
   reset(x, y, type, small, broken) {
@@ -77,12 +77,15 @@ class Ground extends Phaser.Sprite {
 
     const name = Ground.getName(type, small, broken)
 
-    this.frame = name
+    this.frameName = name
 
     this.data.name = name
     this.data.type = type
     this.data.small = small
     this.data.broken = broken
+
+    this.removeChildren()
+    this.addEnviroment()
   }
 }
 

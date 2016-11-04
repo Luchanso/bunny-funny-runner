@@ -13,6 +13,33 @@ class GroundsGenerator extends Engine.Component.Generator {
       generate: new Phaser.Signal()
     }
     this.currentStep = -1
+    this.currentGroundType = Engine.Ground.type.SNOW
+
+    this.addBiomTimer()
+  }
+
+  addBiomTimer() {
+    const minTime = 5000
+    const maxTime = 15000
+    const time = this.game.rnd.between(minTime, maxTime)
+
+    this.biomTimer = this.game.time.create()
+    this.biomTimer.add(time, this.changeBiom, this)
+    this.biomTimer.start()
+  }
+
+  changeBiom() {
+    const minTime = 5000
+    const maxTime = 15000
+    const time = this.game.rnd.between(minTime, maxTime)
+
+    const types = Object.keys(Engine.Ground.type).map(val => {
+      return Engine.Ground.type[val]
+    })
+
+    this.currentGroundType = this.game.rnd.pick(types)
+
+    this.biomTimer.add(time, this.changeBiom, this)
   }
 
   update() {
@@ -49,10 +76,7 @@ class GroundsGenerator extends Engine.Component.Generator {
   }
 
   addRandomGround(x, y) {
-    const types = Object.keys(Engine.Ground.type).map(val => {
-      return Engine.Ground.type[val]
-    })
-    const type = this.game.rnd.pick(types)
+    const type = this.currentGroundType
     const small = this.game.rnd.pick([true, false])
     const broken = this.game.rnd.pick([true, false])
 

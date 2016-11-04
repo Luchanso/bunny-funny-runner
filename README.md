@@ -4,7 +4,6 @@ Plans
 * Change lose menu
   * Add ADS for lives
 * Simple menu
-  * Play
   * Settings (simple)
     * Music scroll
     * Sound scroll

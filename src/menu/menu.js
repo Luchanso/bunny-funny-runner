@@ -5,11 +5,53 @@ class Menu extends Phaser.State {
 
   preload() {
     this.load.image('i-play', 'assets/sprites/icons/play.png')
+    this.load.image('i-settings', 'assets/sprites/icons/settings.png')
+    this.load.image('i-shop', 'assets/sprites/icons/shop.png')
   }
 
   create() {
     this.stage.backgroundColor = 0x0D47A1
 
+    this.createPlayBtn()
+    this.createSettingsBtn()
+    this.createShopBtn()
+  }
+
+  createSettingsBtn() {
+    const btnColor = 0xADE6FF
+    const icon = 'i-settings'
+    const margin = 150
+
+    this.settings = new Engine.Btn(
+      this.game,
+      this.game.width / 2 + margin,
+      this.game.height / 2,
+      btnColor,
+      icon
+    )
+    this.settings.icon.tint = 0x26C6DA
+    // this.settings.clicked.add(this.startGame, this)
+    this.add.existing(this.settings)
+  }
+
+  createShopBtn() {
+    const btnColor = 0xADE6FF
+    const icon = 'i-shop'
+    const margin = -150
+
+    this.settings = new Engine.Btn(
+      this.game,
+      this.game.width / 2 + margin,
+      this.game.height / 2,
+      btnColor,
+      icon
+    )
+    this.settings.icon.tint = 0x26C6DA
+    // this.settings.clicked.add(this.startGame, this)
+    this.add.existing(this.settings)
+  }
+
+  createPlayBtn() {
     const btnColor = 0xADE6FF
     const icon = 'i-play'
 

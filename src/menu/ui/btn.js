@@ -24,11 +24,26 @@ class Btn extends Phaser.Graphics {
   }
 
   click() {
+    this.parent.bringToTop(this)
+
     const animation = 250
+    let screenSize
+
+    if (this.x > this.game.width / 2) {
+      screenSize = Phaser.Math.distancePow(this.x, this.y, 0, 0)
+    }
+    else {
+      screenSize = Phaser.Math.distancePow(
+        this.x,
+        this.y,
+        this.game.width,
+        this.game.height
+      )
+    }
 
     let tween = this.game.add.tween(this)
       .to({
-        radius: Math.sqrt(Math.pow(this.game.width, 2) + Math.pow(this.game.height, 2))
+        radius: screenSize * 2
       }, animation)
       .start()
 

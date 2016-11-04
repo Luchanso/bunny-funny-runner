@@ -1,17 +1,16 @@
 Plans
 
-* Add achievements
-
-* Add biom system
+* Add music
 * Add ADS for lives
 
 * Simple menu
   * Play
   * Settings (simple)
+    * Music scroll
+    * Sound scroll
   * Shop
     * Create money boxes
 
-Убойные каникулы
 ---
 Configurations:
 * Jump distance x: 280px - 560px

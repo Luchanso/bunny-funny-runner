@@ -58,6 +58,9 @@ gulp.task('js', () => {
     'src/boot/**/*.js',
     'src/loader/**/*.js',
 
+    'src/menu/ui/*.js',
+    'src/menu/menu.js',
+
     'src/game/components/generator.js',
     'src/game/components/**/*.js',
     'src/game/actors/enemy.js',

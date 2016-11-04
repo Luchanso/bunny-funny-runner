@@ -1,8 +1,8 @@
 Plans
 
 * Add music
-* Add ADS for lives
-
+* Change lose menu
+  * Add ADS for lives
 * Simple menu
   * Play
   * Settings (simple)

@@ -61,6 +61,12 @@ gulp.task('js', () => {
     'src/menu/ui/*.js',
     'src/menu/menu.js',
 
+    'src/shop/ui/*.js',
+    'src/shop/shop.js',
+
+    'src/settings/ui/*.js',
+    'src/settings/settings.js',
+
     'src/game/components/generator.js',
     'src/game/components/**/*.js',
     'src/game/actors/enemy.js',

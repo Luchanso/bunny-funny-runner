@@ -52,7 +52,7 @@ class Menu extends Phaser.State {
   }
 
   createShopBtn() {
-    const btnColor = 0xADE6FF
+    const btnColor = 0xBF360C
     const icon = 'i-shop'
     const margin = -150
 
@@ -63,8 +63,8 @@ class Menu extends Phaser.State {
       btnColor,
       icon
     )
-    this.settings.icon.tint = 0x26C6DA
-    // this.settings.clicked.add(this.startGame, this)
+    // this.settings.icon.tint = 0x00E676
+    this.settings.clicked.add(this.openShop, this)
     this.add.existing(this.settings)
   }
 
@@ -87,6 +87,11 @@ class Menu extends Phaser.State {
   startGame() {
     this.stage.backgroundColor = this.play.color
     this.state.start('Game')
+  }
+
+  openShop() {
+    this.stage.backgroundColor = this.play.color
+    this.state.start('Shop')
   }
 }
 

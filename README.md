@@ -9,6 +9,8 @@ Plans
     * Sound scroll
   * Shop
     * Create money boxes
+    * Create skins boxes
+    * Create bonus boxes
 
 ---
 Configurations:

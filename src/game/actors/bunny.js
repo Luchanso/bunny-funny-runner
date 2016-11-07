@@ -14,8 +14,8 @@ class Bunny extends Phaser.Sprite {
     this.width *= 0.35
     this.height *= 0.35
 
-    this.body.gravity.setTo(0, 2500)
-    this.body.maxVelocity.setTo(400, 20000)
+    Object.assign(this.body.gravity, Bunny.GRAVITY)
+    Object.assign(this.body.maxVelocity, Bunny.MAX_VELOCITY)
     this.body.collideWorldBounds = true
 
     this.onDied = new Phaser.Signal()
@@ -40,7 +40,7 @@ class Bunny extends Phaser.Sprite {
     this.data.trail.stopEmitt()
 
     this.body.velocity.setTo(0)
-    this.body.maxVelocity.setTo(40000, 20000)
+    Object.assign(this.body.maxVelocity, Bunny.JETPACK_VELOCITY)
     this.body.gravity.setTo(0, 0)
 
     this.jetPackSprite.alpha = 1
@@ -67,7 +67,7 @@ class Bunny extends Phaser.Sprite {
     tween.onComplete.add(() => {
       this.data.jetPack = false
       this.data.trail.startEmitt()
-      this.body.gravity.setTo(0, 2500)
+      Object.assign(this.body.gravity, Bunny.GRAVITY)
 
       this.body.velocity.setTo(Bunny.BASE_MAX_SPEED, 0)
       this.body.acceleration.setTo(Bunny.ACCELERATION, 0)
@@ -196,12 +196,14 @@ class Bunny extends Phaser.Sprite {
     const animationDownTime = 1000
     const animationUpTime = 100
     const upMove = 100
+    const gravity = new Phaser.Point(0, 4000)
+    const velocity = new Phaser.Point(0, -1200)
 
     this.game.camera.unfollow()
 
-    this.body.velocity.setTo(0, -1200)
+    this.body.velocity = velocity
     this.body.acceleration.setTo(0)
-    this.body.gravity.setTo(0, 4000)
+    this.body.gravity = gravity
     this.body.collideWorldBounds = false
     this.data.isDead = true
     this.data.trail.stopEmitt()
@@ -292,5 +294,8 @@ Bunny.MAGNET_TIME = 8000
 Bunny.GODMODE_TIME = 10000
 Bunny.WINGS_TIME = 6000
 Bunny.JETPACK_TIME = 5000
+Bunny.MAX_VELOCITY = new Phaser.Point(400, 20000)
+Bunny.GRAVITY = new Phaser.Point(0, 2500)
+Bunny.JETPACK_VELOCITY = new Phaser.Point(40000, 20000)
 
 Engine.Bunny = Bunny

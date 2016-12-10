@@ -61,14 +61,18 @@ class Game extends Phaser.State {
     this.createBestDistance()
     this.createNominals()
 
+    this.drawBorders()
+
     // TEMP CODE
 
-    this.powerUps.add(new Engine.PowerUp(
-      this.game,
-      this.startGround.x + 150,
-      this.startGround.y - 50,
-      Engine.PowerUp.type.GOD
-    ))
+    // this.game.time.slowMotion = 20
+
+    // this.powerUps.add(new Engine.PowerUp(
+    //   this.game,
+    //   this.startGround.x + 150,
+    //   this.startGround.y - 50,
+    //   Engine.PowerUp.type.JETPACK
+    // ))
 
     this.powerUps.add(new Engine.PowerUp(
       this.game,
@@ -80,6 +84,17 @@ class Game extends Phaser.State {
     // END TEMP CODE
 
     // this.createDatGui()
+  }
+
+  drawBorders() {
+    const width = 20
+    const color = 0x57daf6
+
+    let graphics = this.add.graphics(0, 0)
+    graphics.lineStyle(width, color)
+    graphics.drawRect(0, 0, this.game.width, this.game.height)
+
+    graphics.fixedToCamera = true
   }
 
   update() {

@@ -9,13 +9,11 @@ Plans
     * Sound scroll
   * Shop
     * Create money boxes
-    * Create skins boxes
-    * Create bonus boxes
 
 ---
 Configurations:
 * Jump distance x: 280px - 560px
-* Jump distance y: 154px - 250px
+* Jump distance y: 154px - 25 0px
 * Jump distance y from jumper: 783px
 * Better height = 600px
 * Better height >  1024px

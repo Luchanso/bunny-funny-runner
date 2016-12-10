@@ -288,7 +288,7 @@ class Bunny extends Phaser.Sprite {
 Bunny.BASE_MAX_JUMPS = 2
 Bunny.MAX_JUMPS = Bunny.BASE_MAX_JUMPS
 Bunny.ACCELERATION = 2000
-Bunny.BASE_MAX_SPEED = 500
+Bunny.BASE_MAX_SPEED = 250
 
 Bunny.MAGNET_TIME = 8000
 Bunny.GODMODE_TIME = 10000

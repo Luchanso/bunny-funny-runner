@@ -1,4 +1,4 @@
-Engine.game = new Phaser.Game(Engine.maxWidth, Engine.maxHeight, Phaser.AUTO)
+Engine.game = new Phaser.Game(Engine.minWidth * 2, Engine.minHeight * 2, Phaser.AUTO)
 
 window.onresize = () => {
   Engine.game.scale.setGameSize(window.innerWidth, window.innerHeight)

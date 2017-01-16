@@ -1,4 +1,7 @@
-Plans
+Nearest plans:
+* Integrate cloudgames API
+
+Plans:
 
 * Add music
 * Change lose menu

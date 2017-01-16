@@ -12,3 +12,8 @@ Engine.game.state.add('Settings', Engine.Settings)
 Engine.game.state.add('Loader', Engine.Loader)
 
 Engine.game.state.start('Boot')
+
+CloudAPI.init({
+  'id' : -1,
+  'splash' : false
+});

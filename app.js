@@ -1,8 +1,36 @@
 'use strict';
 
+PIXI.DisplayObjectContainer.prototype.removeChildren = function (beginIndex, endIndex) {
+
+    if (beginIndex === undefined) {
+        beginIndex = 0;
+    }
+    if (endIndex === undefined) {
+        endIndex = this.children.length;
+    }
+
+    var range = endIndex - beginIndex;
+
+    if (range > 0 && range <= endIndex) {
+        var removed = this.children.splice(beginIndex, range);
+
+        for (var i = 0; i < removed.length; i++) {
+            var child = removed[i];
+            child.parent = undefined;
+        }
+
+        return removed;
+    } else if (range === 0 && this.children.length === 0) {
+        return [];
+    } else {
+        throw new Error('removeChildren: Range Error, numeric values are outside the acceptable range');
+    }
+};
+'use strict';
+
 var Engine = {
   minWidth: 640,
-  minHeight: 320,
+  minHeight: 360,
 
   maxWidth: window.innerWidth,
   maxHeight: window.innerHeight,
@@ -211,7 +239,7 @@ var Loader = function (_Phaser$State) {
   }, {
     key: 'create',
     value: function create() {
-      this.state.start('Game');
+      this.state.start('Menu');
     }
   }, {
     key: 'addProgressLabel',
@@ -235,6 +263,274 @@ var Loader = function (_Phaser$State) {
 }(Phaser.State);
 
 Engine.Loader = Loader;
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Btn = function (_Phaser$Graphics) {
+  _inherits(Btn, _Phaser$Graphics);
+
+  function Btn(game, x, y, color, icon) {
+    _classCallCheck(this, Btn);
+
+    var _this = _possibleConstructorReturn(this, (Btn.__proto__ || Object.getPrototypeOf(Btn)).call(this, game, x, y));
+
+    _this.color = color;
+    _this.icon = new Phaser.Sprite(_this.game, 0, 0, icon);
+    _this.icon.anchor.setTo(0.5);
+
+    _this.addChild(_this.icon);
+
+    _this.inputEnabled = true;
+    _this.events.onInputDown.add(_this.click, _this);
+
+    _this.radius = _this.icon.width;
+    _this.clicked = new Phaser.Signal();
+
+    _this.draw();
+    return _this;
+  }
+
+  _createClass(Btn, [{
+    key: "draw",
+    value: function draw() {
+      this.beginFill(this.color);
+      this.drawCircle(0, 0, this.radius);
+      this.endFill();
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      var _this2 = this;
+
+      this.parent.bringToTop(this);
+
+      var animation = 250;
+      var screenSize = void 0;
+
+      if (this.x > this.game.width / 2) {
+        screenSize = Phaser.Math.distancePow(this.x, this.y, 0, 0);
+      } else {
+        screenSize = Phaser.Math.distancePow(this.x, this.y, this.game.width, this.game.height);
+      }
+
+      var tween = this.game.add.tween(this).to({
+        radius: screenSize * 2
+      }, animation).start();
+
+      this.game.add.tween(this.icon).to({
+        alpha: 0
+      }, animation).start();
+
+      tween.onComplete.add(this.draw, this);
+      tween.onComplete.add(function () {
+        _this2.clicked.dispatch();
+      }, this);
+      tween.onUpdateCallback(this.draw, this);
+    }
+  }]);
+
+  return Btn;
+}(Phaser.Graphics);
+
+Engine.Btn = Btn;
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Menu = function (_Phaser$State) {
+  _inherits(Menu, _Phaser$State);
+
+  function Menu() {
+    _classCallCheck(this, Menu);
+
+    return _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this));
+  }
+
+  _createClass(Menu, [{
+    key: 'preload',
+    value: function preload() {
+      this.load.image('i-play', 'assets/sprites/icons/play.png');
+      this.load.image('i-settings', 'assets/sprites/icons/settings.png');
+      this.load.image('i-shop', 'assets/sprites/icons/shop.png');
+    }
+  }, {
+    key: 'create',
+    value: function create() {
+      this.stage.backgroundColor = 0x0D47A1;
+
+      this.createPlayBtn();
+      this.createSettingsBtn();
+      this.createShopBtn();
+      this.createLogo();
+    }
+  }, {
+    key: 'createLogo',
+    value: function createLogo() {
+      var style = {
+        font: '50px Open Sans',
+        fill: 'white'
+      };
+
+      this.logo = this.add.text(this.game.width / 2, this.game.height / 4, '🐰 Bunny Funny Runner 🐰 ', style);
+
+      this.logo.anchor.setTo(0.5);
+    }
+  }, {
+    key: 'createSettingsBtn',
+    value: function createSettingsBtn() {
+      var btnColor = 0xADE6FF;
+      var icon = 'i-settings';
+      var margin = 150;
+
+      this.settings = new Engine.Btn(this.game, this.game.width / 2 + margin, this.game.height / 2, btnColor, icon);
+      this.settings.icon.tint = 0x26C6DA;
+      // this.settings.clicked.add(this.startGame, this)
+      this.add.existing(this.settings);
+    }
+  }, {
+    key: 'createShopBtn',
+    value: function createShopBtn() {
+      var btnColor = 0xBF360C;
+      var icon = 'i-shop';
+      var margin = -150;
+
+      this.settings = new Engine.Btn(this.game, this.game.width / 2 + margin, this.game.height / 2, btnColor, icon);
+      // this.settings.icon.tint = 0x00E676
+      this.settings.clicked.add(this.openShop, this);
+      this.add.existing(this.settings);
+    }
+  }, {
+    key: 'createPlayBtn',
+    value: function createPlayBtn() {
+      var btnColor = 0xADE6FF;
+      var icon = 'i-play';
+
+      this.play = new Engine.Btn(this.game, this.game.width / 2, this.game.height / 2, btnColor, icon);
+      this.play.icon.tint = 0x26C6DA;
+      this.play.clicked.add(this.startGame, this);
+      this.add.existing(this.play);
+    }
+  }, {
+    key: 'startGame',
+    value: function startGame() {
+      this.stage.backgroundColor = this.play.color;
+      this.state.start('Game');
+    }
+  }, {
+    key: 'openShop',
+    value: function openShop() {
+      this.stage.backgroundColor = this.play.color;
+      this.state.start('Shop');
+    }
+  }]);
+
+  return Menu;
+}(Phaser.State);
+
+Engine.Menu = Menu;
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BtnShop = function (_Phaser$Sprite) {
+  _inherits(BtnShop, _Phaser$Sprite);
+
+  function BtnShop(game, x, y) {
+    _classCallCheck(this, BtnShop);
+
+    return _possibleConstructorReturn(this, (BtnShop.__proto__ || Object.getPrototypeOf(BtnShop)).call(this, game, x, y, null));
+  }
+
+  return BtnShop;
+}(Phaser.Sprite);
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Shop = function (_Phaser$State) {
+  _inherits(Shop, _Phaser$State);
+
+  function Shop() {
+    _classCallCheck(this, Shop);
+
+    return _possibleConstructorReturn(this, (Shop.__proto__ || Object.getPrototypeOf(Shop)).call(this));
+  }
+
+  _createClass(Shop, [{
+    key: 'create',
+    value: function create() {
+      this.game.stage.backgroundColor = 0xBF360C;
+
+      this.createHeadLabel();
+    }
+  }, {
+    key: 'createHeadLabel',
+    value: function createHeadLabel() {
+      var margin = 100;
+      var animation = 400;
+      var text = 'BUY MORE COINS 💰';
+      var style = {
+        font: '41px Open Sans',
+        fill: 'white'
+      };
+
+      this.headLabel = this.add.text(this.game.width / 2, margin, text, style);
+      this.headLabel.anchor.setTo(0.5);
+      this.headLabel.alpha = 0;
+      this.add.tween(this.headLabel).to({
+        alpha: 1
+      }, animation).start();
+    }
+  }]);
+
+  return Shop;
+}(Phaser.State);
+
+Engine.Shop = Shop;
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Settings = function (_Phaser$State) {
+  _inherits(Settings, _Phaser$State);
+
+  function Settings() {
+    _classCallCheck(this, Settings);
+
+    return _possibleConstructorReturn(this, (Settings.__proto__ || Object.getPrototypeOf(Settings)).call(this));
+  }
+
+  return Settings;
+}(Phaser.State);
+
+Engine.Settings = Settings;
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -549,10 +845,39 @@ var GroundsGenerator = function (_Engine$Component$Gen) {
       generate: new Phaser.Signal()
     };
     _this.currentStep = -1;
+    _this.currentGroundType = Engine.Ground.type.SNOW;
+
+    _this.addBiomTimer();
     return _this;
   }
 
   _createClass(GroundsGenerator, [{
+    key: "addBiomTimer",
+    value: function addBiomTimer() {
+      var minTime = 5000;
+      var maxTime = 15000;
+      var time = this.game.rnd.between(minTime, maxTime);
+
+      this.biomTimer = this.game.time.create();
+      this.biomTimer.add(time, this.changeBiom, this);
+      this.biomTimer.start();
+    }
+  }, {
+    key: "changeBiom",
+    value: function changeBiom() {
+      var minTime = 5000;
+      var maxTime = 15000;
+      var time = this.game.rnd.between(minTime, maxTime);
+
+      var types = Object.keys(Engine.Ground.type).map(function (val) {
+        return Engine.Ground.type[val];
+      });
+
+      this.currentGroundType = this.game.rnd.pick(types);
+
+      this.biomTimer.add(time, this.changeBiom, this);
+    }
+  }, {
     key: "update",
     value: function update() {
       _get(GroundsGenerator.prototype.__proto__ || Object.getPrototypeOf(GroundsGenerator.prototype), "update", this).call(this);
@@ -590,10 +915,7 @@ var GroundsGenerator = function (_Engine$Component$Gen) {
   }, {
     key: "addRandomGround",
     value: function addRandomGround(x, y) {
-      var types = Object.keys(Engine.Ground.type).map(function (val) {
-        return Engine.Ground.type[val];
-      });
-      var type = this.game.rnd.pick(types);
+      var type = this.currentGroundType;
       var small = this.game.rnd.pick([true, false]);
       var broken = this.game.rnd.pick([true, false]);
 
@@ -641,10 +963,10 @@ var JumperGenerator = function (_Engine$Component$Gen) {
   _createClass(JumperGenerator, [{
     key: "generate",
     value: function generate(ground) {
+      var absoluteY = this.game.world.height - this.game.height + ground.y;
+
       if (absoluteY < JumperGenerator.MIN_HEIGHT) return;
       if (!Phaser.Utils.chanceRoll(15)) return;
-
-      var absoluteY = this.game.world.height - this.game.height + ground.y;
 
       var x = this.game.rnd.between(ground.x, ground.x + ground.width - this.prototype.width);
       var y = ground.y;
@@ -749,7 +1071,7 @@ var PowerUpGenerator = function (_Generator) {
       var types = [Engine.PowerUp.type.MAGNET, Engine.PowerUp.type.GOD, Engine.PowerUp.type.WINGS];
       var type = this.game.rnd.pick(types);
 
-      if (Phaser.Utils.chanceRoll(1)) {
+      if (Phaser.Utils.chanceRoll(10)) {
         type = Engine.PowerUp.type.JETPACK;
       }
 
@@ -900,8 +1222,6 @@ var Background = function (_Phaser$TileSprite) {
 
     _this.data.speed = speed;
     _this.data.isStoped = true;
-
-    // this.tint = 0x555555
     return _this;
   }
 
@@ -1094,8 +1414,8 @@ var Bunny = function (_Phaser$Sprite) {
     _this.width *= 0.35;
     _this.height *= 0.35;
 
-    _this.body.gravity.setTo(0, 2500);
-    _this.body.maxVelocity.setTo(400, 20000);
+    Object.assign(_this.body.gravity, Bunny.GRAVITY);
+    Object.assign(_this.body.maxVelocity, Bunny.MAX_VELOCITY);
     _this.body.collideWorldBounds = true;
 
     _this.onDied = new Phaser.Signal();
@@ -1123,7 +1443,7 @@ var Bunny = function (_Phaser$Sprite) {
       this.data.trail.stopEmitt();
 
       this.body.velocity.setTo(0);
-      this.body.maxVelocity.setTo(40000, 20000);
+      Object.assign(this.body.maxVelocity, Bunny.JETPACK_VELOCITY);
       this.body.gravity.setTo(0, 0);
 
       this.jetPackSprite.alpha = 1;
@@ -1149,7 +1469,7 @@ var Bunny = function (_Phaser$Sprite) {
       tween.onComplete.add(function () {
         _this2.data.jetPack = false;
         _this2.data.trail.startEmitt();
-        _this2.body.gravity.setTo(0, 2500);
+        Object.assign(_this2.body.gravity, Bunny.GRAVITY);
 
         _this2.body.velocity.setTo(Bunny.BASE_MAX_SPEED, 0);
         _this2.body.acceleration.setTo(Bunny.ACCELERATION, 0);
@@ -1285,12 +1605,14 @@ var Bunny = function (_Phaser$Sprite) {
       var animationDownTime = 1000;
       var animationUpTime = 100;
       var upMove = 100;
+      var gravity = new Phaser.Point(0, 4000);
+      var velocity = new Phaser.Point(0, -1200);
 
       this.game.camera.unfollow();
 
-      this.body.velocity.setTo(0, -1200);
+      this.body.velocity = velocity;
       this.body.acceleration.setTo(0);
-      this.body.gravity.setTo(0, 4000);
+      this.body.gravity = gravity;
       this.body.collideWorldBounds = false;
       this.data.isDead = true;
       this.data.trail.stopEmitt();
@@ -1380,12 +1702,15 @@ var Bunny = function (_Phaser$Sprite) {
 Bunny.BASE_MAX_JUMPS = 2;
 Bunny.MAX_JUMPS = Bunny.BASE_MAX_JUMPS;
 Bunny.ACCELERATION = 2000;
-Bunny.BASE_MAX_SPEED = 500;
+Bunny.BASE_MAX_SPEED = 250;
 
 Bunny.MAGNET_TIME = 8000;
 Bunny.GODMODE_TIME = 10000;
 Bunny.WINGS_TIME = 6000;
 Bunny.JETPACK_TIME = 5000;
+Bunny.MAX_VELOCITY = new Phaser.Point(400, 20000);
+Bunny.GRAVITY = new Phaser.Point(0, 2500);
+Bunny.JETPACK_VELOCITY = new Phaser.Point(40000, 20000);
 
 Engine.Bunny = Bunny;
 'use strict';
@@ -1848,9 +2173,9 @@ var Ground = function (_Phaser$Sprite) {
       var x = this.game.rnd.between(0, this.width * 1.5);
       var y = 0;
 
-      var cactus = new Phaser.Sprite(this.game, x, y, Engine.spritesheet, name);
-      cactus.anchor.setTo(0, 1);
-      this.addChild(cactus);
+      var env = new Phaser.Sprite(this.game, x, y, Engine.spritesheet, name);
+      env.anchor.setTo(0, 1);
+      this.addChild(env);
     }
   }, {
     key: 'reset',
@@ -1859,12 +2184,15 @@ var Ground = function (_Phaser$Sprite) {
 
       var name = Ground.getName(type, small, broken);
 
-      this.frame = name;
+      this.frameName = name;
 
       this.data.name = name;
       this.data.type = type;
       this.data.small = small;
       this.data.broken = broken;
+
+      this.removeChildren();
+      this.addEnviroment();
     }
   }]);
 
@@ -2082,7 +2410,7 @@ var Nominal = function (_Phaser$Text) {
   _createClass(Nominal, [{
     key: 'addAnimation',
     value: function addAnimation() {
-      var animationTime = 400;
+      var animationTime = 700;
       var animationDistance = 50;
 
       this.alpha = 1;
@@ -2124,7 +2452,7 @@ var Nominal = function (_Phaser$Text) {
       }
 
       var style = {
-        font: '31px Arial',
+        font: 35 + nominal * 6 + 'px Open Sans',
         fill: color
       };
 
@@ -2205,27 +2533,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ProgressBar = function (_Phaser$Graphics) {
   _inherits(ProgressBar, _Phaser$Graphics);
 
-  function ProgressBar(game, x, y, text) {
+  function ProgressBar(game, x, y, text, color) {
     _classCallCheck(this, ProgressBar);
 
     var _this = _possibleConstructorReturn(this, (ProgressBar.__proto__ || Object.getPrototypeOf(ProgressBar)).call(this, game, x, y));
 
-    _this.color = 0x8661ff;
+    _this.color = color;
 
-    _this.progress = 0;
+    _this.progress = 1;
     _this.fixedToCamera = true;
+    _this.alpha = 0;
 
     _this.addLabel(text);
-
-    var tween = _this.game.add.tween(_this).to({
-      progress: 1
-    }).to({
-      progress: 0
-    }).loop(-1).start();
-
-    tween.onUpdateCallback(function () {
-      _this.draw(_this.progress);
-    }, _this);
+    _this.draw(_this.progress);
     return _this;
   }
 
@@ -2255,6 +2575,46 @@ var ProgressBar = function (_Phaser$Graphics) {
       this.beginFill(this.color);
       this.drawRect(0, 0, progress * width, height);
       this.endFill();
+    }
+  }, {
+    key: 'animate',
+    value: function animate(time) {
+      this.value = 1;
+      this.show();
+
+      this.tween = this.game.add.tween(this).to({
+        value: 0
+      }, time).start();
+
+      this.tween.onComplete.add(this.hide, this);
+    }
+  }, {
+    key: 'show',
+    value: function show() {
+      this.animateAlpha(1);
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      this.animateAlpha(0);
+    }
+  }, {
+    key: 'animateAlpha',
+    value: function animateAlpha(alpha) {
+      var animationTime = 150;
+
+      this.game.add.tween(this).to({
+        alpha: alpha
+      }, animationTime).start();
+    }
+  }, {
+    key: 'value',
+    get: function get() {
+      return this.progress;
+    },
+    set: function set(val) {
+      this.progress = val;
+      this.draw(this.progress);
     }
   }]);
 
@@ -2712,6 +3072,27 @@ var Distance = function (_Phaser$Text) {
 }(Phaser.Text);
 
 Engine.Distance = Distance;
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var LoseBox = function (_Phaser$Group) {
+  _inherits(LoseBox, _Phaser$Group);
+
+  function LoseBox(game) {
+    _classCallCheck(this, LoseBox);
+
+    return _possibleConstructorReturn(this, (LoseBox.__proto__ || Object.getPrototypeOf(LoseBox)).call(this, game));
+  }
+
+  return LoseBox;
+}(Phaser.Group);
+
+Engine.LoseBox = LoseBox;
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2837,6 +3218,7 @@ var Game = function (_Phaser$State) {
       this.createCoins();
       this.createEnemies();
       this.createPowerUps();
+      this.createProgressBars();
 
       this.bunny.addTrail();
 
@@ -2849,20 +3231,36 @@ var Game = function (_Phaser$State) {
       this.createBestDistance();
       this.createNominals();
 
+      this.drawBorders();
+
       // TEMP CODE
 
-      // this.progress = new Engine.ProgressBar(
+      // this.game.time.slowMotion = 20
+
+      // this.powerUps.add(new Engine.PowerUp(
       //   this.game,
-      //   this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
-      //   150,
-      //   "My Followers are the best ever"
-      // )
-      //
-      // this.add.existing(this.progress)
+      //   this.startGround.x + 150,
+      //   this.startGround.y - 50,
+      //   Engine.PowerUp.type.JETPACK
+      // ))
+
+      this.powerUps.add(new Engine.PowerUp(this.game, this.startGround.x + 1200, this.startGround.y - 50, Engine.PowerUp.type.WINGS));
 
       // END TEMP CODE
 
       // this.createDatGui()
+    }
+  }, {
+    key: 'drawBorders',
+    value: function drawBorders() {
+      var width = 20;
+      var color = 0x57daf6;
+
+      var graphics = this.add.graphics(0, 0);
+      graphics.lineStyle(width, color);
+      graphics.drawRect(0, 0, this.game.width, this.game.height);
+
+      graphics.fixedToCamera = true;
     }
   }, {
     key: 'update',
@@ -2874,11 +3272,14 @@ var Game = function (_Phaser$State) {
         return;
       }
 
-      this.physics.arcade.collide(this.bunny, this.grounds);
       this.physics.arcade.overlap(this.bunny, this.coins, this.takeCoin, null, this);
-      this.physics.arcade.overlap(this.bunny, this.enemies, this.collideEnemies, null, this);
-      this.physics.arcade.overlap(this.bunny, this.jumpers, this.overlapJumper, null, this);
-      this.physics.arcade.overlap(this.bunny, this.powerUps, this.takePowerUp, null, this);
+
+      if (!this.bunny.data.jetPack) {
+        this.physics.arcade.collide(this.bunny, this.grounds);
+        this.physics.arcade.overlap(this.bunny, this.enemies, this.collideEnemies, null, this);
+        this.physics.arcade.overlap(this.bunny, this.jumpers, this.overlapJumper, null, this);
+        this.physics.arcade.overlap(this.bunny, this.powerUps, this.takePowerUp, null, this);
+      }
       this.updateDie();
       this.updateMagnet();
 
@@ -2892,6 +3293,22 @@ var Game = function (_Phaser$State) {
     value: function render() {
       // this.game.debug.body(this.cloud, 'rgba(20, 0, 255, 0.35)')
       // this.debugCountObject()
+    }
+  }, {
+    key: 'createProgressBars',
+    value: function createProgressBars() {
+      var paddingTop = 50;
+      var margin = 50;
+
+      this.progressJumps = new Engine.ProgressBar(this.game, this.game.width / 2 - Engine.ProgressBar.WIDTH / 2, paddingTop, "Infinity Jumps", 0x8661ff);
+
+      this.progressMagnet = new Engine.ProgressBar(this.game, this.game.width / 2 - Engine.ProgressBar.WIDTH / 2, this.progressJumps.y + margin, "Coin Magnet", 0xff8000);
+
+      this.progressUntouch = new Engine.ProgressBar(this.game, this.game.width / 2 - Engine.ProgressBar.WIDTH / 2, this.progressMagnet.y + margin, "Untouchability", 0xFF0000);
+
+      this.add.existing(this.progressJumps);
+      this.add.existing(this.progressMagnet);
+      this.add.existing(this.progressUntouch);
     }
   }, {
     key: 'createDatGui',
@@ -2926,10 +3343,13 @@ var Game = function (_Phaser$State) {
     key: 'takePowerUp',
     value: function takePowerUp(bunny, powerUp) {
       if (powerUp.type === Engine.PowerUp.type.MAGNET) {
+        this.progressMagnet.animate(Engine.Bunny.MAGNET_TIME);
         this.bunny.activateMagnet();
       } else if (powerUp.type === Engine.PowerUp.type.GOD) {
+        this.progressUntouch.animate(Engine.Bunny.GODMODE_TIME);
         this.bunny.activateGod();
       } else if (powerUp.type === Engine.PowerUp.type.WINGS) {
+        this.progressJumps.animate(Engine.Bunny.WINGS_TIME);
         this.bunny.activateWings();
       } else if (powerUp.type === Engine.PowerUp.type.JETPACK) {
         this.bunny.activateJetPack();
@@ -3219,7 +3639,7 @@ var Game = function (_Phaser$State) {
 Engine.Game = Game;
 'use strict';
 
-Engine.game = new Phaser.Game(Engine.maxWidth, Engine.maxHeight, Phaser.AUTO);
+Engine.game = new Phaser.Game(Engine.minWidth * 2, Engine.minHeight * 2, Phaser.AUTO);
 
 window.onresize = function () {
   Engine.game.scale.setGameSize(window.innerWidth, window.innerHeight);
@@ -3227,6 +3647,14 @@ window.onresize = function () {
 
 Engine.game.state.add('Boot', Engine.Boot);
 Engine.game.state.add('Game', Engine.Game);
+Engine.game.state.add('Menu', Engine.Menu);
+Engine.game.state.add('Shop', Engine.Shop);
+Engine.game.state.add('Settings', Engine.Settings);
 Engine.game.state.add('Loader', Engine.Loader);
 
 Engine.game.state.start('Boot');
+
+CloudAPI.init({
+  'id': 291,
+  'splash': false
+});

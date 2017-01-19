@@ -239,7 +239,7 @@ var Loader = function (_Phaser$State) {
   }, {
     key: 'create',
     value: function create() {
-      this.state.start('Menu');
+      this.state.start('Game');
     }
   }, {
     key: 'addProgressLabel',
@@ -3230,25 +3230,6 @@ var Game = function (_Phaser$State) {
       this.createStartLabel();
       this.createBestDistance();
       this.createNominals();
-
-      this.drawBorders();
-
-      // TEMP CODE
-
-      // this.game.time.slowMotion = 20
-
-      // this.powerUps.add(new Engine.PowerUp(
-      //   this.game,
-      //   this.startGround.x + 150,
-      //   this.startGround.y - 50,
-      //   Engine.PowerUp.type.JETPACK
-      // ))
-
-      this.powerUps.add(new Engine.PowerUp(this.game, this.startGround.x + 1200, this.startGround.y - 50, Engine.PowerUp.type.WINGS));
-
-      // END TEMP CODE
-
-      // this.createDatGui()
     }
   }, {
     key: 'drawBorders',
@@ -3480,12 +3461,20 @@ var Game = function (_Phaser$State) {
       if (this.score.bestDistance < this.score.currentDistance) {
         this.score.bestDistance = this.score.currentDistance;
       }
+
+      if (CloudAPI) {
+        CloudAPI.gameOver();
+      }
     }
   }, {
     key: 'start',
     value: function start() {
       this.startLabel.hide();
       this.bunny.run();
+
+      if (CloudAPI) {
+        CloudAPI.play();
+      }
     }
   }, {
     key: 'createPowerUps',
@@ -3647,7 +3636,7 @@ window.onresize = function () {
 
 Engine.game.state.add('Boot', Engine.Boot);
 Engine.game.state.add('Game', Engine.Game);
-Engine.game.state.add('Menu', Engine.Menu);
+// Engine.game.state.add('Menu', Engine.Menu)
 Engine.game.state.add('Shop', Engine.Shop);
 Engine.game.state.add('Settings', Engine.Settings);
 Engine.game.state.add('Loader', Engine.Loader);

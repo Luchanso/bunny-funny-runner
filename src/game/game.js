@@ -61,7 +61,7 @@ class Game extends Phaser.State {
     this.createBestDistance()
     this.createNominals()
 
-    this.drawBorders()
+    // this.drawBorders()
 
     // TEMP CODE
 
@@ -316,11 +316,19 @@ class Game extends Phaser.State {
     if (this.score.bestDistance < this.score.currentDistance) {
       this.score.bestDistance = this.score.currentDistance
     }
+
+    if (CloudAPI) {
+      CloudAPI.gameOver()
+    }
   }
 
   start() {
     this.startLabel.hide()
     this.bunny.run()
+
+    if (CloudAPI) {
+      CloudAPI.play()
+    }
   }
 
   createPowerUps() {

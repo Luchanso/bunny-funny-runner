@@ -16,4 +16,4 @@ Engine.game.state.start('Boot')
 CloudAPI.init({
   'id' : 291,
   'splash' : false
-});
+})

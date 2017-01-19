@@ -60,30 +60,6 @@ class Game extends Phaser.State {
     this.createStartLabel()
     this.createBestDistance()
     this.createNominals()
-
-    // this.drawBorders()
-
-    // TEMP CODE
-
-    // this.game.time.slowMotion = 20
-
-    // this.powerUps.add(new Engine.PowerUp(
-    //   this.game,
-    //   this.startGround.x + 150,
-    //   this.startGround.y - 50,
-    //   Engine.PowerUp.type.JETPACK
-    // ))
-
-    this.powerUps.add(new Engine.PowerUp(
-      this.game,
-      this.startGround.x + 1200,
-      this.startGround.y - 50,
-      Engine.PowerUp.type.WINGS
-    ))
-
-    // END TEMP CODE
-
-    // this.createDatGui()
   }
 
   drawBorders() {

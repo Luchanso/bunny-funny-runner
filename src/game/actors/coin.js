@@ -2,8 +2,8 @@ class Coin extends Phaser.Sprite {
   constructor(game, x, y, type = Coin.type.GOLD) {
     super(game, x, y, Engine.spritesheet, type + '_1.png')
 
-    this.width *= 0.25
-    this.height *= 0.25
+    this.width *= Engine.scaleRatio / 1.5
+    this.height *= Engine.scaleRatio / 1.5
     this.anchor.setTo(0.5)
 
     this.autoCull = true

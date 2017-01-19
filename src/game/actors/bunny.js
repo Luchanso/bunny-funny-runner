@@ -11,8 +11,8 @@ class Bunny extends Phaser.Sprite {
 
     this.game.physics.arcade.enable([ this ])
 
-    this.width *= 0.35
-    this.height *= 0.35
+    this.width *= Engine.scaleRatio
+    this.height *= Engine.scaleRatio
 
     Object.assign(this.body.gravity, Bunny.GRAVITY)
     Object.assign(this.body.maxVelocity, Bunny.MAX_VELOCITY)

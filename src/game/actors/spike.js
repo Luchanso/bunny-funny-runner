@@ -5,8 +5,8 @@ class Spike extends Phaser.Sprite {
     this.autoCull = true
     this.anchor.setTo(0, 1)
 
-    this.width *= 0.35
-    this.height *= 0.35
+    this.width *= Engine.scaleRatio
+    this.height *= Engine.scaleRatio
 
     this.tint = 0x777777
   }

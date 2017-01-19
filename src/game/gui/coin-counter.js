@@ -2,7 +2,7 @@ class CoinCounter extends Phaser.Text {
   constructor(game, x, y) {
     const style = {
       fill: '#00B8D4', // 2196F3
-      font: '25px Open Sans'
+      font: '23px Open Sans'
     }
 
     super(game, x, y, '0', style)

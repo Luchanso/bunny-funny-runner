@@ -60,30 +60,6 @@ class Game extends Phaser.State {
     this.createStartLabel()
     this.createBestDistance()
     this.createNominals()
-
-    this.drawBorders()
-
-    // TEMP CODE
-
-    // this.game.time.slowMotion = 20
-
-    // this.powerUps.add(new Engine.PowerUp(
-    //   this.game,
-    //   this.startGround.x + 150,
-    //   this.startGround.y - 50,
-    //   Engine.PowerUp.type.JETPACK
-    // ))
-
-    this.powerUps.add(new Engine.PowerUp(
-      this.game,
-      this.startGround.x + 1200,
-      this.startGround.y - 50,
-      Engine.PowerUp.type.WINGS
-    ))
-
-    // END TEMP CODE
-
-    // this.createDatGui()
   }
 
   drawBorders() {
@@ -316,11 +292,19 @@ class Game extends Phaser.State {
     if (this.score.bestDistance < this.score.currentDistance) {
       this.score.bestDistance = this.score.currentDistance
     }
+
+    if (CloudAPI) {
+      CloudAPI.gameOver()
+    }
   }
 
   start() {
     this.startLabel.hide()
     this.bunny.run()
+
+    if (CloudAPI) {
+      CloudAPI.play()
+    }
   }
 
   createPowerUps() {
@@ -454,7 +438,7 @@ class Game extends Phaser.State {
     const marginTop = 100
     const style = {
       fill: 'rgb(255, 255, 255)',
-      font: '100px Open Sans'
+      font: '50px Open Sans'
     }
 
     for (let i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {

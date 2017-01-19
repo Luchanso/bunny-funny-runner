@@ -25,7 +25,7 @@ class Nominal extends Phaser.Text {
     }
 
     const style = {
-      font: `${35 + nominal * 6}px Open Sans`,
+      font: `${25 + nominal * 5.5}px Open Sans`,
       fill: color
     }
 

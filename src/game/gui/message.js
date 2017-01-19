@@ -2,7 +2,7 @@ class Message extends Phaser.Text {
   constructor(game, x, y, text) {
     const style = {
       fill: 'white',
-      font: '75px Open Sans',
+      font: '65px Open Sans',
       align: 'center'
     }
 

@@ -438,7 +438,7 @@ class Game extends Phaser.State {
     const marginTop = 100
     const style = {
       fill: 'rgb(255, 255, 255)',
-      font: '100px Open Sans'
+      font: '50px Open Sans'
     }
 
     for (let i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {

@@ -22,7 +22,7 @@ class Game extends Phaser.State {
   }
 
   init() {
-    this.distanceBetweenGrounds = 450
+    this.distanceBetweenGrounds = 1285 * Engine.scaleRatio
 
     this.score = Engine.Service.get('Score')
     this.score.coins = 0

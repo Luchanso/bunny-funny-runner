@@ -8,6 +8,10 @@ class Loader extends Phaser.State {
   }
 
   create() {
+    if (CloudAPI) {
+      CloudAPI.play()
+    }
+
     this.state.start('Game');
   }
 

@@ -20,6 +20,10 @@ class Game extends Phaser.State {
     this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
     this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg'])
 
+    if (CloudAPI.logos.active()) {
+      this.load.image('cloudgames', 'assets/sprites/clg-logo.png')
+    }
+
     this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8)
   }
 
@@ -61,6 +65,7 @@ class Game extends Phaser.State {
     this.createCoinsLabel()
     this.createLoseLabel()
     this.createStartLabel()
+    this.createCloudGamesLogo()
     this.createBestDistance()
     this.createNominals()
   }
@@ -104,6 +109,22 @@ class Game extends Phaser.State {
   render() {
     // this.game.debug.body(this.cloud, 'rgba(20, 0, 255, 0.35)')
     // this.debugCountObject()
+  }
+
+  createCloudGamesLogo() {
+    const ratio = 0.5;
+    let logo = this.game.add.sprite(0, 0, 'cloudgames');
+    logo.width *= ratio
+    logo.height *= ratio
+    logo.x = this.game.width / 2
+    logo.y = this.game.height - logo.height
+    logo.anchor.setTo(0.5);
+
+    /* TODO: сделать ссылку
+    if (CloudAPI.links.active()) {
+      window.open(CloudAPI.links.list()[ 'logo' ]);
+    }
+     */
   }
 
   createProgressBars() {
@@ -304,16 +325,14 @@ class Game extends Phaser.State {
   start() {
     this.startLabel.hide()
     this.bunny.run()
-
-    if (CloudAPI) {
-      CloudAPI.play()
-    }
   }
 
   createTutorial() {
     let tutorial = this.game.add.sprite(25, 25, 'tutorial')
-    tutorial.width = 250
-    tutorial.height = 250
+    tutorial.width = 225
+    tutorial.height = 225
+
+    window.t = tutorial
   }
 
   createPowerUps() {
@@ -449,9 +468,10 @@ class Game extends Phaser.State {
       fill: 'rgb(255, 255, 255)',
       font: '50px Open Sans'
     }
+    const distance = this.distanceBetweenGrounds;
 
-    for (let i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {
-      let ground = new Engine.Ground(this.game, this.distanceBetweenGrounds * i, 200)
+    for (let i = 1; i < this.game.width / distance; i++) {
+      let ground = new Engine.Ground(this.game, distance * i, 200)
       this.grounds.add(ground)
     }
 

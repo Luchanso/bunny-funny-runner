@@ -9,6 +9,6 @@ let Engine = {
   height: 640,
 
   spritesheet: 'jumper',
-  scaleRatio: 0.25,
+  scaleRatio: 0.25, // 0.35
   magnetDistace: 300
 }

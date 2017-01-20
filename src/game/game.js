@@ -14,6 +14,8 @@ class Game extends Phaser.State {
     this.load.image('layer3', 'assets/sprites/backgrounds/layer3.png')
     this.load.image('layer4', 'assets/sprites/backgrounds/layer4.png')
 
+    this.load.image('tutorial', 'assets/sprites/tutorial/2xjump-2.png')
+
     this.load.audio('lose', ['assets/sounds/lose.mp3', 'assets/sounds/lose.ogg'])
     this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
     this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg'])
@@ -41,6 +43,7 @@ class Game extends Phaser.State {
     this.world.setBounds(0, -(worldHeight - this.game.height), Number.MAX_VALUE, worldHeight);
 
     this.createBackground()
+    this.createTutorial()
     this.createBunny()
     this.createSpikes()
     this.createGrounds()
@@ -307,6 +310,12 @@ class Game extends Phaser.State {
     }
   }
 
+  createTutorial() {
+    let tutorial = this.game.add.sprite(25, 25, 'tutorial')
+    tutorial.width = 250
+    tutorial.height = 250
+  }
+
   createPowerUps() {
     this.powerUps = new Engine.Component.PowerUpGenerator(
       this.game,
@@ -442,7 +451,7 @@ class Game extends Phaser.State {
     }
 
     for (let i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {
-      let ground = new Engine.Ground(this.game, this.distanceBetweenGrounds * i, 400)
+      let ground = new Engine.Ground(this.game, this.distanceBetweenGrounds * i, 200)
       this.grounds.add(ground)
     }
 

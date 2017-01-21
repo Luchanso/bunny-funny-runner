@@ -15,6 +15,7 @@ class Game extends Phaser.State {
     this.load.image('layer4', 'assets/sprites/backgrounds/layer4.png')
 
     this.load.image('tutorial', 'assets/sprites/tutorial/2xjump-2.png')
+    this.load.image('buttonMore', 'assets/sprites/ui/buttonMore.png')
 
     this.load.audio('lose', ['assets/sounds/lose.mp3', 'assets/sounds/lose.ogg'])
     this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
@@ -112,19 +113,21 @@ class Game extends Phaser.State {
   }
 
   createCloudGamesLogo() {
-    const ratio = 0.5;
-    let logo = this.game.add.sprite(0, 0, 'cloudgames');
+    const ratio = 0.5
+    let logo = this.game.add.sprite(0, 0, 'cloudgames')
     logo.width *= ratio
     logo.height *= ratio
     logo.x = this.game.width / 2
     logo.y = this.game.height - logo.height
     logo.anchor.setTo(0.5);
 
-    /* TODO: сделать ссылку
-    if (CloudAPI.links.active()) {
-      window.open(CloudAPI.links.list()[ 'logo' ]);
-    }
-     */
+    logo.inputEnabled = true
+    logo.input.useHandCursor = true
+    logo.events.onInputDown.add(() => {
+      if (CloudAPI && CloudAPI.links.active()) {
+        window.open(CloudAPI.links.list()['logo']);
+      }
+    })
   }
 
   createProgressBars() {
@@ -309,8 +312,27 @@ class Game extends Phaser.State {
     this.bestDistance = new Engine.BestDistance(this.game)
   }
 
+  addButtonMore() {
+    const { camera } = this.game
+    const marginBottom = 50
+    let button = this.game.add.sprite(0, 0, 'buttonMore')
+
+    button.inputEnabled = true
+    button.anchor.setTo(0.5, 1)
+    button.x = camera.x + camera.width / 2
+    button.y = camera.y + camera.height - marginBottom
+    button.input.useHandCursor = true
+    button.events.onInputDown.add(() => {
+      if (CloudAPI && CloudAPI.links.active()) {
+        window.open(CloudAPI.links.list()['games']);
+      }
+    })
+  }
+
   lose() {
     this.loseLabel.show()
+
+    this.addButtonMore();
 
     // TODO: Need incapsulation
     if (this.score.bestDistance < this.score.currentDistance) {

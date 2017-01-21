@@ -59,8 +59,8 @@ class GroundsGenerator extends Engine.Component.Generator {
 
     const { scaleRatio } = Engine;
 
-    const MARGIN_TOP = 50
-    const WORL_HEIGHT = this.game.world.bounds.height + this.game.height
+    const MARGIN_TOP = 500
+    const WORL_HEIGHT = this.game.world.bounds.height + this.game.height - MARGIN_TOP
     const VERTICAL_COUNT = 12
     const START_POINT = -this.game.world.bounds.height + MARGIN_TOP
     const GRID_HEIGHT = WORL_HEIGHT / VERTICAL_COUNT //  960 * scaleRatio

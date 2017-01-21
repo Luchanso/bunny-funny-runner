@@ -48,6 +48,7 @@ class Game extends Phaser.State {
 
     this.createBackground()
     this.createTutorial()
+    this.createCloudGamesLogo()
     this.createBunny()
     this.createSpikes()
     this.createGrounds()
@@ -65,7 +66,6 @@ class Game extends Phaser.State {
     this.createCoinsLabel()
     this.createLoseLabel()
     this.createStartLabel()
-    this.createCloudGamesLogo()
     this.createBestDistance()
     this.createNominals()
   }

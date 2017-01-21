@@ -16,6 +16,11 @@ class Game extends Phaser.State {
 
     this.load.image('tutorial', 'assets/sprites/tutorial/2xjump-2.png')
     this.load.image('buttonMore', 'assets/sprites/ui/buttonMore.png')
+    this.load.atlasJSONArray(
+      'soundControll',
+      'assets/sprites/ui/soundControll.png',
+      'assets/sprites/ui/soundControll.json'
+    )
 
     this.load.audio('lose', ['assets/sounds/lose.mp3', 'assets/sounds/lose.ogg'])
     this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
@@ -69,6 +74,7 @@ class Game extends Phaser.State {
     this.createStartLabel()
     this.createBestDistance()
     this.createNominals()
+    this.createSoundControll()
   }
 
   drawBorders() {
@@ -110,6 +116,37 @@ class Game extends Phaser.State {
   render() {
     // this.game.debug.body(this.cloud, 'rgba(20, 0, 255, 0.35)')
     // this.debugCountObject()
+  }
+
+  createSoundControll() {
+    let soundControll = new SoundControll(this.game)
+    this.game.add.existing(soundControll)
+    soundControll.x = 5
+    soundControll.y = 5
+    soundControll.fixedToCamera = true
+
+    if (CloudAPI) {
+      CloudAPI.mute = this.mute;
+      CloudAPI.unmute = this.mute;
+    }
+
+    soundControll.events.onInputDown.add(() => {
+      if (soundControll.frameName === 'mute') {
+        this.mute()
+      } else {
+        this.unmute()
+      }
+    })
+  }
+
+  mute() {
+    this.game.sound.mute = true
+    return true
+  }
+
+  unmute() {
+    this.game.sound.mute = false
+    return true
   }
 
   createCloudGamesLogo() {
@@ -430,10 +467,10 @@ class Game extends Phaser.State {
     let hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR)
     hotkey.onDown.add(this.spacebarDown, this)
 
-    let mouse = this.input.mouse
-    mouse.mouseDownCallback = () => {
-      this.spacebarDown()
-    }
+    // let mouse = this.input.mouse
+    // mouse.mouseDownCallback = () => {
+    //   this.spacebarDown()
+    // }
   }
 
   spacebarDown() {

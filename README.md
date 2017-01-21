@@ -1,5 +1,6 @@
 Nearest plans:
 * Integrate cloudgames API
+  * Add more games
 
 Plans:
 

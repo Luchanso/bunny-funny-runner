@@ -14,15 +14,27 @@ class Game extends Phaser.State {
     this.load.image('layer3', 'assets/sprites/backgrounds/layer3.png')
     this.load.image('layer4', 'assets/sprites/backgrounds/layer4.png')
 
+    this.load.image('tutorial', 'assets/sprites/tutorial/2xjump-2.png')
+    this.load.image('buttonMore', 'assets/sprites/ui/buttonMore.png')
+    this.load.atlasJSONArray(
+      'soundControll',
+      'assets/sprites/ui/soundControll.png',
+      'assets/sprites/ui/soundControll.json'
+    )
+
     this.load.audio('lose', ['assets/sounds/lose.mp3', 'assets/sounds/lose.ogg'])
     this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
     this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg'])
+
+    if (CloudAPI.logos.active()) {
+      this.load.image('cloudgames', 'assets/sprites/clg-logo.png')
+    }
 
     this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8)
   }
 
   init() {
-    this.distanceBetweenGrounds = 450
+    this.distanceBetweenGrounds = 1285 * Engine.scaleRatio
 
     this.score = Engine.Service.get('Score')
     this.score.coins = 0
@@ -41,6 +53,8 @@ class Game extends Phaser.State {
     this.world.setBounds(0, -(worldHeight - this.game.height), Number.MAX_VALUE, worldHeight);
 
     this.createBackground()
+    this.createTutorial()
+    this.createCloudGamesLogo()
     this.createBunny()
     this.createSpikes()
     this.createGrounds()
@@ -60,6 +74,7 @@ class Game extends Phaser.State {
     this.createStartLabel()
     this.createBestDistance()
     this.createNominals()
+    this.createSoundControll()
   }
 
   drawBorders() {
@@ -101,6 +116,55 @@ class Game extends Phaser.State {
   render() {
     // this.game.debug.body(this.cloud, 'rgba(20, 0, 255, 0.35)')
     // this.debugCountObject()
+  }
+
+  createSoundControll() {
+    let soundControll = new SoundControll(this.game)
+    this.game.add.existing(soundControll)
+    soundControll.x = 5
+    soundControll.y = 5
+    soundControll.fixedToCamera = true
+
+    if (CloudAPI) {
+      CloudAPI.mute = this.mute;
+      CloudAPI.unmute = this.mute;
+    }
+
+    soundControll.events.onInputDown.add(() => {
+      if (soundControll.frameName === 'mute') {
+        this.mute()
+      } else {
+        this.unmute()
+      }
+    })
+  }
+
+  mute() {
+    this.game.sound.mute = true
+    return true
+  }
+
+  unmute() {
+    this.game.sound.mute = false
+    return true
+  }
+
+  createCloudGamesLogo() {
+    const ratio = 0.5
+    let logo = this.game.add.sprite(0, 0, 'cloudgames')
+    logo.width *= ratio
+    logo.height *= ratio
+    logo.x = this.game.width / 2
+    logo.y = this.game.height - logo.height
+    logo.anchor.setTo(0.5);
+
+    logo.inputEnabled = true
+    logo.input.useHandCursor = true
+    logo.events.onInputDown.add(() => {
+      if (CloudAPI && CloudAPI.links.active()) {
+        window.open(CloudAPI.links.list()['logo']);
+      }
+    })
   }
 
   createProgressBars() {
@@ -285,8 +349,27 @@ class Game extends Phaser.State {
     this.bestDistance = new Engine.BestDistance(this.game)
   }
 
+  addButtonMore() {
+    const { camera } = this.game
+    const marginBottom = 50
+    let button = this.game.add.sprite(0, 0, 'buttonMore')
+
+    button.inputEnabled = true
+    button.anchor.setTo(0.5, 1)
+    button.x = camera.x + camera.width / 2
+    button.y = camera.y + camera.height - marginBottom
+    button.input.useHandCursor = true
+    button.events.onInputDown.add(() => {
+      if (CloudAPI && CloudAPI.links.active()) {
+        window.open(CloudAPI.links.list()['games']);
+      }
+    })
+  }
+
   lose() {
     this.loseLabel.show()
+
+    this.addButtonMore();
 
     // TODO: Need incapsulation
     if (this.score.bestDistance < this.score.currentDistance) {
@@ -301,10 +384,14 @@ class Game extends Phaser.State {
   start() {
     this.startLabel.hide()
     this.bunny.run()
+  }
 
-    if (CloudAPI) {
-      CloudAPI.play()
-    }
+  createTutorial() {
+    let tutorial = this.game.add.sprite(25, 25, 'tutorial')
+    tutorial.width = 225
+    tutorial.height = 225
+
+    window.t = tutorial
   }
 
   createPowerUps() {
@@ -380,10 +467,10 @@ class Game extends Phaser.State {
     let hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR)
     hotkey.onDown.add(this.spacebarDown, this)
 
-    let mouse = this.input.mouse
-    mouse.mouseDownCallback = () => {
-      this.spacebarDown()
-    }
+    // let mouse = this.input.mouse
+    // mouse.mouseDownCallback = () => {
+    //   this.spacebarDown()
+    // }
   }
 
   spacebarDown() {
@@ -440,9 +527,10 @@ class Game extends Phaser.State {
       fill: 'rgb(255, 255, 255)',
       font: '50px Open Sans'
     }
+    const distance = this.distanceBetweenGrounds;
 
-    for (let i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {
-      let ground = new Engine.Ground(this.game, this.distanceBetweenGrounds * i, 400)
+    for (let i = 1; i < this.game.width / distance; i++) {
+      let ground = new Engine.Ground(this.game, distance * i, 200)
       this.grounds.add(ground)
     }
 

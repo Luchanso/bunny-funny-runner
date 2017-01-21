@@ -35,8 +35,11 @@ var Engine = {
   maxWidth: window.innerWidth,
   maxHeight: window.innerHeight,
 
+  width: 1000,
+  height: 640,
+
   spritesheet: 'jumper',
-  scaleRatio: 0.35,
+  scaleRatio: 0.25, // 0.35
   magnetDistace: 300
 };
 "use strict";
@@ -239,6 +242,10 @@ var Loader = function (_Phaser$State) {
   }, {
     key: 'create',
     value: function create() {
+      if (CloudAPI) {
+        CloudAPI.play();
+      }
+
       this.state.start('Game');
     }
   }, {
@@ -895,11 +902,17 @@ var GroundsGenerator = function (_Engine$Component$Gen) {
     value: function generate(margin) {
       _get(GroundsGenerator.prototype.__proto__ || Object.getPrototypeOf(GroundsGenerator.prototype), "generate", this).call(this);
 
-      var VERTICAL_COUNT = 8;
-      var START_POINT = -(this.game.world.bounds.height - this.game.height);
-      var GRID_HEIGHT = 335; //this.game.world.bounds.height / SPLIT_VERTICAL
-      var RND_HORIZONTAL = 120;
-      var RND_VERTICAL = 100;
+      var _Engine = Engine,
+          scaleRatio = _Engine.scaleRatio;
+
+
+      var MARGIN_TOP = 500;
+      var WORL_HEIGHT = this.game.world.bounds.height + this.game.height - MARGIN_TOP;
+      var VERTICAL_COUNT = 12;
+      var START_POINT = -this.game.world.bounds.height + MARGIN_TOP;
+      var GRID_HEIGHT = WORL_HEIGHT / VERTICAL_COUNT; //  960 * scaleRatio
+      var RND_HORIZONTAL = 340 * scaleRatio;
+      var RND_VERTICAL = 285 * scaleRatio;
 
       for (var i = 1; i < VERTICAL_COUNT; i++) {
         if (this.game.rnd.pick[(true, false)]) continue;
@@ -1411,8 +1424,8 @@ var Bunny = function (_Phaser$Sprite) {
 
     _this.game.physics.arcade.enable([_this]);
 
-    _this.width *= 0.35;
-    _this.height *= 0.35;
+    _this.width *= Engine.scaleRatio;
+    _this.height *= Engine.scaleRatio;
 
     Object.assign(_this.body.gravity, Bunny.GRAVITY);
     Object.assign(_this.body.maxVelocity, Bunny.MAX_VELOCITY);
@@ -1840,8 +1853,8 @@ var Coin = function (_Phaser$Sprite) {
 
     var _this = _possibleConstructorReturn(this, (Coin.__proto__ || Object.getPrototypeOf(Coin)).call(this, game, x, y, Engine.spritesheet, type + '_1.png'));
 
-    _this.width *= 0.25;
-    _this.height *= 0.25;
+    _this.width *= Engine.scaleRatio / 1.5;
+    _this.height *= Engine.scaleRatio / 1.5;
     _this.anchor.setTo(0.5);
 
     _this.autoCull = true;
@@ -2452,7 +2465,7 @@ var Nominal = function (_Phaser$Text) {
       }
 
       var style = {
-        font: 35 + nominal * 6 + 'px Open Sans',
+        font: 25 + nominal * 5.5 + 'px Open Sans',
         fill: color
       };
 
@@ -2643,8 +2656,8 @@ var Spike = function (_Phaser$Sprite) {
         _this.autoCull = true;
         _this.anchor.setTo(0, 1);
 
-        _this.width *= 0.35;
-        _this.height *= 0.35;
+        _this.width *= Engine.scaleRatio;
+        _this.height *= Engine.scaleRatio;
 
         _this.tint = 0x777777;
         return _this;
@@ -2988,7 +3001,7 @@ var CoinCounter = function (_Phaser$Text) {
 
         var style = {
             fill: '#00B8D4', // 2196F3
-            font: '25px Open Sans'
+            font: '23px Open Sans'
         };
 
         var _this = _possibleConstructorReturn(this, (CoinCounter.__proto__ || Object.getPrototypeOf(CoinCounter)).call(this, game, x, y, '0', style));
@@ -3050,7 +3063,7 @@ var Distance = function (_Phaser$Text) {
 
     var style = {
       fill: '#00BCD4',
-      font: '43px Open Sans'
+      font: '35px Open Sans'
     };
 
     var _this = _possibleConstructorReturn(this, (Distance.__proto__ || Object.getPrototypeOf(Distance)).call(this, game, x, y, '0m', style));
@@ -3111,7 +3124,7 @@ var Message = function (_Phaser$Text) {
 
     var style = {
       fill: 'white',
-      font: '75px Open Sans',
+      font: '65px Open Sans',
       align: 'center'
     };
 
@@ -3164,6 +3177,48 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var SoundControll = function (_Phaser$Sprite) {
+  _inherits(SoundControll, _Phaser$Sprite);
+
+  function SoundControll(game) {
+    var x = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    var y = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+    _classCallCheck(this, SoundControll);
+
+    var state = game.sound.mute ? 'mute' : 'unmute';
+    var size = 40;
+
+    var _this = _possibleConstructorReturn(this, (SoundControll.__proto__ || Object.getPrototypeOf(SoundControll)).call(this, game, x, y, 'soundControll', state));
+
+    _this.inputEnabled = true;
+    _this.input.useHandCursor = true;
+    _this.events.onInputDown.add(_this.click.bind(_this));
+
+    _this.width = size;
+    _this.height = size;
+    return _this;
+  }
+
+  _createClass(SoundControll, [{
+    key: 'click',
+    value: function click() {
+      this.frameName = this.frameName === 'mute' ? 'unmute' : 'mute';
+    }
+  }]);
+
+  return SoundControll;
+}(Phaser.Sprite);
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var Game = function (_Phaser$State) {
   _inherits(Game, _Phaser$State);
 
@@ -3182,16 +3237,24 @@ var Game = function (_Phaser$State) {
       this.load.image('layer3', 'assets/sprites/backgrounds/layer3.png');
       this.load.image('layer4', 'assets/sprites/backgrounds/layer4.png');
 
+      this.load.image('tutorial', 'assets/sprites/tutorial/2xjump-2.png');
+      this.load.image('buttonMore', 'assets/sprites/ui/buttonMore.png');
+      this.load.atlasJSONArray('soundControll', 'assets/sprites/ui/soundControll.png', 'assets/sprites/ui/soundControll.json');
+
       this.load.audio('lose', ['assets/sounds/lose.mp3', 'assets/sounds/lose.ogg']);
       this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg']);
       this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg']);
+
+      if (CloudAPI.logos.active()) {
+        this.load.image('cloudgames', 'assets/sprites/clg-logo.png');
+      }
 
       this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8);
     }
   }, {
     key: 'init',
     value: function init() {
-      this.distanceBetweenGrounds = 450;
+      this.distanceBetweenGrounds = 1285 * Engine.scaleRatio;
 
       this.score = Engine.Service.get('Score');
       this.score.coins = 0;
@@ -3211,6 +3274,8 @@ var Game = function (_Phaser$State) {
       this.world.setBounds(0, -(worldHeight - this.game.height), Number.MAX_VALUE, worldHeight);
 
       this.createBackground();
+      this.createTutorial();
+      this.createCloudGamesLogo();
       this.createBunny();
       this.createSpikes();
       this.createGrounds();
@@ -3230,6 +3295,7 @@ var Game = function (_Phaser$State) {
       this.createStartLabel();
       this.createBestDistance();
       this.createNominals();
+      this.createSoundControll();
     }
   }, {
     key: 'drawBorders',
@@ -3276,6 +3342,61 @@ var Game = function (_Phaser$State) {
       // this.debugCountObject()
     }
   }, {
+    key: 'createSoundControll',
+    value: function createSoundControll() {
+      var _this2 = this;
+
+      var soundControll = new SoundControll(this.game);
+      this.game.add.existing(soundControll);
+      soundControll.x = 5;
+      soundControll.y = 5;
+      soundControll.fixedToCamera = true;
+
+      if (CloudAPI) {
+        CloudAPI.mute = this.mute;
+        CloudAPI.unmute = this.mute;
+      }
+
+      soundControll.events.onInputDown.add(function () {
+        if (soundControll.frameName === 'mute') {
+          _this2.mute();
+        } else {
+          _this2.unmute();
+        }
+      });
+    }
+  }, {
+    key: 'mute',
+    value: function mute() {
+      this.game.sound.mute = true;
+      return true;
+    }
+  }, {
+    key: 'unmute',
+    value: function unmute() {
+      this.game.sound.mute = false;
+      return true;
+    }
+  }, {
+    key: 'createCloudGamesLogo',
+    value: function createCloudGamesLogo() {
+      var ratio = 0.5;
+      var logo = this.game.add.sprite(0, 0, 'cloudgames');
+      logo.width *= ratio;
+      logo.height *= ratio;
+      logo.x = this.game.width / 2;
+      logo.y = this.game.height - logo.height;
+      logo.anchor.setTo(0.5);
+
+      logo.inputEnabled = true;
+      logo.input.useHandCursor = true;
+      logo.events.onInputDown.add(function () {
+        if (CloudAPI && CloudAPI.links.active()) {
+          window.open(CloudAPI.links.list()['logo']);
+        }
+      });
+    }
+  }, {
     key: 'createProgressBars',
     value: function createProgressBars() {
       var paddingTop = 50;
@@ -3304,7 +3425,7 @@ var Game = function (_Phaser$State) {
   }, {
     key: 'updateMagnet',
     value: function updateMagnet() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (!this.bunny.data.magnet) return;
 
@@ -3314,9 +3435,9 @@ var Game = function (_Phaser$State) {
 
       // TODO: Need optimization
       this.coins.forEach(function (coin) {
-        var distance = _this2.game.physics.arcade.distanceBetween(_this2.bunny, coin);
+        var distance = _this3.game.physics.arcade.distanceBetween(_this3.bunny, coin);
         if (distance < Engine.magnetDistace) {
-          _this2.game.physics.arcade.accelerateToObject(coin, _this2.bunny, speed, _this2.rnd.between(minSpeed, maxSpeed), _this2.rnd.between(minSpeed, maxSpeed));
+          _this3.game.physics.arcade.accelerateToObject(coin, _this3.bunny, speed, _this3.rnd.between(minSpeed, maxSpeed), _this3.rnd.between(minSpeed, maxSpeed));
         }
       });
     }
@@ -3453,9 +3574,30 @@ var Game = function (_Phaser$State) {
       this.bestDistance = new Engine.BestDistance(this.game);
     }
   }, {
+    key: 'addButtonMore',
+    value: function addButtonMore() {
+      var camera = this.game.camera;
+
+      var marginBottom = 50;
+      var button = this.game.add.sprite(0, 0, 'buttonMore');
+
+      button.inputEnabled = true;
+      button.anchor.setTo(0.5, 1);
+      button.x = camera.x + camera.width / 2;
+      button.y = camera.y + camera.height - marginBottom;
+      button.input.useHandCursor = true;
+      button.events.onInputDown.add(function () {
+        if (CloudAPI && CloudAPI.links.active()) {
+          window.open(CloudAPI.links.list()['games']);
+        }
+      });
+    }
+  }, {
     key: 'lose',
     value: function lose() {
       this.loseLabel.show();
+
+      this.addButtonMore();
 
       // TODO: Need incapsulation
       if (this.score.bestDistance < this.score.currentDistance) {
@@ -3471,10 +3613,15 @@ var Game = function (_Phaser$State) {
     value: function start() {
       this.startLabel.hide();
       this.bunny.run();
+    }
+  }, {
+    key: 'createTutorial',
+    value: function createTutorial() {
+      var tutorial = this.game.add.sprite(25, 25, 'tutorial');
+      tutorial.width = 225;
+      tutorial.height = 225;
 
-      if (CloudAPI) {
-        CloudAPI.play();
-      }
+      window.t = tutorial;
     }
   }, {
     key: 'createPowerUps',
@@ -3527,20 +3674,20 @@ var Game = function (_Phaser$State) {
   }, {
     key: 'addControl',
     value: function addControl() {
-      var _this3 = this;
+      var _this4 = this;
 
       var hotkey2 = this.input.keyboard.addKey(Phaser.KeyCode.Q);
       hotkey2.onDown.add(function () {
-        _this3.bunny.playDieAnimation();
+        _this4.bunny.playDieAnimation();
       }, this);
 
       var hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
       hotkey.onDown.add(this.spacebarDown, this);
 
-      var mouse = this.input.mouse;
-      mouse.mouseDownCallback = function () {
-        _this3.spacebarDown();
-      };
+      // let mouse = this.input.mouse
+      // mouse.mouseDownCallback = () => {
+      //   this.spacebarDown()
+      // }
     }
   }, {
     key: 'spacebarDown',
@@ -3588,11 +3735,12 @@ var Game = function (_Phaser$State) {
       var marginTop = 100;
       var style = {
         fill: 'rgb(255, 255, 255)',
-        font: '100px Open Sans'
+        font: '50px Open Sans'
       };
+      var distance = this.distanceBetweenGrounds;
 
-      for (var i = 1; i < this.game.width / this.distanceBetweenGrounds; i++) {
-        var ground = new Engine.Ground(this.game, this.distanceBetweenGrounds * i, 400);
+      for (var i = 1; i < this.game.width / distance; i++) {
+        var ground = new Engine.Ground(this.game, distance * i, 200);
         this.grounds.add(ground);
       }
 
@@ -3628,11 +3776,7 @@ var Game = function (_Phaser$State) {
 Engine.Game = Game;
 'use strict';
 
-Engine.game = new Phaser.Game(Engine.minWidth * 2, Engine.minHeight * 2, Phaser.AUTO);
-
-window.onresize = function () {
-  Engine.game.scale.setGameSize(window.innerWidth, window.innerHeight);
-};
+Engine.game = new Phaser.Game(Engine.width, Engine.height, Phaser.AUTO);
 
 Engine.game.state.add('Boot', Engine.Boot);
 Engine.game.state.add('Game', Engine.Game);

@@ -126,8 +126,8 @@ class Game extends Phaser.State {
     soundControll.fixedToCamera = true
 
     if (CloudAPI) {
-      CloudAPI.mute = this.mute;
-      CloudAPI.unmute = this.mute;
+      CloudAPI.mute = this.mute.bind(this)
+      CloudAPI.unmute = this.mute.bind(this)
     }
 
     soundControll.events.onInputDown.add(() => {

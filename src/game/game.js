@@ -26,7 +26,7 @@ class Game extends Phaser.State {
     this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
     this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg'])
 
-    if (CloudAPI.logos.active()) {
+    if (CloudAPI && CloudAPI.logos.active()) {
       this.load.image('cloudgames', 'assets/sprites/clg-logo.png')
     }
 

@@ -1,3 +1,7 @@
+if (typeof CloudAPI === 'undefined') {
+   window.CloudAPI = undefined;
+}
+
 let Engine = {
   minWidth: 640,
   minHeight: 360,

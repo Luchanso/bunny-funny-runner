@@ -45,6 +45,8 @@ class Game extends Phaser.State {
   }
 
   create() {
+    if (!Phaser.Device.desktop) this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+
     this.profiler = Engine.Service.get('Profiler')
 
     const worldHeight = 550 * 5

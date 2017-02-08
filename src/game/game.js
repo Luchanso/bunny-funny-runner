@@ -464,6 +464,9 @@ class Game extends Phaser.State {
       this.bunny.playDieAnimation()
     }, this)
 
+    let touch = this.input.touch;
+    touch.touchStartCallback = this.spacebarDown.bind(this);
+
     let hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR)
     hotkey.onDown.add(this.spacebarDown, this)
 

@@ -406,12 +406,21 @@ class Game extends Phaser.State {
     this.coins = new Engine.Component.CoinGenerator(this.game, this.bunny, this.grounds)
   }
 
+  getScreenText() {
+    let text = '';
+
+    if (Phaser.Device.desktop) text = 'Press spacebar';
+    else text = 'Touch the screen';
+
+    return text;
+  }
+
   createLoseLabel() {
     this.loseLabel = new Engine.Message(
       this.game,
       this.game.width / 2,
       this.game.height / 2,
-      'You lose :-(\r\nPress spacebar'
+      'You lose :-(\r\n' + this.getScreenText()
     )
 
     this.loseLabel.anchor.setTo(0.5)
@@ -423,7 +432,7 @@ class Game extends Phaser.State {
       this.game,
       this.game.width / 2,
       this.game.height / 2,
-      'Press spacebar\r\nto start'
+      this.getScreenText() + '\r\nto start'
     )
 
     this.startLabel.anchor.setTo(0.5)

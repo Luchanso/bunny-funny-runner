@@ -1,6 +1,6 @@
 {
   "name": "Name",
-  "version": "1.4.2",
+  "version": "1.4.0",
   "description": "Game",
   "main": "gulpfile.js",
   "scripts": {

@@ -4,6 +4,8 @@
   "description": "Game",
   "main": "gulpfile.js",
   "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [
     "game"
@@ -19,8 +21,9 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.9",
-    "phaser": "^2.6.2"
+    "phaser": "^2.6.2",
+    "snyk": "^1.41.1"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {},
+  "snyk": true
 }

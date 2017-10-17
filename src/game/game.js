@@ -56,7 +56,7 @@ class Game extends Phaser.State {
 
     this.createBackground()
     this.createTutorial()
-    this.createCloudGamesLogo()
+    // this.createCloudGamesLogo()
     this.createBunny()
     this.createSpikes()
     this.createGrounds()
@@ -371,7 +371,7 @@ class Game extends Phaser.State {
   lose() {
     this.loseLabel.show()
 
-    this.addButtonMore();
+    // this.addButtonMore();
 
     // TODO: Need incapsulation
     if (this.score.bestDistance < this.score.currentDistance) {

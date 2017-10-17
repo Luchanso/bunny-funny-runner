@@ -4,6 +4,7 @@
   "description": "Game",
   "main": "gulpfile.js",
   "scripts": {
+    "start": "gulp"
   },
   "keywords": [
     "game"

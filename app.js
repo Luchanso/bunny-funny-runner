@@ -3249,9 +3249,9 @@ var Game = function (_Phaser$State) {
       this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg']);
       this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg']);
 
-      if (CloudAPI && CloudAPI.logos.active()) {
-        this.load.image('cloudgames', 'assets/sprites/clg-logo.png');
-      }
+      // if (CloudAPI && CloudAPI.logos.active()) {
+      //   this.load.image('cloudgames', 'assets/sprites/clg-logo.png')
+      // }
 
       this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8);
     }
@@ -3358,10 +3358,10 @@ var Game = function (_Phaser$State) {
       soundControll.y = 5;
       soundControll.fixedToCamera = true;
 
-      if (CloudAPI) {
-        CloudAPI.mute = this.mute.bind(this);
-        CloudAPI.unmute = this.mute.bind(this);
-      }
+      // if (CloudAPI) {
+      //   CloudAPI.mute = this.mute.bind(this)
+      //   CloudAPI.unmute = this.mute.bind(this)
+      // }
 
       soundControll.events.onInputDown.add(function () {
         if (soundControll.frameName === 'mute') {
@@ -3610,9 +3610,9 @@ var Game = function (_Phaser$State) {
         this.score.bestDistance = this.score.currentDistance;
       }
 
-      if (CloudAPI) {
-        CloudAPI.gameOver();
-      }
+      // if (CloudAPI) {
+      //   CloudAPI.gameOver()
+      // }
     }
   }, {
     key: 'start',

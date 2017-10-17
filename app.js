@@ -28,6 +28,10 @@ PIXI.DisplayObjectContainer.prototype.removeChildren = function (beginIndex, end
 };
 'use strict';
 
+if (typeof CloudAPI === 'undefined') {
+  window.CloudAPI = undefined;
+}
+
 var Engine = {
   minWidth: 640,
   minHeight: 360,
@@ -607,146 +611,146 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var CoinGenerator = function (_Generator) {
-    _inherits(CoinGenerator, _Generator);
+  _inherits(CoinGenerator, _Generator);
 
-    function CoinGenerator(game, bunny, grounds) {
-        _classCallCheck(this, CoinGenerator);
+  function CoinGenerator(game, bunny, grounds) {
+    _classCallCheck(this, CoinGenerator);
 
-        var _this = _possibleConstructorReturn(this, (CoinGenerator.__proto__ || Object.getPrototypeOf(CoinGenerator)).call(this, game, bunny));
+    var _this = _possibleConstructorReturn(this, (CoinGenerator.__proto__ || Object.getPrototypeOf(CoinGenerator)).call(this, game, bunny));
 
-        _this.grounds = grounds;
-        _this.grounds.signals.generate.add(_this.createdNewGround, _this);
+    _this.grounds = grounds;
+    _this.grounds.signals.generate.add(_this.createdNewGround, _this);
 
-        _this.prototype = new Engine.Coin(_this.game, 0, 0);
+    _this.prototype = new Engine.Coin(_this.game, 0, 0);
 
-        _this.createTemplates();
-        return _this;
+    _this.createTemplates();
+    return _this;
+  }
+
+  _createClass(CoinGenerator, [{
+    key: "createTemplates",
+    value: function createTemplates() {
+      this.templates = [];
+
+      this.templates.push([[0, 0, 2, 3, 0], [0, 0, 2, 0, 0], [0, 0, 2, 0, 0], [0, 1, 3, 1, 0], [1, 1, 1, 1, 1]]);
+
+      this.templates.push([[3, 1, 1, 3], [1, 0, 0, 1], [1, 0, 0, 1], [1, 0, 0, 1], [1, 0, 0, 1], [2, 1, 1, 2]]);
+
+      this.templates.push([[0, 1, 0], [1, 3, 1], [0, 1, 0]]);
+
+      this.templates.push([[3]]);
+
+      this.templates.push([[3, 3, 3]]);
+
+      this.templates.push([[0, 0, 0, 3, 0, 0, 0], [0, 0, 2, 0, 2, 0, 0], [0, 2, 0, 0, 0, 2, 0], [2, 0, 0, 0, 0, 0, 2], [1, 1, 1, 1, 1, 1, 1]]);
+
+      this.templates.push([[0, 0, 1], [0, 3, 0], [1, 0, 0]]);
+
+      this.templates.push([[1, 0, 0], [0, 3, 0], [0, 0, 1]]);
+
+      this.templates.push([[1, 0, 0], [0, 3, 0], [0, 0, 1]]);
     }
+  }, {
+    key: "createdNewGround",
+    value: function createdNewGround(ground) {
+      if (!Phaser.Utils.chanceRoll(30)) return;
 
-    _createClass(CoinGenerator, [{
-        key: "createTemplates",
-        value: function createTemplates() {
-            this.templates = [];
+      var padding = 1;
 
-            this.templates.push([[0, 0, 2, 3, 0], [0, 0, 2, 0, 0], [0, 0, 2, 0, 0], [0, 1, 3, 1, 0], [1, 1, 1, 1, 1]]);
+      var template = this.game.rnd.pick(this.templates);
 
-            this.templates.push([[3, 1, 1, 3], [1, 0, 0, 1], [1, 0, 0, 1], [1, 0, 0, 1], [1, 0, 0, 1], [2, 1, 1, 2]]);
+      // if (ground.data.small) {
+      //   template = this.templates[this.game.rnd.pick([1, 2, 3])]
+      // } else {
+      // }
 
-            this.templates.push([[0, 1, 0], [1, 3, 1], [0, 1, 0]]);
+      var direction = this.game.rnd.pick([this.getOffsetRight, this.getOffsetTop, this.getOffsetTopRight]).bind(this)(ground, template);
 
-            this.templates.push([[3]]);
+      var offsetX = direction.x;
+      var offsetY = direction.y;
 
-            this.templates.push([[3, 3, 3]]);
+      var templateWidth = template[0].length * this.prototype.width;
+      var templateHeight = template.length * this.prototype.height;
 
-            this.templates.push([[0, 0, 0, 3, 0, 0, 0], [0, 0, 2, 0, 2, 0, 0], [0, 2, 0, 0, 0, 2, 0], [2, 0, 0, 0, 0, 0, 2], [1, 1, 1, 1, 1, 1, 1]]);
+      for (var i in template) {
+        for (var j in template[i]) {
+          if (template[i][j] > 0) {
+            var x = offsetX + j * (this.prototype.width + padding) - templateWidth / 2;
+            var y = offsetY + i * (this.prototype.height + padding) - templateHeight;
 
-            this.templates.push([[0, 0, 1], [0, 3, 0], [1, 0, 0]]);
-
-            this.templates.push([[1, 0, 0], [0, 3, 0], [0, 0, 1]]);
-
-            this.templates.push([[1, 0, 0], [0, 3, 0], [0, 0, 1]]);
+            this.generate(x, y, template[i][j]);
+          }
         }
-    }, {
-        key: "createdNewGround",
-        value: function createdNewGround(ground) {
-            if (!Phaser.Utils.chanceRoll(30)) return;
+      }
+    }
+  }, {
+    key: "generate",
+    value: function generate(x, y, maxType) {
+      var number = Math.random();
+      var type = 0;
 
-            var padding = 1;
+      if (number < 0.15 && maxType > 2) {
+        // 15%
+        type = Engine.Coin.type.GOLD;
+      } else if (number > 0.15 && number < 0.5 && maxType > 1) {
+        // %35
+        type = Engine.Coin.type.SILVER;
+      } else {
+        // 50%
+        type = Engine.Coin.type.BRONZE;
+      }
 
-            var template = this.game.rnd.pick(this.templates);
+      var coin = this.getFirstDead();
+      if (coin == null) {
+        coin = new Engine.Coin(this.game, x, y, type);
+        this.add(coin);
+      } else {
+        coin.reset(x, y);
+      }
 
-            // if (ground.data.small) {
-            //   template = this.templates[this.game.rnd.pick([1, 2, 3])]
-            // } else {
-            // }
+      return coin;
+    }
+  }, {
+    key: "getOffsetRight",
+    value: function getOffsetRight(ground, template) {
+      var margin = -5;
+      var marginLeft = 25;
 
-            var direction = this.game.rnd.pick([this.getOffsetRight, this.getOffsetTop, this.getOffsetTopRight]).bind(this)(ground, template);
+      var result = {
+        x: ground.x + ground.width + template[0].length * this.prototype.width + marginLeft,
+        y: ground.y + margin + this.prototype.height / 2
+      };
 
-            var offsetX = direction.x;
-            var offsetY = direction.y;
+      return result;
+    }
+  }, {
+    key: "getOffsetTop",
+    value: function getOffsetTop(ground, template) {
+      var margin = -5;
 
-            var templateWidth = template[0].length * this.prototype.width;
-            var templateHeight = template.length * this.prototype.height;
+      var result = {
+        x: ground.x + ground.width / 2 + this.prototype.width / 2,
+        y: ground.y + margin + this.prototype.height / 2
+      };
 
-            for (var i in template) {
-                for (var j in template[i]) {
-                    if (template[i][j] > 0) {
-                        var x = offsetX + j * (this.prototype.width + padding) - templateWidth / 2;
-                        var y = offsetY + i * (this.prototype.height + padding) - templateHeight;
+      return result;
+    }
+  }, {
+    key: "getOffsetTopRight",
+    value: function getOffsetTopRight(ground, template) {
+      var margin = template.length * this.prototype.height;
+      var marginLeft = 25;
 
-                        this.generate(x, y, template[i][j]);
-                    }
-                }
-            }
-        }
-    }, {
-        key: "generate",
-        value: function generate(x, y, maxType) {
-            var number = Math.random();
-            var type = 0;
+      var result = {
+        x: ground.x + ground.width + template[0].length * this.prototype.width + marginLeft,
+        y: ground.y + margin + this.prototype.height / 2
+      };
 
-            if (number < 0.15 && maxType > 2) {
-                // 15%
-                type = Engine.Coin.type.GOLD;
-            } else if (number > 0.15 && number < 0.5 && maxType > 1) {
-                // %35
-                type = Engine.Coin.type.SILVER;
-            } else {
-                // 50%
-                type = Engine.Coin.type.BRONZE;
-            }
+      return result;
+    }
+  }]);
 
-            var coin = this.getFirstDead();
-            if (coin == null) {
-                coin = new Engine.Coin(this.game, x, y, type);
-                this.add(coin);
-            } else {
-                coin.reset(x, y);
-            }
-
-            return coin;
-        }
-    }, {
-        key: "getOffsetRight",
-        value: function getOffsetRight(ground, template) {
-            var margin = -5;
-            var marginLeft = 25;
-
-            var result = {
-                x: ground.x + ground.width + template[0].length * this.prototype.width + marginLeft,
-                y: ground.y + margin + this.prototype.height / 2
-            };
-
-            return result;
-        }
-    }, {
-        key: "getOffsetTop",
-        value: function getOffsetTop(ground, template) {
-            var margin = -5;
-
-            var result = {
-                x: ground.x + ground.width / 2 + this.prototype.width / 2,
-                y: ground.y + margin + this.prototype.height / 2
-            };
-
-            return result;
-        }
-    }, {
-        key: "getOffsetTopRight",
-        value: function getOffsetTopRight(ground, template) {
-            var margin = template.length * this.prototype.height;
-            var marginLeft = 25;
-
-            var result = {
-                x: ground.x + ground.width + template[0].length * this.prototype.width + marginLeft,
-                y: ground.y + margin + this.prototype.height / 2
-            };
-
-            return result;
-        }
-    }]);
-
-    return CoinGenerator;
+  return CoinGenerator;
 }(Generator);
 
 Engine.Component.CoinGenerator = CoinGenerator;
@@ -1356,44 +1360,44 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Blood = function (_Phaser$Particles$Arc) {
-    _inherits(Blood, _Phaser$Particles$Arc);
+  _inherits(Blood, _Phaser$Particles$Arc);
 
-    function Blood(game, follow) {
-        _classCallCheck(this, Blood);
+  function Blood(game, follow) {
+    _classCallCheck(this, Blood);
 
-        var particles = 50;
-        var lifespan = 5000;
-        var speed = 1000;
+    var particles = 50;
+    var lifespan = 5000;
+    var speed = 1000;
 
-        var _this = _possibleConstructorReturn(this, (Blood.__proto__ || Object.getPrototypeOf(Blood)).call(this, game, 0, 0, particles));
+    var _this = _possibleConstructorReturn(this, (Blood.__proto__ || Object.getPrototypeOf(Blood)).call(this, game, 0, 0, particles));
 
-        _this.follow = follow;
+    _this.follow = follow;
 
-        _this.makeParticles('particles', [0, 1, 2, 3, 4], particles, true);
-        _this.bounce.setTo(1);
-        _this.gravity = 0;
-        _this.minParticleSpeed.setTo(-speed, -speed);
-        _this.maxParticleSpeed.setTo(speed, speed);
-        _this.setAlpha(1, 0, lifespan);
-        return _this;
+    _this.makeParticles('particles', [0, 1, 2, 3, 4], particles, true);
+    _this.bounce.setTo(1);
+    _this.gravity = 0;
+    _this.minParticleSpeed.setTo(-speed, -speed);
+    _this.maxParticleSpeed.setTo(speed, speed);
+    _this.setAlpha(1, 0, lifespan);
+    return _this;
+  }
+
+  _createClass(Blood, [{
+    key: 'playAnimation',
+    value: function playAnimation() {
+      var explode = true;
+      var lifespan = 5000;
+      var frequency = null;
+      var quantity = 200;
+
+      this.x = this.follow.x + this.follow.width / 2;
+      this.y = this.follow.y + this.follow.height / 2;
+
+      this.start(explode, lifespan, frequency, quantity);
     }
+  }]);
 
-    _createClass(Blood, [{
-        key: 'playAnimation',
-        value: function playAnimation() {
-            var explode = true;
-            var lifespan = 5000;
-            var frequency = null;
-            var quantity = 200;
-
-            this.x = this.follow.x + this.follow.width / 2;
-            this.y = this.follow.y + this.follow.height / 2;
-
-            this.start(explode, lifespan, frequency, quantity);
-        }
-    }]);
-
-    return Blood;
+  return Blood;
 }(Phaser.Particles.Arcade.Emitter);
 
 Engine.Blood = Blood;
@@ -2490,46 +2494,46 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var PowerUp = function (_Phaser$Sprite) {
-    _inherits(PowerUp, _Phaser$Sprite);
+  _inherits(PowerUp, _Phaser$Sprite);
 
-    function PowerUp(game, x, y) {
-        var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : PowerUp.type.MAGNET;
+  function PowerUp(game, x, y) {
+    var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : PowerUp.type.MAGNET;
 
-        _classCallCheck(this, PowerUp);
+    _classCallCheck(this, PowerUp);
 
-        var _this = _possibleConstructorReturn(this, (PowerUp.__proto__ || Object.getPrototypeOf(PowerUp)).call(this, game, x, y, Engine.spritesheet, type));
+    var _this = _possibleConstructorReturn(this, (PowerUp.__proto__ || Object.getPrototypeOf(PowerUp)).call(this, game, x, y, Engine.spritesheet, type));
 
-        var customRatio = 0.25;
+    var customRatio = 0.25;
 
-        _this.width *= Engine.scaleRatio + customRatio;
-        _this.height *= Engine.scaleRatio + customRatio;
+    _this.width *= Engine.scaleRatio + customRatio;
+    _this.height *= Engine.scaleRatio + customRatio;
 
-        _this.type = type;
+    _this.type = type;
 
-        _this.game.physics.arcade.enable([_this]);
+    _this.game.physics.arcade.enable([_this]);
 
-        _this.anchor.setTo(0.5);
-        return _this;
+    _this.anchor.setTo(0.5);
+    return _this;
+  }
+
+  _createClass(PowerUp, [{
+    key: 'reset',
+    value: function reset(x, y, type) {
+      _get(PowerUp.prototype.__proto__ || Object.getPrototypeOf(PowerUp.prototype), 'reset', this).call(this, x, y);
+
+      this.type = type;
+      this.frameName = type;
     }
+  }]);
 
-    _createClass(PowerUp, [{
-        key: 'reset',
-        value: function reset(x, y, type) {
-            _get(PowerUp.prototype.__proto__ || Object.getPrototypeOf(PowerUp.prototype), 'reset', this).call(this, x, y);
-
-            this.type = type;
-            this.frameName = type;
-        }
-    }]);
-
-    return PowerUp;
+  return PowerUp;
 }(Phaser.Sprite);
 
 PowerUp.type = {
-    MAGNET: 'powerup_bubble.png',
-    GOD: 'powerup_bunny.png',
-    WINGS: 'powerup_wings.png',
-    JETPACK: 'powerup_jetpack.png'
+  MAGNET: 'powerup_bubble.png',
+  GOD: 'powerup_bunny.png',
+  WINGS: 'powerup_wings.png',
+  JETPACK: 'powerup_jetpack.png'
 };
 
 Engine.PowerUp = PowerUp;
@@ -2646,24 +2650,24 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Spike = function (_Phaser$Sprite) {
-    _inherits(Spike, _Phaser$Sprite);
+  _inherits(Spike, _Phaser$Sprite);
 
-    function Spike(game, x, y) {
-        _classCallCheck(this, Spike);
+  function Spike(game, x, y) {
+    _classCallCheck(this, Spike);
 
-        var _this = _possibleConstructorReturn(this, (Spike.__proto__ || Object.getPrototypeOf(Spike)).call(this, game, x, y, Engine.spritesheet, 'spikes_top.png'));
+    var _this = _possibleConstructorReturn(this, (Spike.__proto__ || Object.getPrototypeOf(Spike)).call(this, game, x, y, Engine.spritesheet, 'spikes_top.png'));
 
-        _this.autoCull = true;
-        _this.anchor.setTo(0, 1);
+    _this.autoCull = true;
+    _this.anchor.setTo(0, 1);
 
-        _this.width *= Engine.scaleRatio;
-        _this.height *= Engine.scaleRatio;
+    _this.width *= Engine.scaleRatio;
+    _this.height *= Engine.scaleRatio;
 
-        _this.tint = 0x777777;
-        return _this;
-    }
+    _this.tint = 0x777777;
+    return _this;
+  }
 
-    return Spike;
+  return Spike;
 }(Phaser.Sprite);
 
 Engine.Spike = Spike;
@@ -2994,54 +2998,54 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var CoinCounter = function (_Phaser$Text) {
-    _inherits(CoinCounter, _Phaser$Text);
+  _inherits(CoinCounter, _Phaser$Text);
 
-    function CoinCounter(game, x, y) {
-        _classCallCheck(this, CoinCounter);
+  function CoinCounter(game, x, y) {
+    _classCallCheck(this, CoinCounter);
 
-        var style = {
-            fill: '#00B8D4', // 2196F3
-            font: '23px Open Sans'
-        };
+    var style = {
+      fill: '#00B8D4', // 2196F3
+      font: '23px Open Sans'
+    };
 
-        var _this = _possibleConstructorReturn(this, (CoinCounter.__proto__ || Object.getPrototypeOf(CoinCounter)).call(this, game, x, y, '0', style));
+    var _this = _possibleConstructorReturn(this, (CoinCounter.__proto__ || Object.getPrototypeOf(CoinCounter)).call(this, game, x, y, '0', style));
 
-        _this.fixedToCamera = true;
-        _this.score = Engine.Service.get('Score');
-        _this.score.updateCoins.add(_this.updateCoinsCount, _this);
+    _this.fixedToCamera = true;
+    _this.score = Engine.Service.get('Score');
+    _this.score.updateCoins.add(_this.updateCoinsCount, _this);
 
-        _this.createIcon();
-        return _this;
+    _this.createIcon();
+    return _this;
+  }
+
+  _createClass(CoinCounter, [{
+    key: 'createIcon',
+    value: function createIcon() {
+      var x = this.width * 2;
+      var y = 1;
+
+      var coin = this.game.make.sprite(x, y, Engine.spritesheet, 'coin_gold.png');
+
+      coin.anchor.setTo(1, 0);
+
+      coin.width = this.fontSize;
+      coin.height = this.fontSize;
+
+      this.addChild(coin);
+
+      var offsetX = this.cameraOffset.x - coin.width;
+      var offsetY = this.cameraOffset.y;
+
+      this.cameraOffset.setTo(offsetX, offsetY);
     }
+  }, {
+    key: 'updateCoinsCount',
+    value: function updateCoinsCount() {
+      this.text = '' + this.score.coins;
+    }
+  }]);
 
-    _createClass(CoinCounter, [{
-        key: 'createIcon',
-        value: function createIcon() {
-            var x = this.width * 2;
-            var y = 1;
-
-            var coin = this.game.make.sprite(x, y, Engine.spritesheet, 'coin_gold.png');
-
-            coin.anchor.setTo(1, 0);
-
-            coin.width = this.fontSize;
-            coin.height = this.fontSize;
-
-            this.addChild(coin);
-
-            var offsetX = this.cameraOffset.x - coin.width;
-            var offsetY = this.cameraOffset.y;
-
-            this.cameraOffset.setTo(offsetX, offsetY);
-        }
-    }, {
-        key: 'updateCoinsCount',
-        value: function updateCoinsCount() {
-            this.text = '' + this.score.coins;
-        }
-    }]);
-
-    return CoinCounter;
+  return CoinCounter;
 }(Phaser.Text);
 
 Engine.CoinCounter = CoinCounter;
@@ -3245,7 +3249,7 @@ var Game = function (_Phaser$State) {
       this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg']);
       this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg']);
 
-      if (CloudAPI.logos.active()) {
+      if (CloudAPI && CloudAPI.logos.active()) {
         this.load.image('cloudgames', 'assets/sprites/clg-logo.png');
       }
 
@@ -3266,6 +3270,8 @@ var Game = function (_Phaser$State) {
   }, {
     key: 'create',
     value: function create() {
+      if (!Phaser.Device.desktop) this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+
       this.profiler = Engine.Service.get('Profiler');
 
       var worldHeight = 550 * 5;
@@ -3275,7 +3281,7 @@ var Game = function (_Phaser$State) {
 
       this.createBackground();
       this.createTutorial();
-      this.createCloudGamesLogo();
+      // this.createCloudGamesLogo()
       this.createBunny();
       this.createSpikes();
       this.createGrounds();
@@ -3353,8 +3359,8 @@ var Game = function (_Phaser$State) {
       soundControll.fixedToCamera = true;
 
       if (CloudAPI) {
-        CloudAPI.mute = this.mute;
-        CloudAPI.unmute = this.mute;
+        CloudAPI.mute = this.mute.bind(this);
+        CloudAPI.unmute = this.mute.bind(this);
       }
 
       soundControll.events.onInputDown.add(function () {
@@ -3597,7 +3603,7 @@ var Game = function (_Phaser$State) {
     value: function lose() {
       this.loseLabel.show();
 
-      this.addButtonMore();
+      // this.addButtonMore();
 
       // TODO: Need incapsulation
       if (this.score.bestDistance < this.score.currentDistance) {
@@ -3634,9 +3640,18 @@ var Game = function (_Phaser$State) {
       this.coins = new Engine.Component.CoinGenerator(this.game, this.bunny, this.grounds);
     }
   }, {
+    key: 'getScreenText',
+    value: function getScreenText() {
+      var text = '';
+
+      if (Phaser.Device.desktop) text = 'Press spacebar';else text = 'Touch the screen';
+
+      return text;
+    }
+  }, {
     key: 'createLoseLabel',
     value: function createLoseLabel() {
-      this.loseLabel = new Engine.Message(this.game, this.game.width / 2, this.game.height / 2, 'You lose :-(\r\nPress spacebar');
+      this.loseLabel = new Engine.Message(this.game, this.game.width / 2, this.game.height / 2, 'You lose :-(\r\n' + this.getScreenText());
 
       this.loseLabel.anchor.setTo(0.5);
       this.add.existing(this.loseLabel);
@@ -3644,7 +3659,7 @@ var Game = function (_Phaser$State) {
   }, {
     key: 'createStartLabel',
     value: function createStartLabel() {
-      this.startLabel = new Engine.Message(this.game, this.game.width / 2, this.game.height / 2, 'Press spacebar\r\nto start');
+      this.startLabel = new Engine.Message(this.game, this.game.width / 2, this.game.height / 2, this.getScreenText() + '\r\nto start');
 
       this.startLabel.anchor.setTo(0.5);
       this.startLabel.show();
@@ -3680,6 +3695,9 @@ var Game = function (_Phaser$State) {
       hotkey2.onDown.add(function () {
         _this4.bunny.playDieAnimation();
       }, this);
+
+      var touch = this.input.touch;
+      touch.touchStartCallback = this.spacebarDown.bind(this);
 
       var hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
       hotkey.onDown.add(this.spacebarDown, this);

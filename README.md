@@ -1,4 +1,3 @@
----
 Configurations:
 * Jump distance x: 280px - 560px
 * Jump distance y: 154px - 25 0px
@@ -6,7 +5,6 @@ Configurations:
 * Better height = 600px
 * Better height >  1024px
 
----
 Install:
 ```sh
 git clone https://github.com/Luchanso/bunny-funny-runner

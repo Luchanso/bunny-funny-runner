@@ -5,7 +5,7 @@ class Ground extends Phaser.Sprite {
     y,
     type = Ground.type.GRASS,
     small = false,
-    broken = false
+    broken = false,
   ) {
     const name = Ground.getName(type, small, broken);
 
@@ -32,17 +32,21 @@ class Ground extends Phaser.Sprite {
   addEnviroment() {
     const type = this.data.type;
 
-    if (type === Ground.type.GRASS && Phaser.Utils.chanceRoll(5))
+    if (type === Ground.type.GRASS && Phaser.Utils.chanceRoll(5)) {
       this.addBrownGrass();
-    else if (type === Ground.type.GRASS && Phaser.Utils.chanceRoll(15))
+    } else if (type === Ground.type.GRASS && Phaser.Utils.chanceRoll(15)) {
       this.addGreenGrass();
+    }
 
-    if (type === Ground.type.WOOD && Phaser.Utils.chanceRoll(10))
+    if (type === Ground.type.WOOD && Phaser.Utils.chanceRoll(10)) {
       this.addBrownGrass();
-    if (type === Ground.type.STONE && Phaser.Utils.chanceRoll(15))
+    }
+    if (type === Ground.type.STONE && Phaser.Utils.chanceRoll(15)) {
       this.addBrownGrass();
-    if (type === Ground.type.SAND && Phaser.Utils.chanceRoll(15))
+    }
+    if (type === Ground.type.SAND && Phaser.Utils.chanceRoll(15)) {
       this.addCactus();
+    }
 
     if (
       type !== Ground.type.SNOW &&
@@ -54,19 +58,19 @@ class Ground extends Phaser.Sprite {
   }
 
   addMushroom() {
-    let name = this.game.rnd.pick(['mushroom_brown.png', 'mushroom_red.png']);
+    const name = this.game.rnd.pick(['mushroom_brown.png', 'mushroom_red.png']);
 
     this.addEnviromentObject(name);
   }
 
   addGreenGrass() {
-    let name = this.game.rnd.pick(['grass1.png', 'grass2.png']);
+    const name = this.game.rnd.pick(['grass1.png', 'grass2.png']);
 
     this.addEnviromentObject(name);
   }
 
   addBrownGrass() {
-    let name = this.game.rnd.pick(['grass_brown1.png', 'grass_brown2.png']);
+    const name = this.game.rnd.pick(['grass_brown1.png', 'grass_brown2.png']);
 
     this.addEnviromentObject(name);
   }
@@ -79,7 +83,7 @@ class Ground extends Phaser.Sprite {
     const x = this.game.rnd.between(0, this.width * 1.5);
     const y = 0;
 
-    let env = new Phaser.Sprite(this.game, x, y, Engine.spritesheet, name);
+    const env = new Phaser.Sprite(this.game, x, y, Engine.spritesheet, name);
     env.anchor.setTo(0, 1);
     this.addChild(env);
   }
@@ -107,7 +111,7 @@ Ground.type = {
   SAND: 'sand',
   SNOW: 'snow',
   STONE: 'stone',
-  WOOD: 'wood'
+  WOOD: 'wood',
 };
 
 Ground.getName = (type, small, broken) => {

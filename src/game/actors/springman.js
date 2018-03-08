@@ -13,27 +13,27 @@ class SpringMan extends Engine.Enemy {
       .tween(this)
       .to(
         {
-          x: this.x + amplitude
+          x: this.x + amplitude,
         },
-        time
+        time,
       )
       .to(
         {
-          x: this.x
+          x: this.x,
         },
-        time
+        time,
       )
       .to(
         {
-          x: this.x - amplitude
+          x: this.x - amplitude,
         },
-        time
+        time,
       )
       .to(
         {
-          x: this.x
+          x: this.x,
         },
-        time
+        time,
       )
       .loop()
       .start();

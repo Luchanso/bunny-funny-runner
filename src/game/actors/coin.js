@@ -1,6 +1,6 @@
 class Coin extends Phaser.Sprite {
   constructor(game, x, y, type = Coin.type.GOLD) {
-    super(game, x, y, Engine.spritesheet, type + '_1.png');
+    super(game, x, y, Engine.spritesheet, `${type}_1.png`);
 
     this.width *= Engine.scaleRatio / 1.5;
     this.height *= Engine.scaleRatio / 1.5;
@@ -35,7 +35,7 @@ class Coin extends Phaser.Sprite {
   createAnimation() {
     const countCoinsFrame = 7;
 
-    let animationFrames = [];
+    const animationFrames = [];
 
     for (let i = 1; i < countCoinsFrame; i++) {
       // if (i === 4) continue
@@ -50,7 +50,7 @@ class Coin extends Phaser.Sprite {
     super.reset(x, y);
 
     this.type = type;
-    this.frame = type + '_1.png';
+    this.frame = `${type}_1.png`;
     // this.animations.currentAnim.destroy()
 
     this.createAnimation();
@@ -64,7 +64,7 @@ class Coin extends Phaser.Sprite {
 Coin.type = {
   GOLD: 'gold',
   SILVER: 'silver',
-  BRONZE: 'bronze'
+  BRONZE: 'bronze',
 };
 
 Engine.Coin = Coin;

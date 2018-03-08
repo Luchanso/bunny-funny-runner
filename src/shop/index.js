@@ -15,7 +15,7 @@ class Shop extends Phaser.State {
     const text = 'BUY MORE COINS 💰';
     const style = {
       font: '41px Open Sans',
-      fill: 'white'
+      fill: 'white',
     };
 
     this.headLabel = this.add.text(this.game.width / 2, margin, text, style);
@@ -25,9 +25,9 @@ class Shop extends Phaser.State {
       .tween(this.headLabel)
       .to(
         {
-          alpha: 1
+          alpha: 1,
         },
-        animation
+        animation,
       )
       .start();
   }

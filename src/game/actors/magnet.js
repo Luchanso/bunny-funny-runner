@@ -18,7 +18,7 @@ class MagnetEffect extends Phaser.Graphics {
     this.clear();
 
     for (let i = 0; i < this.waves.length; i++) {
-      let wave = this.waves[i];
+      const wave = this.waves[i];
 
       if (Date.now() - wave.startTime > 2000) {
         this.waves.splice(i, 1);
@@ -53,30 +53,30 @@ class MagnetEffect extends Phaser.Graphics {
       .tween(this)
       .to(
         {
-          alpha
+          alpha,
         },
-        animationTime
+        animationTime,
       )
       .start();
   }
 
   addWave() {
-    let wave = {
+    const wave = {
       radius: 0,
       width: 15,
       alpha: 0.8,
-      startTime: Date.now()
+      startTime: Date.now(),
     };
 
-    let tween = this.game.add
+    const tween = this.game.add
       .tween(wave)
       .to(
         {
           width: 1,
           radius: Engine.magnetDistace,
-          alpha: 0
+          alpha: 0,
         },
-        750
+        750,
       )
       .start();
 

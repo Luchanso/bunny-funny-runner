@@ -18,7 +18,7 @@ class CoinGenerator extends Generator {
       [0, 0, 2, 0, 0],
       [0, 0, 2, 0, 0],
       [0, 1, 3, 1, 0],
-      [1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1],
     ]);
 
     this.templates.push([
@@ -27,7 +27,7 @@ class CoinGenerator extends Generator {
       [1, 0, 0, 1],
       [1, 0, 0, 1],
       [1, 0, 0, 1],
-      [2, 1, 1, 2]
+      [2, 1, 1, 2],
     ]);
 
     this.templates.push([[0, 1, 0], [1, 3, 1], [0, 1, 0]]);
@@ -41,7 +41,7 @@ class CoinGenerator extends Generator {
       [0, 0, 2, 0, 2, 0, 0],
       [0, 2, 0, 0, 0, 2, 0],
       [2, 0, 0, 0, 0, 0, 2],
-      [1, 1, 1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1, 1, 1],
     ]);
 
     this.templates.push([[0, 0, 1], [0, 3, 0], [1, 0, 0]]);
@@ -56,29 +56,29 @@ class CoinGenerator extends Generator {
 
     const padding = 1;
 
-    let template = this.game.rnd.pick(this.templates);
+    const template = this.game.rnd.pick(this.templates);
 
     // if (ground.data.small) {
     //   template = this.templates[this.game.rnd.pick([1, 2, 3])]
     // } else {
     // }
 
-    let direction = this.game.rnd
+    const direction = this.game.rnd
       .pick([this.getOffsetRight, this.getOffsetTop, this.getOffsetTopRight])
       .bind(this)(ground, template);
 
-    let offsetX = direction.x;
-    let offsetY = direction.y;
+    const offsetX = direction.x;
+    const offsetY = direction.y;
 
-    let templateWidth = template[0].length * this.prototype.width;
-    let templateHeight = template.length * this.prototype.height;
+    const templateWidth = template[0].length * this.prototype.width;
+    const templateHeight = template.length * this.prototype.height;
 
-    for (let i in template) {
-      for (let j in template[i]) {
+    for (const i in template) {
+      for (const j in template[i]) {
         if (template[i][j] > 0) {
-          let x =
+          const x =
             offsetX + j * (this.prototype.width + padding) - templateWidth / 2;
-          let y =
+          const y =
             offsetY + i * (this.prototype.height + padding) - templateHeight;
 
           this.generate(x, y, template[i][j]);
@@ -117,13 +117,13 @@ class CoinGenerator extends Generator {
     const margin = -5;
     const marginLeft = 25;
 
-    let result = {
+    const result = {
       x:
         ground.x +
         ground.width +
         template[0].length * this.prototype.width +
         marginLeft,
-      y: ground.y + margin + this.prototype.height / 2
+      y: ground.y + margin + this.prototype.height / 2,
     };
 
     return result;
@@ -132,9 +132,9 @@ class CoinGenerator extends Generator {
   getOffsetTop(ground, template) {
     const margin = -5;
 
-    let result = {
+    const result = {
       x: ground.x + ground.width / 2 + this.prototype.width / 2,
-      y: ground.y + margin + this.prototype.height / 2
+      y: ground.y + margin + this.prototype.height / 2,
     };
 
     return result;
@@ -144,13 +144,13 @@ class CoinGenerator extends Generator {
     const margin = template.length * this.prototype.height;
     const marginLeft = 25;
 
-    let result = {
+    const result = {
       x:
         ground.x +
         ground.width +
         template[0].length * this.prototype.width +
         marginLeft,
-      y: ground.y + margin + this.prototype.height / 2
+      y: ground.y + margin + this.prototype.height / 2,
     };
 
     return result;

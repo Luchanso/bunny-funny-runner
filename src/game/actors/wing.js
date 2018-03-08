@@ -27,15 +27,15 @@ class Wing extends Phaser.Sprite {
       .tween(this)
       .to(
         {
-          rotation: min
+          rotation: min,
         },
-        200
+        200,
       )
       .to(
         {
-          rotation: max
+          rotation: max,
         },
-        200
+        200,
       )
       .loop(-1)
       .start();

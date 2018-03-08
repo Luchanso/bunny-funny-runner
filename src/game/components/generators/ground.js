@@ -10,7 +10,7 @@ class GroundsGenerator extends Engine.Component.Generator {
 
     this.distance = distance;
     this.signals = {
-      generate: new Phaser.Signal()
+      generate: new Phaser.Signal(),
     };
     this.currentStep = -1;
     this.currentGroundType = Engine.Ground.type.SNOW;
@@ -33,9 +33,7 @@ class GroundsGenerator extends Engine.Component.Generator {
     const maxTime = 15000;
     const time = this.game.rnd.between(minTime, maxTime);
 
-    const types = Object.keys(Engine.Ground.type).map(val => {
-      return Engine.Ground.type[val];
-    });
+    const types = Object.keys(Engine.Ground.type).map(val => Engine.Ground.type[val]);
 
     this.currentGroundType = this.game.rnd.pick(types);
 
@@ -45,8 +43,8 @@ class GroundsGenerator extends Engine.Component.Generator {
   update() {
     super.update();
 
-    let step = Math.floor(this.bunny.x / this.distance);
-    let margin = this.game.width;
+    const step = Math.floor(this.bunny.x / this.distance);
+    const margin = this.game.width;
 
     if (step !== this.currentStep) {
       this.currentStep = step;
@@ -80,7 +78,7 @@ class GroundsGenerator extends Engine.Component.Generator {
         GRID_HEIGHT * i +
         this.game.rnd.between(-RND_VERTICAL, RND_VERTICAL);
 
-      let ground = this.addRandomGround(x, y);
+      const ground = this.addRandomGround(x, y);
 
       this.signals.generate.dispatch(ground);
     }

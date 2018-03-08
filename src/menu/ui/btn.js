@@ -36,17 +36,17 @@ class Btn extends Phaser.Graphics {
         this.x,
         this.y,
         this.game.width,
-        this.game.height
+        this.game.height,
       );
     }
 
-    let tween = this.game.add
+    const tween = this.game.add
       .tween(this)
       .to(
         {
-          radius: screenSize * 2
+          radius: screenSize * 2,
         },
-        animation
+        animation,
       )
       .start();
 
@@ -54,9 +54,9 @@ class Btn extends Phaser.Graphics {
       .tween(this.icon)
       .to(
         {
-          alpha: 0
+          alpha: 0,
         },
-        animation
+        animation,
       )
       .start();
 

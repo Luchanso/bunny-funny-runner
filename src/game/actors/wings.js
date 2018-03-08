@@ -5,7 +5,7 @@ class Wings extends Phaser.Group {
     super(game);
 
     this.data = {
-      visible: false
+      visible: false,
     };
     this.alpha = 0;
     this.bunny = bunny;
@@ -57,9 +57,9 @@ class Wings extends Phaser.Group {
       .tween(this)
       .to(
         {
-          alpha: alpha
+          alpha,
         },
-        time
+        time,
       )
       .start();
   }

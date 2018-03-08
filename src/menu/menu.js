@@ -21,14 +21,14 @@ class Menu extends Phaser.State {
   createLogo() {
     const style = {
       font: '50px Open Sans',
-      fill: 'white'
+      fill: 'white',
     };
 
     this.logo = this.add.text(
       this.game.width / 2,
       this.game.height / 4,
       '🐰 Bunny Funny Runner 🐰 ',
-      style
+      style,
     );
 
     this.logo.anchor.setTo(0.5);
@@ -44,7 +44,7 @@ class Menu extends Phaser.State {
       this.game.width / 2 + margin,
       this.game.height / 2,
       btnColor,
-      icon
+      icon,
     );
     this.settings.icon.tint = 0x26c6da;
     // this.settings.clicked.add(this.startGame, this)
@@ -61,7 +61,7 @@ class Menu extends Phaser.State {
       this.game.width / 2 + margin,
       this.game.height / 2,
       btnColor,
-      icon
+      icon,
     );
     // this.settings.icon.tint = 0x00E676
     this.settings.clicked.add(this.openShop, this);
@@ -77,7 +77,7 @@ class Menu extends Phaser.State {
       this.game.width / 2,
       this.game.height / 2,
       btnColor,
-      icon
+      icon,
     );
     this.play.icon.tint = 0x26c6da;
     this.play.clicked.add(this.startGame, this);

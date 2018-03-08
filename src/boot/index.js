@@ -1,10 +1,6 @@
-class Boot extends Phaser.State {
-  constructor() {
-    super();
-  }
+import Phaser from 'phaser';
 
-  preload() {}
-
+export default class Boot extends Phaser.State {
   create() {
     this.game.stage.disableVisibilityChange = true;
     this.scale.pageAlignHorizontally = true;
@@ -13,5 +9,3 @@ class Boot extends Phaser.State {
     this.state.start('Loader');
   }
 }
-
-Engine.Boot = Boot;

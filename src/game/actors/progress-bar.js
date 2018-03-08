@@ -15,10 +15,10 @@ class ProgressBar extends Phaser.Graphics {
   addLabel(text) {
     const style = {
       fill: Phaser.Color.getWebRGB(this.color),
-      font: '21px Open Sans'
+      font: '21px Open Sans',
     };
 
-    let label = new Phaser.Text(this.game, 0, -30, text, style);
+    const label = new Phaser.Text(this.game, 0, -30, text, style);
 
     this.addChild(label);
   }
@@ -53,9 +53,9 @@ class ProgressBar extends Phaser.Graphics {
       .tween(this)
       .to(
         {
-          value: 0
+          value: 0,
         },
-        time
+        time,
       )
       .start();
 
@@ -77,9 +77,9 @@ class ProgressBar extends Phaser.Graphics {
       .tween(this)
       .to(
         {
-          alpha
+          alpha,
         },
-        animationTime
+        animationTime,
       )
       .start();
   }

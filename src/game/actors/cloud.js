@@ -18,13 +18,13 @@ class Cloud extends Engine.Enemy {
     this.data.y = this.y;
     this.data.rotation = 0;
 
-    let tween = this.game.add
+    const tween = this.game.add
       .tween(this.data)
       .to(
         {
-          rotation: Phaser.Math.PI2
+          rotation: Phaser.Math.PI2,
         },
-        time
+        time,
       )
       .loop(-1)
       .start();
@@ -47,7 +47,7 @@ class Cloud extends Engine.Enemy {
     this.bolt.makeParticles(
       Engine.spritesheets,
       ['lighting_yellow.png', 'lighting_blue.png'],
-      maxParticles
+      maxParticles,
     );
     this.bolt.lifespan = lifespan;
     this.bolt.gravity = 0;
@@ -67,10 +67,10 @@ class Cloud extends Engine.Enemy {
       this.x + this.width / 2,
       this.y + this.height,
       Engine.spritesheet,
-      this.game.rnd.pick(['lighting_yellow.png', 'lighting_blue.png'])
+      this.game.rnd.pick(['lighting_yellow.png', 'lighting_blue.png']),
     );
 
-    this.bolt.forEachExists(item => {
+    this.bolt.forEachExists((item) => {
       item.tint = 0x0000ff;
     }, this);
   }

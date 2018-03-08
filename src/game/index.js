@@ -1,13 +1,13 @@
-class Game extends Phaser.State {
-  constructor() {
-    super();
-  }
+import Phaser from 'phaser';
+import Service from '../service';
+import { config } from '../config';
 
+export default class Game extends Phaser.State {
   preload() {
     this.load.atlasXML(
-      Engine.spritesheet,
+      config.spritesheet,
       'assets/spritesheets/jumper.png',
-      'assets/spritesheets/jumper.xml'
+      'assets/spritesheets/jumper.xml',
     );
 
     this.load.image('layer2', 'assets/sprites/backgrounds/layer2.png');
@@ -19,45 +19,44 @@ class Game extends Phaser.State {
     this.load.atlasJSONArray(
       'soundControll',
       'assets/sprites/ui/soundControll.png',
-      'assets/sprites/ui/soundControll.json'
+      'assets/sprites/ui/soundControll.json',
     );
 
     this.load.audio('lose', [
       'assets/sounds/lose.mp3',
-      'assets/sounds/lose.ogg'
+      'assets/sounds/lose.ogg',
     ]);
     this.load.audio('coin', [
       'assets/sounds/coin.mp3',
-      'assets/sounds/coin.ogg'
+      'assets/sounds/coin.ogg',
     ]);
     this.load.audio('jump', [
       'assets/sounds/jump.mp3',
-      'assets/sounds/jump.ogg'
+      'assets/sounds/jump.ogg',
     ]);
-
-    // if (CloudAPI && CloudAPI.logos.active()) {
-    //   this.load.image('cloudgames', 'assets/sprites/clg-logo.png')
-    // }
 
     this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8);
   }
 
   init() {
-    this.distanceBetweenGrounds = 1285 * Engine.scaleRatio;
+    this.distanceBetweenGrounds = 1285 * config.scaleRatio;
 
-    this.score = Engine.Service.get('Score');
+    this.score = Service.get('Score');
     this.score.coins = 0;
 
     this.paddingLeftCamera = 200;
 
-    window.game = this;
+    if (process.env.NODE_ENV === 'development') {
+      window.game = this;
+    }
   }
 
   create() {
-    if (!Phaser.Device.desktop)
+    if (!Phaser.Device.desktop) {
       this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+    }
 
-    this.profiler = Engine.Service.get('Profiler');
+    this.profiler = Service.get('Profiler');
 
     const worldHeight = 550 * 5;
     this.stage.backgroundColor = 0xade6ff; // 0x555555//
@@ -66,12 +65,11 @@ class Game extends Phaser.State {
       0,
       -(worldHeight - this.game.height),
       Number.MAX_VALUE,
-      worldHeight
+      worldHeight,
     );
 
     this.createBackground();
     this.createTutorial();
-    // this.createCloudGamesLogo()
     this.createBunny();
     this.createSpikes();
     this.createGrounds();
@@ -98,7 +96,7 @@ class Game extends Phaser.State {
     const width = 20;
     const color = 0x57daf6;
 
-    let graphics = this.add.graphics(0, 0);
+    const graphics = this.add.graphics(0, 0);
     graphics.lineStyle(width, color);
     graphics.drawRect(0, 0, this.game.width, this.game.height);
 
@@ -118,7 +116,7 @@ class Game extends Phaser.State {
       this.coins,
       this.takeCoin,
       null,
-      this
+      this,
     );
 
     if (!this.bunny.data.jetPack) {
@@ -128,50 +126,43 @@ class Game extends Phaser.State {
         this.enemies,
         this.collideEnemies,
         null,
-        this
+        this,
       );
       this.physics.arcade.overlap(
         this.bunny,
         this.jumpers,
         this.overlapJumper,
         null,
-        this
+        this,
       );
       this.physics.arcade.overlap(
         this.bunny,
         this.powerUps,
         this.takePowerUp,
         null,
-        this
+        this,
       );
     }
     this.updateDie();
     this.updateMagnet();
 
     // TODO: Need incapsulation
-    this.score.currentDistance = Math.round(
-      this.bunny.x / Engine.Score.MULTIPER_DISTANCE
-    );
+    this.score.currentDistance = Math.round(this.bunny.x / config.Score.MULTIPER_DISTANCE);
 
     this.bottomSpikes.x = this.bunny.x - this.paddingLeftCamera;
   }
 
-  render() {
-    // this.game.debug.body(this.cloud, 'rgba(20, 0, 255, 0.35)')
-    // this.debugCountObject()
-  }
+  // render() {
+  //   this.game.debug.body(this.cloud, 'rgba(20, 0, 255, 0.35)')
+  //   this.debugCountObject()
+  // }
 
   createSoundControll() {
-    let soundControll = new SoundControll(this.game);
+    const soundControll = new SoundControll(this.game);
     this.game.add.existing(soundControll);
     soundControll.x = 5;
     soundControll.y = 5;
     soundControll.fixedToCamera = true;
-
-    // if (CloudAPI) {
-    //   CloudAPI.mute = this.mute.bind(this)
-    //   CloudAPI.unmute = this.mute.bind(this)
-    // }
 
     soundControll.events.onInputDown.add(() => {
       if (soundControll.frameName === 'mute') {
@@ -192,24 +183,6 @@ class Game extends Phaser.State {
     return true;
   }
 
-  createCloudGamesLogo() {
-    const ratio = 0.5;
-    let logo = this.game.add.sprite(0, 0, 'cloudgames');
-    logo.width *= ratio;
-    logo.height *= ratio;
-    logo.x = this.game.width / 2;
-    logo.y = this.game.height - logo.height;
-    logo.anchor.setTo(0.5);
-
-    logo.inputEnabled = true;
-    logo.input.useHandCursor = true;
-    logo.events.onInputDown.add(() => {
-      if (CloudAPI && CloudAPI.links.active()) {
-        window.open(CloudAPI.links.list()['logo']);
-      }
-    });
-  }
-
   createProgressBars() {
     const paddingTop = 50;
     const margin = 50;
@@ -219,7 +192,7 @@ class Game extends Phaser.State {
       this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
       paddingTop,
       'Infinity Jumps',
-      0x8661ff
+      0x8661ff,
     );
 
     this.progressMagnet = new Engine.ProgressBar(
@@ -227,7 +200,7 @@ class Game extends Phaser.State {
       this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
       this.progressJumps.y + margin,
       'Coin Magnet',
-      0xff8000
+      0xff8000,
     );
 
     this.progressUntouch = new Engine.ProgressBar(
@@ -235,7 +208,7 @@ class Game extends Phaser.State {
       this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
       this.progressMagnet.y + margin,
       'Untouchability',
-      0xff0000
+      0xff0000,
     );
 
     this.add.existing(this.progressJumps);
@@ -244,10 +217,10 @@ class Game extends Phaser.State {
   }
 
   createDatGui() {
-    let gui = new dat.GUI();
+    const gui = new window.dat.GUI();
 
-    let dg = document.getElementsByClassName('dg ac')[0];
-    dg.style.right = this.game.width / 2 - 245 + 'px';
+    const dg = document.getElementsByClassName('dg ac')[0];
+    dg.style.right = `${this.game.width / 2 - 245}px`;
 
     gui.addColor(this.progress, 'color');
   }
@@ -260,15 +233,18 @@ class Game extends Phaser.State {
     const maxSpeed = 1000;
 
     // TODO: Need optimization
-    this.coins.forEach(coin => {
-      let distance = this.game.physics.arcade.distanceBetween(this.bunny, coin);
-      if (distance < Engine.magnetDistace) {
+    this.coins.forEach((coin) => {
+      const distance = this.game.physics.arcade.distanceBetween(
+        this.bunny,
+        coin,
+      );
+      if (distance < config.magnetDistace) {
         this.game.physics.arcade.accelerateToObject(
           coin,
           this.bunny,
           speed,
           this.rnd.between(minSpeed, maxSpeed),
-          this.rnd.between(minSpeed, maxSpeed)
+          this.rnd.between(minSpeed, maxSpeed),
         );
       }
     });
@@ -305,35 +281,35 @@ class Game extends Phaser.State {
   debugCountObject() {
     let summ = 0;
 
-    for (let item of this.world.children) {
+    for (const item of this.world.children) {
       summ += item.children.length + 1;
     }
 
-    this.game.debug.text('Objects in memory: ' + summ, 90, 15);
+    this.game.debug.text(`Objects in memory: ${summ}`, 90, 15);
     this.game.debug.text(
-      'Rendered objects: ' + this.camera.totalInView,
+      `Rendered objects: ${this.camera.totalInView}`,
       90,
-      35
+      35,
     );
-    this.game.debug.text('Coins objects: ' + this.coins.length, 90, 55);
-    this.game.debug.text('Enemies objects: ' + this.enemies.length, 90, 75);
-    this.game.debug.text('Grounds objects: ' + this.grounds.length, 90, 95);
-    this.game.debug.text('Nominals objects: ' + this.nominals.length, 90, 115);
-    this.game.debug.text('Jumpers objects: ' + this.jumpers.length, 90, 135);
+    this.game.debug.text(`Coins objects: ${this.coins.length}`, 90, 55);
+    this.game.debug.text(`Enemies objects: ${this.enemies.length}`, 90, 75);
+    this.game.debug.text(`Grounds objects: ${this.grounds.length}`, 90, 95);
+    this.game.debug.text(`Nominals objects: ${this.nominals.length}`, 90, 115);
+    this.game.debug.text(`Jumpers objects: ${this.jumpers.length}`, 90, 135);
     this.game.debug.text(
-      'Blood objects: ' + this.bunny.data.blood.length,
+      `Blood objects: ${this.bunny.data.blood.length}`,
       90,
-      155
-    );
-    this.game.debug.text(
-      'Trail objects: ' + this.bunny.data.trail.length,
-      90,
-      175
+      155,
     );
     this.game.debug.text(
-      'Spikes objects: ' + this.bottomSpikes.length,
+      `Trail objects: ${this.bunny.data.trail.length}`,
       90,
-      195
+      175,
+    );
+    this.game.debug.text(
+      `Spikes objects: ${this.bottomSpikes.length}`,
+      90,
+      195,
     );
   }
 
@@ -347,7 +323,7 @@ class Game extends Phaser.State {
     this.jumpers = new Engine.Component.JumperGenerator(
       this.game,
       this.bunny,
-      this.grounds
+      this.grounds,
     );
   }
 
@@ -355,7 +331,7 @@ class Game extends Phaser.State {
     this.enemies = new Engine.Component.EnemyGenerator(
       this.game,
       this.bunny,
-      this.grounds
+      this.grounds,
     );
   }
 
@@ -384,10 +360,10 @@ class Game extends Phaser.State {
     this.bottomSpikes = this.game.add.group();
 
     for (let i = 0; i < COUNT; i++) {
-      let spike = new Engine.Spike(
+      const spike = new Engine.Spike(
         this.game,
         i * PROTOTYPE.width,
-        this.game.height
+        this.game.height,
       );
 
       this.bottomSpikes.add(spike);
@@ -397,7 +373,7 @@ class Game extends Phaser.State {
   createNominals() {
     this.nominals = new Engine.Component.NominalGenerator(
       this.game,
-      this.bunny
+      this.bunny,
     );
   }
 
@@ -408,18 +384,13 @@ class Game extends Phaser.State {
   addButtonMore() {
     const { camera } = this.game;
     const marginBottom = 50;
-    let button = this.game.add.sprite(0, 0, 'buttonMore');
+    const button = this.game.add.sprite(0, 0, 'buttonMore');
 
     button.inputEnabled = true;
     button.anchor.setTo(0.5, 1);
     button.x = camera.x + camera.width / 2;
     button.y = camera.y + camera.height - marginBottom;
     button.input.useHandCursor = true;
-    button.events.onInputDown.add(() => {
-      if (CloudAPI && CloudAPI.links.active()) {
-        window.open(CloudAPI.links.list()['games']);
-      }
-    });
   }
 
   lose() {
@@ -431,10 +402,6 @@ class Game extends Phaser.State {
     if (this.score.bestDistance < this.score.currentDistance) {
       this.score.bestDistance = this.score.currentDistance;
     }
-
-    // if (CloudAPI) {
-    //   CloudAPI.gameOver()
-    // }
   }
 
   start() {
@@ -443,7 +410,7 @@ class Game extends Phaser.State {
   }
 
   createTutorial() {
-    let tutorial = this.game.add.sprite(25, 25, 'tutorial');
+    const tutorial = this.game.add.sprite(25, 25, 'tutorial');
     tutorial.width = 225;
     tutorial.height = 225;
 
@@ -454,7 +421,7 @@ class Game extends Phaser.State {
     this.powerUps = new Engine.Component.PowerUpGenerator(
       this.game,
       this.bunny,
-      this.grounds
+      this.grounds,
     );
   }
 
@@ -462,17 +429,14 @@ class Game extends Phaser.State {
     this.coins = new Engine.Component.CoinGenerator(
       this.game,
       this.bunny,
-      this.grounds
+      this.grounds,
     );
   }
 
   getScreenText() {
-    let text = '';
+    if (Phaser.Device.desktop) return 'Press spacebar';
 
-    if (Phaser.Device.desktop) text = 'Press spacebar';
-    else text = 'Touch the screen';
-
-    return text;
+    return 'Touch the screen';
   }
 
   createLoseLabel() {
@@ -480,7 +444,7 @@ class Game extends Phaser.State {
       this.game,
       this.game.width / 2,
       this.game.height / 2,
-      'You lose :-(\r\n' + this.getScreenText()
+      `You lose :-(\r\n${this.getScreenText()}`,
     );
 
     this.loseLabel.anchor.setTo(0.5);
@@ -492,7 +456,7 @@ class Game extends Phaser.State {
       this.game,
       this.game.width / 2,
       this.game.height / 2,
-      this.getScreenText() + '\r\nto start'
+      `${this.getScreenText()}\r\nto start`,
     );
 
     this.startLabel.anchor.setTo(0.5);
@@ -507,7 +471,7 @@ class Game extends Phaser.State {
     this.distanceLabel = new Engine.Distance(
       this.game,
       this.game.width - marginLeft,
-      marginTop
+      marginTop,
     );
     this.distanceLabel.anchor.setTo(1, 0);
     this.add.existing(this.distanceLabel);
@@ -522,22 +486,22 @@ class Game extends Phaser.State {
     this.coinsLabel = new Engine.CoinCounter(
       this.game,
       this.game.width - marginLeft,
-      marginTop
+      marginTop,
     );
     this.coinsLabel.anchor.setTo(1, 0);
     this.add.existing(this.coinsLabel);
   }
 
   addControl() {
-    let hotkey2 = this.input.keyboard.addKey(Phaser.KeyCode.Q);
+    const hotkey2 = this.input.keyboard.addKey(Phaser.KeyCode.Q);
     hotkey2.onDown.add(() => {
       this.bunny.playDieAnimation();
     }, this);
 
-    let touch = this.input.touch;
+    const { touch } = this.input;
     touch.touchStartCallback = this.spacebarDown.bind(this);
 
-    let hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+    const hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     hotkey.onDown.add(this.spacebarDown, this);
 
     // let mouse = this.input.mouse
@@ -580,7 +544,7 @@ class Game extends Phaser.State {
     this.grounds = new Engine.Component.GroundsGenerator(
       this.game,
       this.bunny,
-      this.distanceBetweenGrounds
+      this.distanceBetweenGrounds,
     );
     this.createStartGround();
     this.createFirstGrounds();
@@ -590,20 +554,20 @@ class Game extends Phaser.State {
     const marginTop = 100;
     const style = {
       fill: 'rgb(255, 255, 255)',
-      font: '50px Open Sans'
+      font: '50px Open Sans',
     };
     const distance = this.distanceBetweenGrounds;
 
     for (let i = 1; i < this.game.width / distance; i++) {
-      let ground = new Engine.Ground(this.game, distance * i, 200);
+      const ground = new Engine.Ground(this.game, distance * i, 200);
       this.grounds.add(ground);
     }
 
-    let label = this.add.text(
+    const label = this.add.text(
       this.game.width / 2,
       marginTop,
       `Best ${this.score.bestDistance}m`,
-      style
+      style,
     );
     label.anchor.setTo(0.5);
 
@@ -620,23 +584,15 @@ class Game extends Phaser.State {
       this.paddingLeftCamera,
       this.game.height / 2 - this.bunny.height * 1.5,
       1,
-      deadZoneHeight
+      deadZoneHeight,
     );
   }
 
   createBackground() {
     this.backgrounds = this.add.group();
 
-    this.backgrounds.add(
-      new Engine.Background(this.game, 0, 0, 'layer2', -0.05)
-    );
-    this.backgrounds.add(
-      new Engine.Background(this.game, 0, 0, 'layer3', -0.1)
-    );
-    this.backgrounds.add(
-      new Engine.Background(this.game, 0, 0, 'layer4', -0.25)
-    );
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer2', -0.05));
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer3', -0.1));
+    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer4', -0.25));
   }
 }
-
-Engine.Game = Game;

@@ -18,7 +18,7 @@ class Generator extends Phaser.Group {
   stop() {}
 
   checkDie() {
-    this.children.forEach(item => {
+    this.children.forEach((item) => {
       if (
         !item.inCamera &&
         item.alive &&

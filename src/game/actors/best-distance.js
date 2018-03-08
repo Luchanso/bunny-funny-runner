@@ -14,7 +14,7 @@ class BestDistance {
   createLabel() {
     const style = {
       fill: 'white',
-      font: '26px Arial'
+      font: '26px Arial',
     };
     const marginLeft = 10;
     const marginTop = 150;
@@ -23,7 +23,7 @@ class BestDistance {
       this.x + marginLeft,
       0,
       `Best ${this.score.bestDistance} m.`,
-      style
+      style,
     );
     this.label.update = () => {
       this.label.y = this.game.camera.y + marginTop;

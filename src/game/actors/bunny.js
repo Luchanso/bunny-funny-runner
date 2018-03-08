@@ -1,6 +1,6 @@
 class Bunny extends Phaser.Sprite {
   constructor(game, x, y, name) {
-    super(game, x, y, Engine.spritesheet, name + '_stand.png');
+    super(game, x, y, Engine.spritesheet, `${name}_stand.png`);
 
     this.data.name = name;
     this.data.magnet = false;
@@ -33,7 +33,7 @@ class Bunny extends Phaser.Sprite {
       0,
       0,
       Engine.spritesheet,
-      'jetpack.png'
+      'jetpack.png',
     );
 
     this.addChild(this.jetPackSprite);
@@ -57,9 +57,9 @@ class Bunny extends Phaser.Sprite {
       .tween(this)
       .to(
         {
-          rotation: Math.PI / 2
+          rotation: Math.PI / 2,
         },
-        100
+        100,
       )
       .start();
 
@@ -67,13 +67,13 @@ class Bunny extends Phaser.Sprite {
   }
 
   diactivateJetPack() {
-    let tween = this.game.add
+    const tween = this.game.add
       .tween(this.body.maxVelocity)
       .to(
         {
-          x: 400
+          x: 400,
         },
-        500
+        500,
       )
       .start();
 
@@ -95,9 +95,9 @@ class Bunny extends Phaser.Sprite {
         .tween(this)
         .to(
           {
-            rotation: 0
+            rotation: 0,
           },
-          100
+          100,
         )
         .start();
     }, this);
@@ -117,7 +117,7 @@ class Bunny extends Phaser.Sprite {
     if (!this.data.jetPack) {
       this.wingTimeout = setTimeout(
         this.diactivateWings.bind(this),
-        Bunny.WINGS_TIME
+        Bunny.WINGS_TIME,
       );
     }
   }
@@ -193,7 +193,7 @@ class Bunny extends Phaser.Sprite {
 
     this.magnetTimeout = setTimeout(
       this.diactivateMagnet.bind(this),
-      Bunny.MAGNET_TIME
+      Bunny.MAGNET_TIME,
     );
   }
 
@@ -248,16 +248,16 @@ class Bunny extends Phaser.Sprite {
   }
 
   createAnimation() {
-    this.animations.add('jump', [this.data.name + '_jump.png'], 1, true);
+    this.animations.add('jump', [`${this.data.name}_jump.png`], 1, true);
     this.animations.add(
       'run',
-      [this.data.name + '_walk1.png', this.data.name + '_walk2.png'],
+      [`${this.data.name}_walk1.png`, `${this.data.name}_walk2.png`],
       10,
-      true
+      true,
     );
-    this.animations.add('hurt', [this.data.name + '_hurt.png'], 1, true);
-    this.animations.add('ready', [this.data.name + '_ready.png'], 1, true);
-    this.animations.add('stand', [this.data.name + '_stand.png'], 1, true);
+    this.animations.add('hurt', [`${this.data.name}_hurt.png`], 1, true);
+    this.animations.add('ready', [`${this.data.name}_ready.png`], 1, true);
+    this.animations.add('stand', [`${this.data.name}_stand.png`], 1, true);
   }
 
   activateGod() {
@@ -266,7 +266,7 @@ class Bunny extends Phaser.Sprite {
     if (!this.data.jetPack) {
       this.godTimeout = setTimeout(
         this.diactivateGod.bind(this),
-        Bunny.GODMODE_TIME
+        Bunny.GODMODE_TIME,
       );
     }
 
@@ -280,15 +280,15 @@ class Bunny extends Phaser.Sprite {
       .tween(this)
       .to(
         {
-          alpha: 0.2
+          alpha: 0.2,
         },
-        animationTime
+        animationTime,
       )
       .to(
         {
-          alpha: 1
+          alpha: 1,
         },
-        animationTime
+        animationTime,
       )
       .loop(-1)
       .start();

@@ -3,7 +3,7 @@ class Message extends Phaser.Text {
     const style = {
       fill: 'white',
       font: '65px Open Sans',
-      align: 'center'
+      align: 'center',
     };
 
     super(game, x, y, text, style);
@@ -23,7 +23,7 @@ class Message extends Phaser.Text {
   }
 
   animate(alpha, animationTime = 300) {
-    let tween = this.game.add.tween(this).to({ alpha }, animationTime);
+    const tween = this.game.add.tween(this).to({ alpha }, animationTime);
 
     if (this.tween && this.tween.isRunning) {
       this.tween.chain(tween);

@@ -17,44 +17,44 @@ class Fire extends Phaser.Sprite {
   }
 
   fade(alpha) {
-    let animation = 100;
+    const animation = 100;
 
     this.game.add
       .tween(this)
       .to(
         {
-          alpha
+          alpha,
         },
-        animation
+        animation,
       )
       .start();
   }
 
   addAnimation() {
-    let animation = 100;
+    const animation = 100;
 
     this.game.add
       .tween(this)
       .to(
         {
           width: this.width * 0.75,
-          height: this.height * 0.9
+          height: this.height * 0.9,
         },
-        animation
+        animation,
       )
       .to(
         {
           width: this.width * 1.23,
-          height: this.height * 1.1
+          height: this.height * 1.1,
         },
-        animation
+        animation,
       )
       .to(
         {
           width: this.width,
-          height: this.height
+          height: this.height,
         },
-        animation
+        animation,
       )
       .loop(-1)
       .start();

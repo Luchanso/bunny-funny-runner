@@ -2,7 +2,7 @@ class CoinCounter extends Phaser.Text {
   constructor(game, x, y) {
     const style = {
       fill: '#00B8D4', // 2196F3
-      font: '23px Open Sans'
+      font: '23px Open Sans',
     };
 
     super(game, x, y, '0', style);
@@ -15,10 +15,15 @@ class CoinCounter extends Phaser.Text {
   }
 
   createIcon() {
-    let x = this.width * 2;
-    let y = 1;
+    const x = this.width * 2;
+    const y = 1;
 
-    let coin = this.game.make.sprite(x, y, Engine.spritesheet, 'coin_gold.png');
+    const coin = this.game.make.sprite(
+      x,
+      y,
+      Engine.spritesheet,
+      'coin_gold.png',
+    );
 
     coin.anchor.setTo(1, 0);
 

@@ -1,8 +1,8 @@
 {
   "name": "bunny-funny-runner",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Runner about bunny",
-  "main": "gulpfile.js",
+  "main": "./src/app.js",
   "scripts": {
     "snyk-protect": "snyk protect",
     "precommit": "lint-staged",
@@ -16,6 +16,7 @@
   "author": "Loutchansky Oleg",
   "license": "MIT",
   "dependencies": {
+    "babel-eslint": "^8.2.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
@@ -27,7 +28,7 @@
   },
   "lint-staged": {
     "./src/**/*.js": [
-      "prettier --write",
+      "prettier-eslint --write",
       "git add"
     ]
   },
@@ -42,7 +43,7 @@
     "eslint-plugin-import": "^2.9.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
-    "prettier": "^1.11.1",
+    "prettier-eslint-cli": "^4.7.1",
     "snyk": "^1.69.10",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.10"

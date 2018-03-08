@@ -1,7 +1,8 @@
 const path = require('path');
+const packageJSON = require('./package.json');
 
 module.exports = {
-  entry: ['./src/example.js'],
+  entry: [packageJSON.main],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'build'),

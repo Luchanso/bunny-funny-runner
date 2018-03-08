@@ -15,7 +15,7 @@ class FlyMan extends Engine.Enemy {
     this.smoke.gravity = 0;
     this.smoke.setAlpha(1, 0, 2000);
     this.smoke.setScale(0, Engine.scaleRatio, 0, Engine.scaleRatio, 2000);
-    this.smoke.forEach(item => {
+    this.smoke.forEach((item) => {
       item.tint = 0x777777;
     });
     this.smoke.lifespan = 2000;
@@ -33,7 +33,7 @@ class FlyMan extends Engine.Enemy {
         this.x + this.width / 2,
         this.y + this.height / 2,
         Engine.spritesheet,
-        'smoke.png'
+        'smoke.png',
       );
     }
   }
@@ -46,27 +46,27 @@ class FlyMan extends Engine.Enemy {
       .tween(this)
       .to(
         {
-          y: this.y + distance
+          y: this.y + distance,
         },
-        time
+        time,
       )
       .to(
         {
-          y: this.y
+          y: this.y,
         },
-        time
+        time,
       )
       .to(
         {
-          y: this.y - distance
+          y: this.y - distance,
         },
-        time
+        time,
       )
       .to(
         {
-          y: this.y
+          y: this.y,
         },
-        time
+        time,
       )
       .loop()
       .start();

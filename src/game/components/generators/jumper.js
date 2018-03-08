@@ -16,7 +16,7 @@ class JumperGenerator extends Engine.Component.Generator {
 
     const x = this.game.rnd.between(
       ground.x,
-      ground.x + ground.width - this.prototype.width
+      ground.x + ground.width - this.prototype.width,
     );
     const y = ground.y;
 

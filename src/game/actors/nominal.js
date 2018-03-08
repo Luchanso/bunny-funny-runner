@@ -26,7 +26,7 @@ class Nominal extends Phaser.Text {
 
     const style = {
       font: `${25 + nominal * 5.5}px Open Sans`,
-      fill: color
+      fill: color,
     };
 
     return style;
@@ -43,9 +43,9 @@ class Nominal extends Phaser.Text {
       .to(
         {
           alpha: 0,
-          y: this.y - animationDistance
+          y: this.y - animationDistance,
         },
-        animationTime
+        animationTime,
       )
       .start();
 
@@ -55,7 +55,7 @@ class Nominal extends Phaser.Text {
   reset(x, y, nominal) {
     super.reset(x, y);
 
-    let style = Nominal.getStyle(nominal);
+    const style = Nominal.getStyle(nominal);
 
     this.text = `+${nominal}`;
     this.fill = style.fill;

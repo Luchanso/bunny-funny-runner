@@ -26,7 +26,7 @@ PowerUp.type = {
   MAGNET: 'powerup_bubble.png',
   GOD: 'powerup_bunny.png',
   WINGS: 'powerup_wings.png',
-  JETPACK: 'powerup_jetpack.png'
+  JETPACK: 'powerup_jetpack.png',
 };
 
 Engine.PowerUp = PowerUp;

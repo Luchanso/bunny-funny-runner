@@ -26,7 +26,7 @@ class Trail extends Phaser.Particles.Arcade.Emitter {
         this._follow.x,
         this._follow.y + this._follow.height / 1.1,
         'particles',
-        particleFrame
+        particleFrame,
       );
     }
   }

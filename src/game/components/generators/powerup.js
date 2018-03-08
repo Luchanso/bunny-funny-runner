@@ -14,13 +14,13 @@ class PowerUpGenerator extends Generator {
 
     const x = this.game.rnd.between(
       ground.x,
-      ground.x + ground.width - this.prototype.width
+      ground.x + ground.width - this.prototype.width,
     );
     const y = ground.y - this.prototype.height;
     const types = [
       Engine.PowerUp.type.MAGNET,
       Engine.PowerUp.type.GOD,
-      Engine.PowerUp.type.WINGS
+      Engine.PowerUp.type.WINGS,
     ];
     let type = this.game.rnd.pick(types);
 

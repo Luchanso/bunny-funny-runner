@@ -20,12 +20,12 @@ class AirTrail extends Phaser.Graphics {
 
     this.parts.unshift({
       x: this.follow.x + this.follow.width / 2,
-      y: this.follow.y + this.follow.height
+      y: this.follow.y + this.follow.height,
     });
 
     for (let i = 0; i < this.parts.length - 1; i++) {
-      let part = this.parts[i];
-      let nextPart = this.parts[i + 1];
+      const part = this.parts[i];
+      const nextPart = this.parts[i + 1];
 
       accumulator += accRatio;
 

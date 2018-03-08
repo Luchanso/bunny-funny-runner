@@ -11,7 +11,7 @@ class EnemyGenerator extends Generator {
       Engine.SpringMan,
       Engine.FlyMan,
       Engine.SpikeBall,
-      Engine.Cloud
+      Engine.Cloud,
     ];
   }
 
@@ -32,10 +32,8 @@ class EnemyGenerator extends Generator {
     x = ground.x + ground.width + marginLeft;
     y = ground.y + this.game.rnd.between(-75, 75);
 
-    let TypeClass = this.game.rnd.pick(this.types);
-    let enemy = this.children.find(item => {
-      return item.constructor === TypeClass && !item.alive;
-    });
+    const TypeClass = this.game.rnd.pick(this.types);
+    let enemy = this.children.find(item => item.constructor === TypeClass && !item.alive);
 
     if (enemy == null) {
       enemy = new TypeClass(this.game, x, y);

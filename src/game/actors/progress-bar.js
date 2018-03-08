@@ -1,4 +1,6 @@
-class ProgressBar extends Phaser.Graphics {
+import Phaser from 'phaser';
+
+export default class ProgressBar extends Phaser.Graphics {
   constructor(game, x, y, text, color) {
     super(game, x, y);
 
@@ -15,7 +17,7 @@ class ProgressBar extends Phaser.Graphics {
   addLabel(text) {
     const style = {
       fill: Phaser.Color.getWebRGB(this.color),
-      font: '21px Open Sans',
+      font: '21px Open Sans'
     };
 
     const label = new Phaser.Text(this.game, 0, -30, text, style);
@@ -53,9 +55,9 @@ class ProgressBar extends Phaser.Graphics {
       .tween(this)
       .to(
         {
-          value: 0,
+          value: 0
         },
-        time,
+        time
       )
       .start();
 
@@ -77,14 +79,12 @@ class ProgressBar extends Phaser.Graphics {
       .tween(this)
       .to(
         {
-          alpha,
+          alpha
         },
-        animationTime,
+        animationTime
       )
       .start();
   }
 }
 
 ProgressBar.WIDTH = 500;
-
-Engine.ProgressBar = ProgressBar;

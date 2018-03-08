@@ -1,4 +1,8 @@
-class Cloud extends Engine.Enemy {
+import Phaser from 'phaser';
+import Enemy from './enemy';
+import { config } from '../../config';
+
+export default class Cloud extends Enemy {
   constructor(game, x, y) {
     super(game, x, y, 'cloud.png');
 
@@ -22,9 +26,9 @@ class Cloud extends Engine.Enemy {
       .tween(this.data)
       .to(
         {
-          rotation: Phaser.Math.PI2,
+          rotation: Phaser.Math.PI2
         },
-        time,
+        time
       )
       .loop(-1)
       .start();
@@ -45,9 +49,9 @@ class Cloud extends Engine.Enemy {
     this.bolt = this.game.add.emitter(0, 0, maxParticles);
 
     this.bolt.makeParticles(
-      Engine.spritesheets,
+      config.spritesheets,
       ['lighting_yellow.png', 'lighting_blue.png'],
-      maxParticles,
+      maxParticles
     );
     this.bolt.lifespan = lifespan;
     this.bolt.gravity = 0;
@@ -66,11 +70,13 @@ class Cloud extends Engine.Enemy {
     this.bolt.emitParticle(
       this.x + this.width / 2,
       this.y + this.height,
-      Engine.spritesheet,
-      this.game.rnd.pick(['lighting_yellow.png', 'lighting_blue.png']),
+      config.spritesheet,
+      this.game.rnd.pick(['lighting_yellow.png', 'lighting_blue.png'])
     );
 
-    this.bolt.forEachExists((item) => {
+    this.bolt.forEachExists(item => {
+      // need for perfomance
+      // eslint-disable-next-line
       item.tint = 0x0000ff;
     }, this);
   }
@@ -88,5 +94,3 @@ class Cloud extends Engine.Enemy {
     super.kill();
   }
 }
-
-Engine.Cloud = Cloud;

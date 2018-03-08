@@ -1,4 +1,6 @@
-class SpringMan extends Engine.Enemy {
+import Enemy from './enemy';
+
+export default class SpringMan extends Enemy {
   constructor(game, x, y) {
     super(game, x, y, 'springMan_stand.png');
 
@@ -13,27 +15,27 @@ class SpringMan extends Engine.Enemy {
       .tween(this)
       .to(
         {
-          x: this.x + amplitude,
+          x: this.x + amplitude
         },
-        time,
+        time
       )
       .to(
         {
-          x: this.x,
+          x: this.x
         },
-        time,
+        time
       )
       .to(
         {
-          x: this.x - amplitude,
+          x: this.x - amplitude
         },
-        time,
+        time
       )
       .to(
         {
-          x: this.x,
+          x: this.x
         },
-        time,
+        time
       )
       .loop()
       .start();
@@ -51,5 +53,3 @@ class SpringMan extends Engine.Enemy {
     super.kill();
   }
 }
-
-Engine.SpringMan = SpringMan;

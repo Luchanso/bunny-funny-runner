@@ -1,4 +1,6 @@
-class Generator extends Phaser.Group {
+import Phaser from 'phaser';
+
+export default class Generator extends Phaser.Group {
   constructor(game, bunny) {
     super(game);
 
@@ -18,7 +20,7 @@ class Generator extends Phaser.Group {
   stop() {}
 
   checkDie() {
-    this.children.forEach((item) => {
+    this.children.forEach(item => {
       if (
         !item.inCamera &&
         item.alive &&
@@ -29,6 +31,3 @@ class Generator extends Phaser.Group {
     });
   }
 }
-
-Engine.Component = {};
-Engine.Component.Generator = Generator;

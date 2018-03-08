@@ -1,18 +1,21 @@
-class Ground extends Phaser.Sprite {
+import Phaser from 'phaser';
+import { config } from '../../config';
+
+export default class Ground extends Phaser.Sprite {
   constructor(
     game,
     x,
     y,
     type = Ground.type.GRASS,
     small = false,
-    broken = false,
+    broken = false
   ) {
     const name = Ground.getName(type, small, broken);
 
-    super(game, x, y, Engine.spritesheet, name);
+    super(game, x, y, config.spritesheet, name);
 
-    this.width *= Engine.scaleRatio;
-    this.height *= Engine.scaleRatio;
+    this.width *= config.scaleRatio;
+    this.height *= config.scaleRatio;
 
     this.autoCull = true;
 
@@ -30,7 +33,7 @@ class Ground extends Phaser.Sprite {
   }
 
   addEnviroment() {
-    const type = this.data.type;
+    const { type } = this.data;
 
     if (type === Ground.type.GRASS && Phaser.Utils.chanceRoll(5)) {
       this.addBrownGrass();
@@ -83,7 +86,7 @@ class Ground extends Phaser.Sprite {
     const x = this.game.rnd.between(0, this.width * 1.5);
     const y = 0;
 
-    const env = new Phaser.Sprite(this.game, x, y, Engine.spritesheet, name);
+    const env = new Phaser.Sprite(this.game, x, y, config.spritesheet, name);
     env.anchor.setTo(0, 1);
     this.addChild(env);
   }
@@ -111,7 +114,7 @@ Ground.type = {
   SAND: 'sand',
   SNOW: 'snow',
   STONE: 'stone',
-  WOOD: 'wood',
+  WOOD: 'wood'
 };
 
 Ground.getName = (type, small, broken) => {
@@ -124,5 +127,3 @@ Ground.getName = (type, small, broken) => {
 
   return name;
 };
-
-Engine.Ground = Ground;

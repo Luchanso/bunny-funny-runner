@@ -1,4 +1,6 @@
-class Background extends Phaser.TileSprite {
+import Phaser from 'phaser';
+
+export default class Background extends Phaser.TileSprite {
   constructor(game, x, y, name, speed) {
     super(game, x, y, 1024, 1024, name);
 
@@ -14,5 +16,3 @@ class Background extends Phaser.TileSprite {
     this.tilePosition.x = this.game.camera.x * this.data.speed;
   }
 }
-
-Engine.Background = Background;

@@ -1,8 +1,7 @@
-class Menu extends Phaser.State {
-  constructor() {
-    super();
-  }
+import Phaser from 'phaser';
+import Btn from './ui/btn';
 
+export default class Menu extends Phaser.State {
   preload() {
     this.load.image('i-play', 'assets/sprites/icons/play.png');
     this.load.image('i-settings', 'assets/sprites/icons/settings.png');
@@ -21,14 +20,14 @@ class Menu extends Phaser.State {
   createLogo() {
     const style = {
       font: '50px Open Sans',
-      fill: 'white',
+      fill: 'white'
     };
 
     this.logo = this.add.text(
       this.game.width / 2,
       this.game.height / 4,
       '🐰 Bunny Funny Runner 🐰 ',
-      style,
+      style
     );
 
     this.logo.anchor.setTo(0.5);
@@ -39,12 +38,12 @@ class Menu extends Phaser.State {
     const icon = 'i-settings';
     const margin = 150;
 
-    this.settings = new Engine.Btn(
+    this.settings = new Btn(
       this.game,
       this.game.width / 2 + margin,
       this.game.height / 2,
       btnColor,
-      icon,
+      icon
     );
     this.settings.icon.tint = 0x26c6da;
     // this.settings.clicked.add(this.startGame, this)
@@ -56,12 +55,12 @@ class Menu extends Phaser.State {
     const icon = 'i-shop';
     const margin = -150;
 
-    this.settings = new Engine.Btn(
+    this.settings = new Btn(
       this.game,
       this.game.width / 2 + margin,
       this.game.height / 2,
       btnColor,
-      icon,
+      icon
     );
     // this.settings.icon.tint = 0x00E676
     this.settings.clicked.add(this.openShop, this);
@@ -72,12 +71,12 @@ class Menu extends Phaser.State {
     const btnColor = 0xade6ff;
     const icon = 'i-play';
 
-    this.play = new Engine.Btn(
+    this.play = new Btn(
       this.game,
       this.game.width / 2,
       this.game.height / 2,
       btnColor,
-      icon,
+      icon
     );
     this.play.icon.tint = 0x26c6da;
     this.play.clicked.add(this.startGame, this);
@@ -94,5 +93,3 @@ class Menu extends Phaser.State {
     this.state.start('Shop');
   }
 }
-
-Engine.Menu = Menu;

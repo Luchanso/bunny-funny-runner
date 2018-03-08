@@ -1,11 +1,15 @@
-PIXI.DisplayObjectContainer.prototype.removeChildren = function (
+import Phaser from 'phaser';
+
+Phaser.PIXI.DisplayObjectContainer.prototype.removeChildren = function fix(
   beginIndex,
-  endIndex,
+  endIndex
 ) {
   if (beginIndex === undefined) {
+    // eslint-disable-next-line
     beginIndex = 0;
   }
   if (endIndex === undefined) {
+    // eslint-disable-next-line
     endIndex = this.children.length;
   }
 
@@ -23,5 +27,7 @@ PIXI.DisplayObjectContainer.prototype.removeChildren = function (
   } else if (range === 0 && this.children.length === 0) {
     return [];
   }
-  throw new Error('removeChildren: Range Error, numeric values are outside the acceptable range');
+  throw new Error(
+    'removeChildren: Range Error, numeric values are outside the acceptable range'
+  );
 };

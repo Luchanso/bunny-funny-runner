@@ -1,7 +1,3 @@
-class Settings extends Phaser.State {
-  constructor() {
-    super();
-  }
-}
+import Phaser from 'phaser';
 
-Engine.Settings = Settings;
+export default class Settings extends Phaser.State {}

@@ -1,25 +1,23 @@
-class Loader extends Phaser.State {
-  constructor() {
-    super();
-  }
+import Phaser from 'phaser';
 
+export default class Loader extends Phaser.State {
   preload() {}
 
   create() {
-    this.state.start('Game');
+    this.state.start('Main');
   }
 
   addProgressLabel() {
     const style = {
       font: '41px Open Sans',
-      fill: '#00E676',
+      fill: '#00E676'
     };
 
     this.progressLabel = this.add.text(
       this.game.world.centerX,
       this.game.world.centerY,
       'Loading: 0% (0/0)',
-      style,
+      style
     );
     this.progressLabel.anchor.setTo(0.5);
   }
@@ -28,5 +26,3 @@ class Loader extends Phaser.State {
     this.progressLabel.text = `Loading ${progress}% (${totalLoaded}/${totalFiles})`;
   }
 }
-
-Engine.Loader = Loader;

@@ -1,7 +1,3 @@
-class LoseBox extends Phaser.Group {
-  constructor(game) {
-    super(game);
-  }
-}
+import Phaser from 'phaser';
 
-Engine.LoseBox = LoseBox;
+export default class LoseBox extends Phaser.Group {}

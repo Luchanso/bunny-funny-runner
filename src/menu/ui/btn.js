@@ -1,4 +1,6 @@
-class Btn extends Phaser.Graphics {
+import Phaser from 'phaser';
+
+export default class Btn extends Phaser.Graphics {
   constructor(game, x, y, color, icon) {
     super(game, x, y);
 
@@ -36,7 +38,7 @@ class Btn extends Phaser.Graphics {
         this.x,
         this.y,
         this.game.width,
-        this.game.height,
+        this.game.height
       );
     }
 
@@ -44,9 +46,9 @@ class Btn extends Phaser.Graphics {
       .tween(this)
       .to(
         {
-          radius: screenSize * 2,
+          radius: screenSize * 2
         },
-        animation,
+        animation
       )
       .start();
 
@@ -54,9 +56,9 @@ class Btn extends Phaser.Graphics {
       .tween(this.icon)
       .to(
         {
-          alpha: 0,
+          alpha: 0
         },
-        animation,
+        animation
       )
       .start();
 
@@ -67,5 +69,3 @@ class Btn extends Phaser.Graphics {
     tween.onUpdateCallback(this.draw, this);
   }
 }
-
-Engine.Btn = Btn;

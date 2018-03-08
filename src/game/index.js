@@ -1,41 +1,64 @@
 import Phaser from 'phaser';
 import Service from '../service';
 import { config } from '../config';
+import SoundControll from './gui/sound';
+// TODO: перенести в gui
+import ProgressBar from './actors/progress-bar';
+// TODO: переименовать в power-up
+import PowerUp from './actors/powerup';
+import Bunny from './actors/bunny';
+import JumperGenerator from './components/generators/jumper';
+import EnemyGenerator from './components/generators/enemy';
+import NominalGenerator from './components/generators/nominals';
+import PowerUpGenerator from './components/generators/powerup';
+import CoinGenerator from './components/generators/coin';
+import GroundsGenerator from './components/generators/ground';
+import Spike from './actors/spike';
+import BestDistance from './actors/best-distance';
+import Message from './gui/message';
+import Distance from './gui/distace';
+import CoinCounter from './gui/coin-counter';
+import Ground from './actors/ground';
+import Background from './actors/background';
+
+import spritesheetImg from './assets/spritesheet/jumper.png';
+import spritesheetXML from './assets/spritesheet/jumper.xml';
+import layer2Img from './assets/background/layer2.png';
+import layer3Img from './assets/background/layer3.png';
+import layer4Img from './assets/background/layer4.png';
+import tutorialImg from './assets/tutorial/2xjump-2.png';
+import btnMoreImg from './assets/ui/buttonMore.png';
+import soundControllImg from './assets/ui/soundControll.png';
+import soundControllJSON from './assets/ui/soundControll.json';
+import coinMP3 from './assets/sounds/coin.mp3';
+import coinOGG from './assets/sounds/coin.ogg';
+import jumpMP3 from './assets/sounds/jump.mp3';
+import jumpOGG from './assets/sounds/jump.ogg';
+import loseMP3 from './assets/sounds/lose.mp3';
+import loseWAV from './assets/sounds/lose.wav';
+import particlesImg from './assets/sprites/particles.png';
 
 export default class Game extends Phaser.State {
   preload() {
-    this.load.atlasXML(
-      config.spritesheet,
-      'assets/spritesheets/jumper.png',
-      'assets/spritesheets/jumper.xml',
-    );
+    this.load.atlasXML(config.spritesheet, spritesheetImg, spritesheetXML);
 
-    this.load.image('layer2', 'assets/sprites/backgrounds/layer2.png');
-    this.load.image('layer3', 'assets/sprites/backgrounds/layer3.png');
-    this.load.image('layer4', 'assets/sprites/backgrounds/layer4.png');
+    this.load.image('layer2', layer2Img);
+    this.load.image('layer3', layer3Img);
+    this.load.image('layer4', layer4Img);
 
-    this.load.image('tutorial', 'assets/sprites/tutorial/2xjump-2.png');
-    this.load.image('buttonMore', 'assets/sprites/ui/buttonMore.png');
+    this.load.image('tutorial', tutorialImg);
+    this.load.image('buttonMore', btnMoreImg);
     this.load.atlasJSONArray(
       'soundControll',
-      'assets/sprites/ui/soundControll.png',
-      'assets/sprites/ui/soundControll.json',
+      soundControllImg,
+      soundControllJSON
     );
 
-    this.load.audio('lose', [
-      'assets/sounds/lose.mp3',
-      'assets/sounds/lose.ogg',
-    ]);
-    this.load.audio('coin', [
-      'assets/sounds/coin.mp3',
-      'assets/sounds/coin.ogg',
-    ]);
-    this.load.audio('jump', [
-      'assets/sounds/jump.mp3',
-      'assets/sounds/jump.ogg',
-    ]);
+    this.load.audio('lose', [loseMP3, loseWAV]);
+    this.load.audio('coin', [coinMP3, coinOGG]);
+    this.load.audio('jump', [jumpMP3, jumpOGG]);
 
-    this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8);
+    this.load.spritesheet('particles', particlesImg, 8, 8);
   }
 
   init() {
@@ -65,7 +88,7 @@ export default class Game extends Phaser.State {
       0,
       -(worldHeight - this.game.height),
       Number.MAX_VALUE,
-      worldHeight,
+      worldHeight
     );
 
     this.createBackground();
@@ -90,6 +113,10 @@ export default class Game extends Phaser.State {
     this.createBestDistance();
     this.createNominals();
     this.createSoundControll();
+
+    if (process.env.NODE_ENV === 'development') {
+      this.createDatGui();
+    }
   }
 
   drawBorders() {
@@ -116,7 +143,7 @@ export default class Game extends Phaser.State {
       this.coins,
       this.takeCoin,
       null,
-      this,
+      this
     );
 
     if (!this.bunny.data.jetPack) {
@@ -126,28 +153,30 @@ export default class Game extends Phaser.State {
         this.enemies,
         this.collideEnemies,
         null,
-        this,
+        this
       );
       this.physics.arcade.overlap(
         this.bunny,
         this.jumpers,
         this.overlapJumper,
         null,
-        this,
+        this
       );
       this.physics.arcade.overlap(
         this.bunny,
         this.powerUps,
         this.takePowerUp,
         null,
-        this,
+        this
       );
     }
     this.updateDie();
     this.updateMagnet();
 
     // TODO: Need incapsulation
-    this.score.currentDistance = Math.round(this.bunny.x / config.Score.MULTIPER_DISTANCE);
+    this.score.currentDistance = Math.round(
+      this.bunny.x / config.Score.MULTIPER_DISTANCE
+    );
 
     this.bottomSpikes.x = this.bunny.x - this.paddingLeftCamera;
   }
@@ -187,28 +216,28 @@ export default class Game extends Phaser.State {
     const paddingTop = 50;
     const margin = 50;
 
-    this.progressJumps = new Engine.ProgressBar(
+    this.progressJumps = new ProgressBar(
       this.game,
-      this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
+      this.game.width / 2 - ProgressBar.WIDTH / 2,
       paddingTop,
       'Infinity Jumps',
-      0x8661ff,
+      0x8661ff
     );
 
-    this.progressMagnet = new Engine.ProgressBar(
+    this.progressMagnet = new ProgressBar(
       this.game,
-      this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
+      this.game.width / 2 - ProgressBar.WIDTH / 2,
       this.progressJumps.y + margin,
       'Coin Magnet',
-      0xff8000,
+      0xff8000
     );
 
-    this.progressUntouch = new Engine.ProgressBar(
+    this.progressUntouch = new ProgressBar(
       this.game,
-      this.game.width / 2 - Engine.ProgressBar.WIDTH / 2,
+      this.game.width / 2 - ProgressBar.WIDTH / 2,
       this.progressMagnet.y + margin,
       'Untouchability',
-      0xff0000,
+      0xff0000
     );
 
     this.add.existing(this.progressJumps);
@@ -233,10 +262,10 @@ export default class Game extends Phaser.State {
     const maxSpeed = 1000;
 
     // TODO: Need optimization
-    this.coins.forEach((coin) => {
+    this.coins.forEach(coin => {
       const distance = this.game.physics.arcade.distanceBetween(
         this.bunny,
-        coin,
+        coin
       );
       if (distance < config.magnetDistace) {
         this.game.physics.arcade.accelerateToObject(
@@ -244,23 +273,23 @@ export default class Game extends Phaser.State {
           this.bunny,
           speed,
           this.rnd.between(minSpeed, maxSpeed),
-          this.rnd.between(minSpeed, maxSpeed),
+          this.rnd.between(minSpeed, maxSpeed)
         );
       }
     });
   }
 
   takePowerUp(bunny, powerUp) {
-    if (powerUp.type === Engine.PowerUp.type.MAGNET) {
-      this.progressMagnet.animate(Engine.Bunny.MAGNET_TIME);
+    if (powerUp.type === PowerUp.type.MAGNET) {
+      this.progressMagnet.animate(Bunny.MAGNET_TIME);
       this.bunny.activateMagnet();
-    } else if (powerUp.type === Engine.PowerUp.type.GOD) {
-      this.progressUntouch.animate(Engine.Bunny.GODMODE_TIME);
+    } else if (powerUp.type === PowerUp.type.GOD) {
+      this.progressUntouch.animate(Bunny.GODMODE_TIME);
       this.bunny.activateGod();
-    } else if (powerUp.type === Engine.PowerUp.type.WINGS) {
-      this.progressJumps.animate(Engine.Bunny.WINGS_TIME);
+    } else if (powerUp.type === PowerUp.type.WINGS) {
+      this.progressJumps.animate(Bunny.WINGS_TIME);
       this.bunny.activateWings();
-    } else if (powerUp.type === Engine.PowerUp.type.JETPACK) {
+    } else if (powerUp.type === PowerUp.type.JETPACK) {
       this.bunny.activateJetPack();
     }
     powerUp.kill();
@@ -268,7 +297,7 @@ export default class Game extends Phaser.State {
 
   takeCoin(bunny, coin) {
     const x = this.bunny.x + this.bunny.width / 2;
-    const y = this.bunny.y;
+    const { y } = this.bunny;
 
     this.nominals.generate(x, y, coin.data.nominal);
 
@@ -281,15 +310,20 @@ export default class Game extends Phaser.State {
   debugCountObject() {
     let summ = 0;
 
-    for (const item of this.world.children) {
-      summ += item.children.length + 1;
-    }
+    // for (const item of this.world.children) {
+    //   summ += item.children.length + 1;
+    // }
+
+    summ = this.world.children.reduce(
+      (prev, curr) => prev + curr.children.length + 1,
+      0
+    );
 
     this.game.debug.text(`Objects in memory: ${summ}`, 90, 15);
     this.game.debug.text(
       `Rendered objects: ${this.camera.totalInView}`,
       90,
-      35,
+      35
     );
     this.game.debug.text(`Coins objects: ${this.coins.length}`, 90, 55);
     this.game.debug.text(`Enemies objects: ${this.enemies.length}`, 90, 75);
@@ -299,17 +333,17 @@ export default class Game extends Phaser.State {
     this.game.debug.text(
       `Blood objects: ${this.bunny.data.blood.length}`,
       90,
-      155,
+      155
     );
     this.game.debug.text(
       `Trail objects: ${this.bunny.data.trail.length}`,
       90,
-      175,
+      175
     );
     this.game.debug.text(
       `Spikes objects: ${this.bottomSpikes.length}`,
       90,
-      195,
+      195
     );
   }
 
@@ -320,19 +354,11 @@ export default class Game extends Phaser.State {
   }
 
   createJumpers() {
-    this.jumpers = new Engine.Component.JumperGenerator(
-      this.game,
-      this.bunny,
-      this.grounds,
-    );
+    this.jumpers = new JumperGenerator(this.game, this.bunny, this.grounds);
   }
 
   createEnemies() {
-    this.enemies = new Engine.Component.EnemyGenerator(
-      this.game,
-      this.bunny,
-      this.grounds,
-    );
+    this.enemies = new EnemyGenerator(this.game, this.bunny, this.grounds);
   }
 
   collideEnemies(bunny, enemy) {
@@ -354,31 +380,24 @@ export default class Game extends Phaser.State {
   }
 
   createSpikes() {
-    const PROTOTYPE = new Engine.Spike(this.game, 0, 0);
+    const PROTOTYPE = new Spike(this.game, 0, 0);
     const COUNT = (this.game.width + this.bunny.x) / PROTOTYPE.width;
 
     this.bottomSpikes = this.game.add.group();
 
     for (let i = 0; i < COUNT; i++) {
-      const spike = new Engine.Spike(
-        this.game,
-        i * PROTOTYPE.width,
-        this.game.height,
-      );
+      const spike = new Spike(this.game, i * PROTOTYPE.width, this.game.height);
 
       this.bottomSpikes.add(spike);
     }
   }
 
   createNominals() {
-    this.nominals = new Engine.Component.NominalGenerator(
-      this.game,
-      this.bunny,
-    );
+    this.nominals = new NominalGenerator(this.game, this.bunny);
   }
 
   createBestDistance() {
-    this.bestDistance = new Engine.BestDistance(this.game);
+    this.bestDistance = new BestDistance(this.game);
   }
 
   addButtonMore() {
@@ -418,19 +437,11 @@ export default class Game extends Phaser.State {
   }
 
   createPowerUps() {
-    this.powerUps = new Engine.Component.PowerUpGenerator(
-      this.game,
-      this.bunny,
-      this.grounds,
-    );
+    this.powerUps = new PowerUpGenerator(this.game, this.bunny, this.grounds);
   }
 
   createCoins() {
-    this.coins = new Engine.Component.CoinGenerator(
-      this.game,
-      this.bunny,
-      this.grounds,
-    );
+    this.coins = new CoinGenerator(this.game, this.bunny, this.grounds);
   }
 
   getScreenText() {
@@ -440,11 +451,11 @@ export default class Game extends Phaser.State {
   }
 
   createLoseLabel() {
-    this.loseLabel = new Engine.Message(
+    this.loseLabel = new Message(
       this.game,
       this.game.width / 2,
       this.game.height / 2,
-      `You lose :-(\r\n${this.getScreenText()}`,
+      `You lose :-(\r\n${this.getScreenText()}`
     );
 
     this.loseLabel.anchor.setTo(0.5);
@@ -452,11 +463,11 @@ export default class Game extends Phaser.State {
   }
 
   createStartLabel() {
-    this.startLabel = new Engine.Message(
+    this.startLabel = new Message(
       this.game,
       this.game.width / 2,
       this.game.height / 2,
-      `${this.getScreenText()}\r\nto start`,
+      `${this.getScreenText()}\r\nto start`
     );
 
     this.startLabel.anchor.setTo(0.5);
@@ -468,10 +479,10 @@ export default class Game extends Phaser.State {
     const marginLeft = 15;
     const marginTop = 10;
 
-    this.distanceLabel = new Engine.Distance(
+    this.distanceLabel = new Distance(
       this.game,
       this.game.width - marginLeft,
-      marginTop,
+      marginTop
     );
     this.distanceLabel.anchor.setTo(1, 0);
     this.add.existing(this.distanceLabel);
@@ -483,10 +494,10 @@ export default class Game extends Phaser.State {
       this.distanceLabel.y + this.distanceLabel.height / 2 + padding;
     const marginLeft = 15;
 
-    this.coinsLabel = new Engine.CoinCounter(
+    this.coinsLabel = new CoinCounter(
       this.game,
       this.game.width - marginLeft,
-      marginTop,
+      marginTop
     );
     this.coinsLabel.anchor.setTo(1, 0);
     this.add.existing(this.coinsLabel);
@@ -529,22 +540,25 @@ export default class Game extends Phaser.State {
     const small = false;
     const broken = false;
 
-    this.startGround = new Engine.Ground(this.game, x, y, type, small, broken);
+    this.startGround = new Ground(this.game, x, y, type, small, broken);
 
     this.grounds.add(this.startGround);
   }
 
   createBunny() {
-    window.bunny = this.bunny = new Engine.Bunny(this.game, 150, 150, 'bunny2');
+    this.bunny = new Bunny(this.game, 150, 150, 'bunny2');
+    if (process.env.NODE_ENV === 'development') {
+      window.bunny = this.bunny;
+    }
     this.bunny.onDied.add(this.lose, this);
     this.add.existing(this.bunny);
   }
 
   createGrounds() {
-    this.grounds = new Engine.Component.GroundsGenerator(
+    this.grounds = new GroundsGenerator(
       this.game,
       this.bunny,
-      this.distanceBetweenGrounds,
+      this.distanceBetweenGrounds
     );
     this.createStartGround();
     this.createFirstGrounds();
@@ -554,12 +568,12 @@ export default class Game extends Phaser.State {
     const marginTop = 100;
     const style = {
       fill: 'rgb(255, 255, 255)',
-      font: '50px Open Sans',
+      font: '50px Open Sans'
     };
     const distance = this.distanceBetweenGrounds;
 
     for (let i = 1; i < this.game.width / distance; i++) {
-      const ground = new Engine.Ground(this.game, distance * i, 200);
+      const ground = new Ground(this.game, distance * i, 200);
       this.grounds.add(ground);
     }
 
@@ -567,7 +581,7 @@ export default class Game extends Phaser.State {
       this.game.width / 2,
       marginTop,
       `Best ${this.score.bestDistance}m`,
-      style,
+      style
     );
     label.anchor.setTo(0.5);
 
@@ -584,15 +598,15 @@ export default class Game extends Phaser.State {
       this.paddingLeftCamera,
       this.game.height / 2 - this.bunny.height * 1.5,
       1,
-      deadZoneHeight,
+      deadZoneHeight
     );
   }
 
   createBackground() {
     this.backgrounds = this.add.group();
 
-    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer2', -0.05));
-    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer3', -0.1));
-    this.backgrounds.add(new Engine.Background(this.game, 0, 0, 'layer4', -0.25));
+    this.backgrounds.add(new Background(this.game, 0, 0, 'layer2', -0.05));
+    this.backgrounds.add(new Background(this.game, 0, 0, 'layer3', -0.1));
+    this.backgrounds.add(new Background(this.game, 0, 0, 'layer4', -0.25));
   }
 }

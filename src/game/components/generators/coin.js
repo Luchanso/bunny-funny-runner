@@ -1,11 +1,15 @@
-class CoinGenerator extends Generator {
+import Phaser from 'phaser';
+import Generator from './generator';
+import Coin from '../../actors/coin';
+
+export default class CoinGenerator extends Generator {
   constructor(game, bunny, grounds) {
     super(game, bunny);
 
     this.grounds = grounds;
     this.grounds.signals.generate.add(this.createdNewGround, this);
 
-    this.prototype = new Engine.Coin(this.game, 0, 0);
+    this.baseObject = new Coin(this.game, 0, 0);
 
     this.createTemplates();
   }
@@ -18,7 +22,7 @@ class CoinGenerator extends Generator {
       [0, 0, 2, 0, 0],
       [0, 0, 2, 0, 0],
       [0, 1, 3, 1, 0],
-      [1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1]
     ]);
 
     this.templates.push([
@@ -27,7 +31,7 @@ class CoinGenerator extends Generator {
       [1, 0, 0, 1],
       [1, 0, 0, 1],
       [1, 0, 0, 1],
-      [2, 1, 1, 2],
+      [2, 1, 1, 2]
     ]);
 
     this.templates.push([[0, 1, 0], [1, 3, 1], [0, 1, 0]]);
@@ -41,7 +45,7 @@ class CoinGenerator extends Generator {
       [0, 0, 2, 0, 2, 0, 0],
       [0, 2, 0, 0, 0, 2, 0],
       [2, 0, 0, 0, 0, 0, 2],
-      [1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1]
     ]);
 
     this.templates.push([[0, 0, 1], [0, 3, 0], [1, 0, 0]]);
@@ -70,16 +74,16 @@ class CoinGenerator extends Generator {
     const offsetX = direction.x;
     const offsetY = direction.y;
 
-    const templateWidth = template[0].length * this.prototype.width;
-    const templateHeight = template.length * this.prototype.height;
+    const templateWidth = template[0].length * this.baseObject.width;
+    const templateHeight = template.length * this.baseObject.height;
 
-    for (const i in template) {
-      for (const j in template[i]) {
+    for (let i = 0; i < template.length; i++) {
+      for (let j = 0; j < template[i].length; j++) {
         if (template[i][j] > 0) {
           const x =
-            offsetX + j * (this.prototype.width + padding) - templateWidth / 2;
+            offsetX + j * (this.baseObject.width + padding) - templateWidth / 2;
           const y =
-            offsetY + i * (this.prototype.height + padding) - templateHeight;
+            offsetY + i * (this.baseObject.height + padding) - templateHeight;
 
           this.generate(x, y, template[i][j]);
         }
@@ -93,18 +97,18 @@ class CoinGenerator extends Generator {
 
     if (number < 0.15 && maxType > 2) {
       // 15%
-      type = Engine.Coin.type.GOLD;
+      type = Coin.type.GOLD;
     } else if (number > 0.15 && number < 0.5 && maxType > 1) {
       // %35
-      type = Engine.Coin.type.SILVER;
+      type = Coin.type.SILVER;
     } else {
       // 50%
-      type = Engine.Coin.type.BRONZE;
+      type = Coin.type.BRONZE;
     }
 
     let coin = this.getFirstDead();
     if (coin == null) {
-      coin = new Engine.Coin(this.game, x, y, type);
+      coin = new Coin(this.game, x, y, type);
       this.add(coin);
     } else {
       coin.reset(x, y);
@@ -121,40 +125,38 @@ class CoinGenerator extends Generator {
       x:
         ground.x +
         ground.width +
-        template[0].length * this.prototype.width +
+        template[0].length * this.baseObject.width +
         marginLeft,
-      y: ground.y + margin + this.prototype.height / 2,
+      y: ground.y + margin + this.baseObject.height / 2
     };
 
     return result;
   }
 
-  getOffsetTop(ground, template) {
+  getOffsetTop(ground) {
     const margin = -5;
 
     const result = {
-      x: ground.x + ground.width / 2 + this.prototype.width / 2,
-      y: ground.y + margin + this.prototype.height / 2,
+      x: ground.x + ground.width / 2 + this.baseObject.width / 2,
+      y: ground.y + margin + this.baseObject.height / 2
     };
 
     return result;
   }
 
   getOffsetTopRight(ground, template) {
-    const margin = template.length * this.prototype.height;
+    const margin = template.length * this.baseObject.height;
     const marginLeft = 25;
 
     const result = {
       x:
         ground.x +
         ground.width +
-        template[0].length * this.prototype.width +
+        template[0].length * this.baseObject.width +
         marginLeft,
-      y: ground.y + margin + this.prototype.height / 2,
+      y: ground.y + margin + this.baseObject.height / 2
     };
 
     return result;
   }
 }
-
-Engine.Component.CoinGenerator = CoinGenerator;

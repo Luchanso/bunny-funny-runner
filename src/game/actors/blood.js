@@ -1,4 +1,6 @@
-class Blood extends Phaser.Particles.Arcade.Emitter {
+import Phaser from 'phaser';
+
+export default class Blood extends Phaser.Particles.Arcade.Emitter {
   constructor(game, follow) {
     const particles = 50;
     const lifespan = 5000;
@@ -28,5 +30,3 @@ class Blood extends Phaser.Particles.Arcade.Emitter {
     this.start(explode, lifespan, frequency, quantity);
   }
 }
-
-Engine.Blood = Blood;

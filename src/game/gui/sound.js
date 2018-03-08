@@ -1,4 +1,6 @@
-class SoundControll extends Phaser.Sprite {
+import Phaser from 'phaser';
+
+export default class SoundControll extends Phaser.Sprite {
   constructor(game, x = 0, y = 0) {
     const state = game.sound.mute ? 'mute' : 'unmute';
     const size = 40;

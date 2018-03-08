@@ -1,9 +1,11 @@
-class Message extends Phaser.Text {
+import Phaser from 'phaser';
+
+export default class Message extends Phaser.Text {
   constructor(game, x, y, text) {
     const style = {
       fill: 'white',
       font: '65px Open Sans',
-      align: 'center',
+      align: 'center'
     };
 
     super(game, x, y, text, style);
@@ -33,5 +35,3 @@ class Message extends Phaser.Text {
     }
   }
 }
-
-Engine.Message = Message;

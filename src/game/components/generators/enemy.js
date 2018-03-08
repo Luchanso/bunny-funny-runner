@@ -1,28 +1,31 @@
-class EnemyGenerator extends Generator {
+import Phaser from 'phaser';
+import Generator from './generator';
+import Service from '../../../service';
+import SpringMan from '../../actors/spring-man';
+import FlyMan from '../../actors/fly-man';
+import SpikeBall from '../../actors/spike-ball';
+import Cloud from '../../actors/cloud';
+
+export default class EnemyGenerator extends Generator {
   constructor(game, bunny, grounds) {
     super(game, bunny);
 
     this.grounds = grounds;
     this.grounds.signals.generate.add(this.generate, this);
 
-    this.score = Engine.Service.get('Score');
+    this.score = Service.get('Score');
 
-    this.types = [
-      Engine.SpringMan,
-      Engine.FlyMan,
-      Engine.SpikeBall,
-      Engine.Cloud,
-    ];
+    this.types = [SpringMan, FlyMan, SpikeBall, Cloud];
   }
 
   generate(ground) {
     const maxChance = 25;
     const maxDistance = 100;
-    const currentDistance = this.score.currentDistance;
+    const { currentDistance } = this.score;
     const currentChance =
       this.cubicInOut(currentDistance / maxDistance) * maxChance;
 
-    if (!Phaser.Utils.chanceRoll(currentChance)) return;
+    if (!Phaser.Utils.chanceRoll(currentChance)) return null;
 
     const marginLeft = this.game.rnd.between(50, 150);
 
@@ -33,7 +36,9 @@ class EnemyGenerator extends Generator {
     y = ground.y + this.game.rnd.between(-75, 75);
 
     const TypeClass = this.game.rnd.pick(this.types);
-    let enemy = this.children.find(item => item.constructor === TypeClass && !item.alive);
+    let enemy = this.children.find(
+      item => item.constructor === TypeClass && !item.alive
+    );
 
     if (enemy == null) {
       enemy = new TypeClass(this.game, x, y);
@@ -50,5 +55,3 @@ class EnemyGenerator extends Generator {
     return t;
   }
 }
-
-Engine.Component.EnemyGenerator = EnemyGenerator;

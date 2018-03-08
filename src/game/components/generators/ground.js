@@ -1,4 +1,9 @@
-class GroundsGenerator extends Engine.Component.Generator {
+import Phaser from 'phaser';
+import Generator from './generator';
+import Ground from '../../actors/ground';
+import { config } from '../../../config';
+
+export default class GroundsGenerator extends Generator {
   /**
    * Grounds generator
    * @param  {Phaser.Game} game
@@ -10,10 +15,10 @@ class GroundsGenerator extends Engine.Component.Generator {
 
     this.distance = distance;
     this.signals = {
-      generate: new Phaser.Signal(),
+      generate: new Phaser.Signal()
     };
     this.currentStep = -1;
-    this.currentGroundType = Engine.Ground.type.SNOW;
+    this.currentGroundType = Ground.type.SNOW;
 
     this.addBiomTimer();
   }
@@ -33,7 +38,7 @@ class GroundsGenerator extends Engine.Component.Generator {
     const maxTime = 15000;
     const time = this.game.rnd.between(minTime, maxTime);
 
-    const types = Object.keys(Engine.Ground.type).map(val => Engine.Ground.type[val]);
+    const types = Object.keys(Ground.type).map(val => Ground.type[val]);
 
     this.currentGroundType = this.game.rnd.pick(types);
 
@@ -55,7 +60,7 @@ class GroundsGenerator extends Engine.Component.Generator {
   generate(margin) {
     super.generate();
 
-    const { scaleRatio } = Engine;
+    const { scaleRatio } = config;
 
     const MARGIN_TOP = 500;
     const WORL_HEIGHT =
@@ -67,20 +72,20 @@ class GroundsGenerator extends Engine.Component.Generator {
     const RND_VERTICAL = 285 * scaleRatio;
 
     for (let i = 1; i < VERTICAL_COUNT; i++) {
-      if (this.game.rnd.pick[(true, false)]) continue;
+      if (this.game.rnd.pick[(true, false)]) {
+        const x =
+          this.bunny.x +
+          margin +
+          this.game.rnd.between(-RND_HORIZONTAL, RND_HORIZONTAL);
+        const y =
+          START_POINT +
+          GRID_HEIGHT * i +
+          this.game.rnd.between(-RND_VERTICAL, RND_VERTICAL);
 
-      const x =
-        this.bunny.x +
-        margin +
-        this.game.rnd.between(-RND_HORIZONTAL, RND_HORIZONTAL);
-      const y =
-        START_POINT +
-        GRID_HEIGHT * i +
-        this.game.rnd.between(-RND_VERTICAL, RND_VERTICAL);
+        const ground = this.addRandomGround(x, y);
 
-      const ground = this.addRandomGround(x, y);
-
-      this.signals.generate.dispatch(ground);
+        this.signals.generate.dispatch(ground);
+      }
     }
   }
 
@@ -91,7 +96,7 @@ class GroundsGenerator extends Engine.Component.Generator {
 
     let ground = this.getFirstDead();
     if (ground == null) {
-      ground = new Engine.Ground(this.game, x, y, type, small, broken);
+      ground = new Ground(this.game, x, y, type, small, broken);
       this.add(ground);
     } else {
       ground.reset(x, y, type, small, broken);
@@ -100,5 +105,3 @@ class GroundsGenerator extends Engine.Component.Generator {
     return ground;
   }
 }
-
-Engine.Component.GroundsGenerator = GroundsGenerator;

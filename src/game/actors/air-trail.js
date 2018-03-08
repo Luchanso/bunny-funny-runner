@@ -1,4 +1,6 @@
-class AirTrail extends Phaser.Graphics {
+import Phaser from 'phaser';
+
+export default class AirTrail extends Phaser.Graphics {
   constructor(game, follow) {
     super(game, 0, 0);
 
@@ -20,7 +22,7 @@ class AirTrail extends Phaser.Graphics {
 
     this.parts.unshift({
       x: this.follow.x + this.follow.width / 2,
-      y: this.follow.y + this.follow.height,
+      y: this.follow.y + this.follow.height
     });
 
     for (let i = 0; i < this.parts.length - 1; i++) {
@@ -44,5 +46,3 @@ class AirTrail extends Phaser.Graphics {
     }
   }
 }
-
-Engine.AirTrail = AirTrail;

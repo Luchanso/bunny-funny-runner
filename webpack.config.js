@@ -20,6 +20,15 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.(png|jpg|gif|json|ogg|mp3|xml)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {}
+          }
+        ]
+      }
     ],
   },
 };

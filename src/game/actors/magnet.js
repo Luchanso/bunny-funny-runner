@@ -1,4 +1,7 @@
-class MagnetEffect extends Phaser.Graphics {
+import Phaser from 'phaser';
+import { config } from '../../config';
+
+export default class MagnetEffect extends Phaser.Graphics {
   constructor(game) {
     super(game, 0, 0);
 
@@ -22,11 +25,10 @@ class MagnetEffect extends Phaser.Graphics {
 
       if (Date.now() - wave.startTime > 2000) {
         this.waves.splice(i, 1);
-        continue;
+      } else {
+        this.lineStyle(wave.width, 0xff8000, wave.alpha);
+        this.drawCircle(0, 0, wave.radius);
       }
-
-      this.lineStyle(wave.width, 0xff8000, wave.alpha);
-      this.drawCircle(0, 0, wave.radius);
     }
   }
 
@@ -53,9 +55,9 @@ class MagnetEffect extends Phaser.Graphics {
       .tween(this)
       .to(
         {
-          alpha,
+          alpha
         },
-        animationTime,
+        animationTime
       )
       .start();
   }
@@ -65,23 +67,21 @@ class MagnetEffect extends Phaser.Graphics {
       radius: 0,
       width: 15,
       alpha: 0.8,
-      startTime: Date.now(),
+      startTime: Date.now()
     };
 
-    const tween = this.game.add
+    this.game.add
       .tween(wave)
       .to(
         {
           width: 1,
-          radius: Engine.magnetDistace,
-          alpha: 0,
+          radius: config.magnetDistace,
+          alpha: 0
         },
-        750,
+        750
       )
       .start();
 
     this.waves.push(wave);
   }
 }
-
-Engine.MagnetEffect = MagnetEffect;

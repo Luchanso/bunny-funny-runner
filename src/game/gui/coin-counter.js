@@ -1,14 +1,18 @@
-class CoinCounter extends Phaser.Text {
+import Phaser from 'phaser';
+import Service from '../../service';
+import { config } from '../../config';
+
+export default class CoinCounter extends Phaser.Text {
   constructor(game, x, y) {
     const style = {
       fill: '#00B8D4', // 2196F3
-      font: '23px Open Sans',
+      font: '23px Open Sans'
     };
 
     super(game, x, y, '0', style);
 
     this.fixedToCamera = true;
-    this.score = Engine.Service.get('Score');
+    this.score = Service.get('Score');
     this.score.updateCoins.add(this.updateCoinsCount, this);
 
     this.createIcon();
@@ -21,8 +25,8 @@ class CoinCounter extends Phaser.Text {
     const coin = this.game.make.sprite(
       x,
       y,
-      Engine.spritesheet,
-      'coin_gold.png',
+      config.spritesheet,
+      'coin_gold.png'
     );
 
     coin.anchor.setTo(1, 0);
@@ -42,5 +46,3 @@ class CoinCounter extends Phaser.Text {
     this.text = `${this.score.coins}`;
   }
 }
-
-Engine.CoinCounter = CoinCounter;

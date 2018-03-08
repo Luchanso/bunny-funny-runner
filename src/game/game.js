@@ -26,9 +26,9 @@ class Game extends Phaser.State {
     this.load.audio('coin', ['assets/sounds/coin.mp3', 'assets/sounds/coin.ogg'])
     this.load.audio('jump', ['assets/sounds/jump.mp3', 'assets/sounds/jump.ogg'])
 
-    if (CloudAPI && CloudAPI.logos.active()) {
-      this.load.image('cloudgames', 'assets/sprites/clg-logo.png')
-    }
+    // if (CloudAPI && CloudAPI.logos.active()) {
+    //   this.load.image('cloudgames', 'assets/sprites/clg-logo.png')
+    // }
 
     this.load.spritesheet('particles', 'assets/sprites/particles.png', 8, 8)
   }
@@ -56,7 +56,7 @@ class Game extends Phaser.State {
 
     this.createBackground()
     this.createTutorial()
-    this.createCloudGamesLogo()
+    // this.createCloudGamesLogo()
     this.createBunny()
     this.createSpikes()
     this.createGrounds()
@@ -127,10 +127,10 @@ class Game extends Phaser.State {
     soundControll.y = 5
     soundControll.fixedToCamera = true
 
-    if (CloudAPI) {
-      CloudAPI.mute = this.mute.bind(this)
-      CloudAPI.unmute = this.mute.bind(this)
-    }
+    // if (CloudAPI) {
+    //   CloudAPI.mute = this.mute.bind(this)
+    //   CloudAPI.unmute = this.mute.bind(this)
+    // }
 
     soundControll.events.onInputDown.add(() => {
       if (soundControll.frameName === 'mute') {
@@ -371,16 +371,16 @@ class Game extends Phaser.State {
   lose() {
     this.loseLabel.show()
 
-    this.addButtonMore();
+    // this.addButtonMore();
 
     // TODO: Need incapsulation
     if (this.score.bestDistance < this.score.currentDistance) {
       this.score.bestDistance = this.score.currentDistance
     }
 
-    if (CloudAPI) {
-      CloudAPI.gameOver()
-    }
+    // if (CloudAPI) {
+    //   CloudAPI.gameOver()
+    // }
   }
 
   start() {

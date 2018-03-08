@@ -6,6 +6,7 @@
   "scripts": {
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
+    "start": "gulp"
   },
   "keywords": [
     "game"

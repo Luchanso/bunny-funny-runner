@@ -1,19 +1,3 @@
-Nearest plans:
-* Integrate cloudgames API
-  * Add more games
-
-Plans:
-
-* Add music
-* Change lose menu
-  * Add ADS for lives
-* Simple menu
-  * Settings (simple)
-    * Music scroll
-    * Sound scroll
-  * Shop
-    * Create money boxes
-
 ---
 Configurations:
 * Jump distance x: 280px - 560px

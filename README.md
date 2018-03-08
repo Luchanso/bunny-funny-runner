@@ -1,3 +1,5 @@
+[![Code Climate](https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg)](https://codeclimate.com/github/Luchanso/bunny-funny-runner)
+
 Configurations:
 * Jump distance x: 280px - 560px
 * Jump distance y: 154px - 25 0px

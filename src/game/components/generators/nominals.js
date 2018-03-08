@@ -3,7 +3,7 @@ import Nominal from '../../actors/nominal';
 
 export default class NominalGenerator extends Generator {
   constructor(...props) {
-    const { game, bunny } = props;
+    const [game, bunny] = props;
     super(game, bunny);
   }
 

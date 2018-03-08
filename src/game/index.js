@@ -20,6 +20,7 @@ import Distance from './gui/distace';
 import CoinCounter from './gui/coin-counter';
 import Ground from './actors/ground';
 import Background from './actors/background';
+import Score from '../service/score';
 
 import spritesheetImg from './assets/spritesheet/jumper.png';
 import spritesheetXML from './assets/spritesheet/jumper.xml';
@@ -35,7 +36,7 @@ import coinOGG from './assets/sounds/coin.ogg';
 import jumpMP3 from './assets/sounds/jump.mp3';
 import jumpOGG from './assets/sounds/jump.ogg';
 import loseMP3 from './assets/sounds/lose.mp3';
-import loseWAV from './assets/sounds/lose.wav';
+import loseOGG from './assets/sounds/lose.ogg';
 import particlesImg from './assets/sprites/particles.png';
 
 export default class Game extends Phaser.State {
@@ -48,13 +49,15 @@ export default class Game extends Phaser.State {
 
     this.load.image('tutorial', tutorialImg);
     this.load.image('buttonMore', btnMoreImg);
+
     this.load.atlasJSONArray(
       'soundControll',
       soundControllImg,
+      null,
       soundControllJSON
     );
 
-    this.load.audio('lose', [loseMP3, loseWAV]);
+    this.load.audio('lose', [loseMP3, loseOGG]);
     this.load.audio('coin', [coinMP3, coinOGG]);
     this.load.audio('jump', [jumpMP3, jumpOGG]);
 
@@ -115,7 +118,7 @@ export default class Game extends Phaser.State {
     this.createSoundControll();
 
     if (process.env.NODE_ENV === 'development') {
-      this.createDatGui();
+      // this.createDatGui();
     }
   }
 
@@ -175,7 +178,7 @@ export default class Game extends Phaser.State {
 
     // TODO: Need incapsulation
     this.score.currentDistance = Math.round(
-      this.bunny.x / config.Score.MULTIPER_DISTANCE
+      this.bunny.x / Score.MULTIPER_DISTANCE
     );
 
     this.bottomSpikes.x = this.bunny.x - this.paddingLeftCamera;

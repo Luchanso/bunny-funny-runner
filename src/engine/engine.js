@@ -1,5 +1,5 @@
 if (typeof CloudAPI === 'undefined') {
-   window.CloudAPI = undefined;
+  window.CloudAPI = undefined;
 }
 
 let Engine = {
@@ -15,4 +15,4 @@ let Engine = {
   spritesheet: 'jumper',
   scaleRatio: 0.25, // 0.35
   magnetDistace: 300
-}
+};

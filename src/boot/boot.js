@@ -3,8 +3,7 @@ class Boot extends Phaser.State {
     super();
   }
 
-  preload() {
-  }
+  preload() {}
 
   create() {
     this.game.stage.disableVisibilityChange = true;

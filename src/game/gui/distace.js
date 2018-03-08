@@ -3,18 +3,18 @@ class Distance extends Phaser.Text {
     const style = {
       fill: '#00BCD4',
       font: '35px Open Sans'
-    }
+    };
 
-    super(game, x, y, '0m', style)
+    super(game, x, y, '0m', style);
 
-    this.fixedToCamera = true
-    this.score = Engine.Service.get('Score')
-    this.score.onUpdate.add(this.updateDistance, this)
+    this.fixedToCamera = true;
+    this.score = Engine.Service.get('Score');
+    this.score.onUpdate.add(this.updateDistance, this);
   }
 
   updateDistance() {
-    this.text = `${this.score.currentDistance}m`
+    this.text = `${this.score.currentDistance}m`;
   }
 }
 
-Engine.Distance = Distance
+Engine.Distance = Distance;

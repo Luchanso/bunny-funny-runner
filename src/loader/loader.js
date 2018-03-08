@@ -3,13 +3,11 @@ class Loader extends Phaser.State {
     super();
   }
 
-  preload() {
-
-  }
+  preload() {}
 
   create() {
     if (CloudAPI) {
-      CloudAPI.play()
+      CloudAPI.play();
     }
 
     this.state.start('Game');
@@ -18,10 +16,15 @@ class Loader extends Phaser.State {
   addProgressLabel() {
     let style = {
       font: '41px Open Sans',
-      fill: '#00E676',
-    }
+      fill: '#00E676'
+    };
 
-    this.progressLabel = this.add.text(this.game.world.centerX, this.game.world.centerY, 'Loading: 0% (0/0)', style);
+    this.progressLabel = this.add.text(
+      this.game.world.centerX,
+      this.game.world.centerY,
+      'Loading: 0% (0/0)',
+      style
+    );
     this.progressLabel.anchor.setTo(0.5);
   }
 

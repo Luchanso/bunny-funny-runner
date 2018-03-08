@@ -1,12 +1,12 @@
 class Service {
   static get(name) {
-    return Service.list[name]
+    return Service.list[name];
   }
 }
 
 Service.list = {
-  "Score": new Engine.Score(),
-  "Profiler": new Engine.Profiler()
-}
+  Score: new Engine.Score(),
+  Profiler: new Engine.Profiler()
+};
 
-Engine.Service = Service
+Engine.Service = Service;

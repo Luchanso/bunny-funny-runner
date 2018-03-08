@@ -1,63 +1,67 @@
 class Nominal extends Phaser.Text {
   constructor(game, x, y, nominal) {
-    super(game, x, y, `+${nominal}`, Nominal.getStyle(nominal))
+    super(game, x, y, `+${nominal}`, Nominal.getStyle(nominal));
 
-    this.anchor.setTo(0.5)
+    this.anchor.setTo(0.5);
 
-    this.autoCull = true
+    this.autoCull = true;
 
-    this.addAnimation()
+    this.addAnimation();
   }
 
   static getStyle(nominal) {
-    let color
+    let color;
 
-    switch(nominal) {
+    switch (nominal) {
       case 8:
-        color = 'orange'
-      break
+        color = 'orange';
+        break;
       case 4:
-        color = 'silver'
-      break
+        color = 'silver';
+        break;
       case 1:
-        color = '#CD7F32'
-      break
+        color = '#CD7F32';
+        break;
     }
 
     const style = {
       font: `${25 + nominal * 5.5}px Open Sans`,
       fill: color
-    }
+    };
 
-    return style
+    return style;
   }
 
   addAnimation() {
-    const animationTime = 700
-    const animationDistance = 50
+    const animationTime = 700;
+    const animationDistance = 50;
 
-    this.alpha = 1
+    this.alpha = 1;
 
-    this.tween = this.game.add.tween(this)
-      .to({
-        alpha: 0,
-        y: this.y - animationDistance
-      }, animationTime)
-      .start()
+    this.tween = this.game.add
+      .tween(this)
+      .to(
+        {
+          alpha: 0,
+          y: this.y - animationDistance
+        },
+        animationTime
+      )
+      .start();
 
-    this.tween.onComplete.add(this.kill, this)
+    this.tween.onComplete.add(this.kill, this);
   }
 
   reset(x, y, nominal) {
-    super.reset(x, y)
+    super.reset(x, y);
 
-    let style = Nominal.getStyle(nominal)
+    let style = Nominal.getStyle(nominal);
 
-    this.text = `+${nominal}`
-    this.fill = style.fill
+    this.text = `+${nominal}`;
+    this.fill = style.fill;
 
-    this.addAnimation()
+    this.addAnimation();
   }
 }
 
-Engine.Nominal = Nominal
+Engine.Nominal = Nominal;

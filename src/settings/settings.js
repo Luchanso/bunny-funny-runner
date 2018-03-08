@@ -1,7 +1,7 @@
 class Settings extends Phaser.State {
   constructor() {
-    super()
+    super();
   }
 }
 
-Engine.Settings = Settings
+Engine.Settings = Settings;

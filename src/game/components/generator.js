@@ -1,40 +1,34 @@
 class Generator extends Phaser.Group {
   constructor(game, bunny) {
-    super(game)
+    super(game);
 
-    this.bunny = bunny
+    this.bunny = bunny;
   }
 
-  start() {
-
-  }
+  start() {}
 
   update() {
-    super.update()
+    super.update();
 
-    this.checkDie()
+    this.checkDie();
   }
 
-  generate() {
+  generate() {}
 
-  }
-
-  stop() {
-
-  }
+  stop() {}
 
   checkDie() {
-    this.children.forEach((item) => {
+    this.children.forEach(item => {
       if (
-          !item.inCamera
-        && item.alive
-        && item.x < this.bunny.x - this.game.camera.deadzone.x
+        !item.inCamera &&
+        item.alive &&
+        item.x < this.bunny.x - this.game.camera.deadzone.x
       ) {
-        item.kill()
+        item.kill();
       }
-    })
+    });
   }
 }
 
-Engine.Component = {}
-Engine.Component.Generator = Generator
+Engine.Component = {};
+Engine.Component.Generator = Generator;

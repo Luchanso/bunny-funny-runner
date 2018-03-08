@@ -1,71 +1,68 @@
 class Wings extends Phaser.Group {
   constructor(game, bunny) {
-    const wingsOffset = 35
+    const wingsOffset = 35;
 
-    super(game)
+    super(game);
 
     this.data = {
       visible: false
-    }
-    this.alpha = 0
-    this.bunny = bunny
+    };
+    this.alpha = 0;
+    this.bunny = bunny;
 
-    this.leftWing = new Engine.Wing(
-      this.game,
-      'wing_left.png'
-    )
-    this.rightWing = new Engine.Wing(
-      this.game,
-      'wing_right.png'
-    )
+    this.leftWing = new Engine.Wing(this.game, 'wing_left.png');
+    this.rightWing = new Engine.Wing(this.game, 'wing_right.png');
 
-    this.leftWing.x = (this.bunny.width) / 2 - wingsOffset
-    this.rightWing.x = (this.bunny.width) / 2 + wingsOffset
-    this.rightWing.y = this.leftWing.y = (this.bunny.height) / 2
+    this.leftWing.x = this.bunny.width / 2 - wingsOffset;
+    this.rightWing.x = this.bunny.width / 2 + wingsOffset;
+    this.rightWing.y = this.leftWing.y = this.bunny.height / 2;
 
+    this.leftWing.anchor.setTo(1, 0.611);
+    this.rightWing.anchor.setTo(0, 0.611);
 
-    this.leftWing.anchor.setTo(1, 0.611)
-    this.rightWing.anchor.setTo(0, 0.611)
+    this.add(this.leftWing);
+    this.add(this.rightWing);
 
-    this.add(this.leftWing)
-    this.add(this.rightWing)
+    this.leftWing.rotateNegative();
+    this.rightWing.rotatePositive();
 
-    this.leftWing.rotateNegative()
-    this.rightWing.rotatePositive()
-
-    this.bunny.bringToTop()
+    this.bunny.bringToTop();
   }
 
   update() {
-    if (!this.data.visible) return
+    if (!this.data.visible) return;
 
-    const offsetX = 7
+    const offsetX = 7;
 
-    this.x = this.bunny.x + offsetX
-    this.y = this.bunny.y
+    this.x = this.bunny.x + offsetX;
+    this.y = this.bunny.y;
   }
 
   show() {
-    this.fade(1)
+    this.fade(1);
 
-    this.data.visible = true
+    this.data.visible = true;
   }
 
   hide() {
-    this.fade(0)
+    this.fade(0);
 
-    this.data.visible = false
+    this.data.visible = false;
   }
 
   fade(alpha) {
-    const time = 100
+    const time = 100;
 
-    this.game.add.tween(this)
-      .to({
-        alpha: alpha
-      }, time)
-      .start()
+    this.game.add
+      .tween(this)
+      .to(
+        {
+          alpha: alpha
+        },
+        time
+      )
+      .start();
   }
 }
 
-Engine.Wings = Wings
+Engine.Wings = Wings;

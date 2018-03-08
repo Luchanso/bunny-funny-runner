@@ -1,19 +1,17 @@
 class Enemy extends Phaser.Sprite {
   constructor(game, x, y, name) {
-    super(game, x, y, Engine.spritesheet, name)
+    super(game, x, y, Engine.spritesheet, name);
 
-    this.game.physics.arcade.enable([ this ])
-    this.body.immovable = true
+    this.game.physics.arcade.enable([this]);
+    this.body.immovable = true;
 
-    this.autoCull = true
+    this.autoCull = true;
 
-    this.width *= Engine.scaleRatio
-    this.height *= Engine.scaleRatio
+    this.width *= Engine.scaleRatio;
+    this.height *= Engine.scaleRatio;
   }
 
-  die() {
-
-  }
+  die() {}
 }
 
-Engine.Enemy = Enemy
+Engine.Enemy = Enemy;

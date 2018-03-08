@@ -1,60 +1,63 @@
 class MagnetEffect extends Phaser.Graphics {
   constructor(game) {
-    super(game, 0, 0)
+    super(game, 0, 0);
 
-    this.waves = []
+    this.waves = [];
 
-    this.waveGenerator = this.game.time.create()
-    this.waveGenerator.loop(900, this.addWave, this)
+    this.waveGenerator = this.game.time.create();
+    this.waveGenerator.loop(900, this.addWave, this);
 
-
-    this.alpha = 0
+    this.alpha = 0;
   }
 
   update() {
-    this.draw()
+    this.draw();
   }
 
   draw() {
-    this.clear()
+    this.clear();
 
     for (let i = 0; i < this.waves.length; i++) {
-      let wave = this.waves[i]
+      let wave = this.waves[i];
 
       if (Date.now() - wave.startTime > 2000) {
-        this.waves.splice(i, 1)
-        continue
+        this.waves.splice(i, 1);
+        continue;
       }
 
-      this.lineStyle(wave.width, 0xff8000, wave.alpha)
-      this.drawCircle(0, 0, wave.radius)
+      this.lineStyle(wave.width, 0xff8000, wave.alpha);
+      this.drawCircle(0, 0, wave.radius);
     }
   }
 
   show() {
-    this.fade(1)
+    this.fade(1);
 
     if (!this.waveGenerator.paused && !this.waveGenerator.running) {
-      this.waveGenerator.start()
+      this.waveGenerator.start();
     } else {
-      this.waveGenerator.resume()
+      this.waveGenerator.resume();
     }
   }
 
   hide() {
-    this.fade(0)
+    this.fade(0);
 
-    this.waveGenerator.pause()
+    this.waveGenerator.pause();
   }
 
   fade(alpha) {
-    const animationTime = 150
+    const animationTime = 150;
 
-    this.game.add.tween(this)
-      .to({
-        alpha
-      }, animationTime)
-      .start()
+    this.game.add
+      .tween(this)
+      .to(
+        {
+          alpha
+        },
+        animationTime
+      )
+      .start();
   }
 
   addWave() {
@@ -63,18 +66,22 @@ class MagnetEffect extends Phaser.Graphics {
       width: 15,
       alpha: 0.8,
       startTime: Date.now()
-    }
+    };
 
-    let tween = this.game.add.tween(wave)
-      .to({
-        width: 1,
-        radius: Engine.magnetDistace,
-        alpha: 0
-      }, 750)
-      .start()
+    let tween = this.game.add
+      .tween(wave)
+      .to(
+        {
+          width: 1,
+          radius: Engine.magnetDistace,
+          alpha: 0
+        },
+        750
+      )
+      .start();
 
-    this.waves.push(wave)
+    this.waves.push(wave);
   }
 }
 
-Engine.MagnetEffect = MagnetEffect
+Engine.MagnetEffect = MagnetEffect;

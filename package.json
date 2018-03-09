@@ -7,7 +7,8 @@
     "snyk-protect": "snyk protect",
     "precommit": "lint-staged",
     "start": "gulp",
-    "build": "webpack"
+    "build": "webpack",
+    "dev": "webpack-dev-server"
   },
   "keywords": [
     "game",
@@ -55,7 +56,8 @@
     "prettier-eslint-cli": "^4.7.1",
     "snyk": "^1.69.10",
     "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.10"
+    "webpack-cli": "^2.0.10",
+    "webpack-dev-server": "^3.1.0"
   },
   "snyk": true
 }

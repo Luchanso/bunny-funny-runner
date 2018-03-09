@@ -81,6 +81,11 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION)
     }),
-    new CleanWebpackPlugin(['build'])
-  ]
+    new CleanWebpackPlugin(['build']),
+  ],
+  devServer: {
+    contentBase: path.join(__dirname, "build"),
+    compress: true,
+    port: 3000
+  }
 };

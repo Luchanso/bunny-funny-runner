@@ -37,6 +37,8 @@ export default class Coin extends Phaser.Sprite {
   }
 
   createAnimation() {
+    if (process.env.OPTIMIZATION) return;
+
     const countCoinsFrame = 7;
 
     const animationFrames = [];

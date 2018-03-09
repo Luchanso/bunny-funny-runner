@@ -79,7 +79,7 @@ module.exports = {
         removeComments: true,
         removeEmptyAttributes: true,
       },
-      template: path.resolve(__dirname, 'public/index.html')
+      template: 'public/index.html'
     }),
     // Add module names to factory functions so they appear in browser profiler.
     new webpack.NamedModulesPlugin(),

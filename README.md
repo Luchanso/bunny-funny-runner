@@ -12,10 +12,4 @@ Install:
 git clone https://github.com/Luchanso/bunny-funny-runner
 cd bunny-funny-runner
 npm install
-npm install gulp -g
-```
-Run command:
-```sh
-gulp
-```
-It will be run on http://localhost:8080 or http://127.0.0.1:8080
+npm run build

@@ -51,6 +51,10 @@ export default class ProgressBar extends Phaser.Graphics {
     this.value = 1;
     this.show();
 
+    if (this.tween && this.tween.isRunning) {
+      this.tween.stop();
+    }
+
     this.tween = this.game.add
       .tween(this)
       .to(

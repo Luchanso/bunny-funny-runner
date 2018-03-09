@@ -4,14 +4,15 @@ const packageJSON = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const phaserModulePath = path.join(__dirname, '/node_modules/phaser/');
+// const phaserModulePath = path.join(__dirname, '/node_modules/phaser/');
 const { NODE_ENV = 'development' } = process.env;
 
 module.exports = {
   entry: [packageJSON.main],
   output: {
     filename: 'bundle.[hash].js',
-    path: path.resolve(__dirname, 'build')
+    path: path.resolve(__dirname, 'build'),
+    chunkFilename: '[name].[hash].js',
   },
   mode: NODE_ENV,
   module: {
@@ -22,7 +23,11 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            plugins: ['transform-class-properties'],
+            plugins: [
+              'transform-class-properties',
+              'syntax-dynamic-import',
+              'transform-runtime'
+            ],
             presets: ['babel-preset-env']
           }
         }
@@ -38,13 +43,13 @@ module.exports = {
           }
         ]
       },
-      {
-        test: require.resolve(path.join(phaserModulePath, 'build/custom/pixi.js')),
-        use: [{
-          loader: 'expose-loader',
-          options: 'PIXI'
-        }]
-      },
+      // {
+      //   test: require.resolve(path.join(phaserModulePath, 'build/custom/pixi.js')),
+      //   use: [{
+      //     loader: 'expose-loader',
+      //     options: 'PIXI'
+      //   }]
+      // },
       // { test: /phaser-split\.js$/, loader: 'expose-loader?Phaser' },
       // { test: /p2\.js/, loader: 'expose-loader?p2' },
     ],

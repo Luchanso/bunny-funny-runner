@@ -116,10 +116,6 @@ export default class Game extends Phaser.State {
     this.createBestDistance();
     this.createNominals();
     this.createSoundControll();
-
-    if (process.env.NODE_ENV === 'development') {
-      // this.createDatGui();
-    }
   }
 
   drawBorders() {
@@ -248,13 +244,14 @@ export default class Game extends Phaser.State {
     this.add.existing(this.progressUntouch);
   }
 
-  createDatGui() {
-    const gui = new window.dat.GUI();
+  async createDatGui() {
+    const dat = (await import('dat.gui')).default;
+    this.gui = new dat.GUI();
 
     const dg = document.getElementsByClassName('dg ac')[0];
     dg.style.right = `${this.game.width / 2 - 245}px`;
 
-    gui.addColor(this.progress, 'color');
+    this.gui.add(this.score, 'coins', 0);
   }
 
   updateMagnet() {

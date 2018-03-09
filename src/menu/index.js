@@ -124,12 +124,10 @@ export default class Menu extends Phaser.State {
   }
 
   startGame() {
-    this.stage.backgroundColor = this.play.color;
     this.state.start('Main');
   }
 
   openShop() {
-    this.stage.backgroundColor = this.play.color;
     this.state.start('Shop');
   }
 }

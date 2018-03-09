@@ -11,6 +11,8 @@ export const config = {
   spritesheet: 'jumper',
   scaleRatio: 0.25, // 0.35
   magnetDistace: 300,
+
+  backgroundColor: 0xade6ff
 };
 
 export default config;

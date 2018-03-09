@@ -15,8 +15,6 @@ export default class Btn extends Phaser.Graphics {
 
     this.radius = this.icon.width;
     this.clicked = new Phaser.Signal();
-
-    this.draw();
   }
 
   draw() {

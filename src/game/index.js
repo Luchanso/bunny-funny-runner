@@ -19,14 +19,14 @@ import Message from './gui/message';
 import Distance from './gui/distace';
 import CoinCounter from './gui/coin-counter';
 import Ground from './actors/ground';
-import Background from './actors/background';
+import Background from '../common/actors/background';
 import Score from '../service/score';
 
 import spritesheetImg from './assets/spritesheet/jumper.png';
 import spritesheetXML from './assets/spritesheet/jumper.xml';
-import layer2Img from './assets/background/layer2.png';
-import layer3Img from './assets/background/layer3.png';
-import layer4Img from './assets/background/layer4.png';
+import layer2Img from '../common/assets/background/layer2.png';
+import layer3Img from '../common/assets/background/layer3.png';
+import layer4Img from '../common/assets/background/layer4.png';
 import tutorialImg from './assets/tutorial/2xjump-2.png';
 import btnMoreImg from './assets/ui/buttonMore.png';
 import soundControllImg from './assets/ui/soundControll.png';
@@ -85,7 +85,7 @@ export default class Game extends Phaser.State {
     this.profiler = Service.get('Profiler');
 
     const worldHeight = 550 * 5;
-    this.stage.backgroundColor = 0xade6ff; // 0x555555//
+    this.stage.backgroundColor = config.backgroundColor; // 0x555555//
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.world.setBounds(
       0,

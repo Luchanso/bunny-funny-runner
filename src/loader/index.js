@@ -4,7 +4,7 @@ export default class Loader extends Phaser.State {
   preload() {}
 
   create() {
-    this.state.start('Main');
+    this.state.start('Menu');
   }
 
   addProgressLabel() {

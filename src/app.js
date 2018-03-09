@@ -1,4 +1,5 @@
 import './init';
+import './fix';
 // eslint-disable-next-line
 import { Game, AUTO } from 'phaser';
 import { config } from './config';

@@ -1,6 +1,6 @@
-import Phaser from 'phaser';
+// import Phaser from 'phaser';
 
-Phaser.PIXI.DisplayObjectContainer.prototype.removeChildren = function fix(
+window.PIXI.DisplayObjectContainer.prototype.removeChildren = function fix(
   beginIndex,
   endIndex
 ) {

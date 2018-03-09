@@ -72,7 +72,7 @@ export default class GroundsGenerator extends Generator {
     const RND_VERTICAL = 285 * scaleRatio;
 
     for (let i = 1; i < VERTICAL_COUNT; i++) {
-      if (this.game.rnd.pick[(true, false)]) {
+      if (this.game.rnd.pick([true, false])) {
         const x =
           this.bunny.x +
           margin +

@@ -1,8 +1,4 @@
-if (typeof CloudAPI === 'undefined') {
-  window.CloudAPI = undefined;
-}
-
-let Engine = {
+export const config = {
   minWidth: 640,
   minHeight: 360,
 
@@ -14,5 +10,7 @@ let Engine = {
 
   spritesheet: 'jumper',
   scaleRatio: 0.25, // 0.35
-  magnetDistace: 300
+  magnetDistace: 300,
 };
+
+export default config;

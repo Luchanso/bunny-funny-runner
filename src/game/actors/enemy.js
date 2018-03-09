@@ -1,17 +1,18 @@
-class Enemy extends Phaser.Sprite {
+import Phaser from 'phaser';
+import { config } from '../../config';
+
+export default class Enemy extends Phaser.Sprite {
   constructor(game, x, y, name) {
-    super(game, x, y, Engine.spritesheet, name);
+    super(game, x, y, config.spritesheet, name);
 
     this.game.physics.arcade.enable([this]);
     this.body.immovable = true;
 
     this.autoCull = true;
 
-    this.width *= Engine.scaleRatio;
-    this.height *= Engine.scaleRatio;
+    this.width *= config.scaleRatio;
+    this.height *= config.scaleRatio;
   }
 
   die() {}
 }
-
-Engine.Enemy = Enemy;

@@ -1,4 +1,6 @@
-class SpikeBall extends Engine.Enemy {
+import Enemy from './enemy';
+
+export default class SpikeBall extends Enemy {
   constructor(game, x, y) {
     super(game, x, y, 'spikeBall1.png');
 
@@ -54,5 +56,3 @@ class SpikeBall extends Engine.Enemy {
     this.animations.play('rotate');
   }
 }
-
-Engine.SpikeBall = SpikeBall;

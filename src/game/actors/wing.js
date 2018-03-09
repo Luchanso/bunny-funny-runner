@@ -1,9 +1,12 @@
-class Wing extends Phaser.Sprite {
-  constructor(game, name) {
-    super(game, 0, 0, Engine.spritesheet, name);
+import Phaser from 'phaser';
+import { config } from '../../config';
 
-    this.width *= Engine.scaleRatio;
-    this.height *= Engine.scaleRatio;
+export default class Wing extends Phaser.Sprite {
+  constructor(game, name) {
+    super(game, 0, 0, config.spritesheet, name);
+
+    this.width *= config.scaleRatio;
+    this.height *= config.scaleRatio;
 
     this.tint = 0xffdb8a;
   }
@@ -41,5 +44,3 @@ class Wing extends Phaser.Sprite {
       .start();
   }
 }
-
-Engine.Wing = Wing;

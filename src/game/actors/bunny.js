@@ -1,6 +1,15 @@
-class Bunny extends Phaser.Sprite {
+import Phaser from 'phaser';
+import { config } from '../../config';
+import Trail from './trail';
+import AirTrail from './air-trail';
+import MagnetEffect from './magnet';
+import Wings from './wings';
+import Fire from './fire';
+import Blood from './blood';
+
+export default class Bunny extends Phaser.Sprite {
   constructor(game, x, y, name) {
-    super(game, x, y, Engine.spritesheet, name + '_stand.png');
+    super(game, x, y, config.spritesheet, `${name}_stand.png`);
 
     this.data.name = name;
     this.data.magnet = false;
@@ -11,11 +20,11 @@ class Bunny extends Phaser.Sprite {
 
     this.game.physics.arcade.enable([this]);
 
-    this.width *= Engine.scaleRatio;
-    this.height *= Engine.scaleRatio;
+    this.width *= config.scaleRatio;
+    this.height *= config.scaleRatio;
 
-    Object.assign(this.body.gravity, Bunny.GRAVITY);
-    Object.assign(this.body.maxVelocity, Bunny.MAX_VELOCITY);
+    this.body.gravity = { ...Bunny.GRAVITY };
+    this.body.maxVelocity = { ...Bunny.MAX_VELOCITY };
     this.body.collideWorldBounds = true;
 
     this.onDied = new Phaser.Signal();
@@ -32,7 +41,7 @@ class Bunny extends Phaser.Sprite {
     this.jetPackSprite = this.game.make.sprite(
       0,
       0,
-      Engine.spritesheet,
+      config.spritesheet,
       'jetpack.png'
     );
 
@@ -45,7 +54,7 @@ class Bunny extends Phaser.Sprite {
     this.data.trail.stopEmitt();
 
     this.body.velocity.setTo(0);
-    Object.assign(this.body.maxVelocity, Bunny.JETPACK_VELOCITY);
+    this.body.maxVelocity = { ...Bunny.JETPACK_VELOCITY };
     this.body.gravity.setTo(0, 0);
 
     this.jetPackSprite.alpha = 1;
@@ -63,11 +72,11 @@ class Bunny extends Phaser.Sprite {
       )
       .start();
 
-    setTimeout(this.diactivateJetPack.bind(this), Bunny.JETPACK_TIME);
+    setTimeout(this.diactivateJetPack, Bunny.JETPACK_TIME);
   }
 
-  diactivateJetPack() {
-    let tween = this.game.add
+  diactivateJetPack = () => {
+    const tween = this.game.add
       .tween(this.body.maxVelocity)
       .to(
         {
@@ -80,7 +89,7 @@ class Bunny extends Phaser.Sprite {
     tween.onComplete.add(() => {
       this.data.jetPack = false;
       this.data.trail.startEmitt();
-      Object.assign(this.body.gravity, Bunny.GRAVITY);
+      this.body.gravity = { ...Bunny.GRAVITY };
 
       this.body.velocity.setTo(Bunny.BASE_MAX_SPEED, 0);
       this.body.acceleration.setTo(Bunny.ACCELERATION, 0);
@@ -101,32 +110,29 @@ class Bunny extends Phaser.Sprite {
         )
         .start();
     }, this);
-  }
+  };
 
   activateWings() {
     const wingsJumps = 100;
 
     this.wings.show();
 
-    this.data.countJump = Bunny.MAX_JUMPS = wingsJumps;
+    this.data.countJump = wingsJumps;
 
     if (this.wingTimeout != null) {
       clearTimeout(this.wingTimeout);
     }
 
     if (!this.data.jetPack) {
-      this.wingTimeout = setTimeout(
-        this.diactivateWings.bind(this),
-        Bunny.WINGS_TIME
-      );
+      this.wingTimeout = setTimeout(this.diactivateWings, Bunny.WINGS_TIME);
     }
   }
 
-  diactivateWings() {
-    this.data.countJump = Bunny.MAX_JUMPS = Bunny.BASE_MAX_JUMPS;
+  diactivateWings = () => {
+    this.data.countJump = Bunny.BASE_MAX_JUMPS;
 
     this.wings.hide();
-  }
+  };
 
   addSounds() {
     this.dieSound = this.game.sound.add('lose');
@@ -134,19 +140,19 @@ class Bunny extends Phaser.Sprite {
   }
 
   addTrail() {
-    this.data.trail = new Engine.Trail(this.game, this);
-    this.data.airTrail = new Engine.AirTrail(this.game, this);
+    this.data.trail = new Trail(this.game, this);
+    this.data.airTrail = new AirTrail(this.game, this);
     this.game.add.existing(this.data.trail);
     this.game.add.existing(this.data.airTrail);
   }
 
   addMagnetEffect() {
-    this.magnetEffect = new Engine.MagnetEffect(this.game);
+    this.magnetEffect = new MagnetEffect(this.game);
     this.game.add.existing(this.magnetEffect);
   }
 
   addWings() {
-    this.wings = new Engine.Wings(this.game, this);
+    this.wings = new Wings(this.game, this);
   }
 
   update() {
@@ -174,8 +180,8 @@ class Bunny extends Phaser.Sprite {
   }
 
   addFire() {
-    this.fire = new Engine.Fire(this.game);
-    this.fire.y = this.height / Engine.scaleRatio;
+    this.fire = new Fire(this.game);
+    this.fire.y = this.height / config.scaleRatio;
     this.fire.x = this.width / 2;
     this.fire.alpha = 0;
 
@@ -191,20 +197,17 @@ class Bunny extends Phaser.Sprite {
       clearTimeout(this.magnetTimeout);
     }
 
-    this.magnetTimeout = setTimeout(
-      this.diactivateMagnet.bind(this),
-      Bunny.MAGNET_TIME
-    );
+    this.magnetTimeout = setTimeout(this.diactivateMagnet, Bunny.MAGNET_TIME);
   }
 
-  diactivateMagnet() {
+  diactivateMagnet = () => {
     this.data.magnet = false;
 
     this.magnetEffect.hide();
-  }
+  };
 
   inAir() {
-    return !bunny.body.touching.down;
+    return !this.body.touching.down;
   }
 
   die() {
@@ -213,9 +216,6 @@ class Bunny extends Phaser.Sprite {
     this.dieSound.play();
     this.playDieAnimation();
 
-    const animationDownTime = 1000;
-    const animationUpTime = 100;
-    const upMove = 100;
     const gravity = new Phaser.Point(0, 4000);
     const velocity = new Phaser.Point(0, -1200);
 
@@ -233,7 +233,7 @@ class Bunny extends Phaser.Sprite {
   }
 
   createDieAnimation() {
-    this.data.blood = new Engine.Blood(this.game, this);
+    this.data.blood = new Blood(this.game, this);
     this.game.add.existing(this.data.blood);
   }
 
@@ -248,26 +248,23 @@ class Bunny extends Phaser.Sprite {
   }
 
   createAnimation() {
-    this.animations.add('jump', [this.data.name + '_jump.png'], 1, true);
+    this.animations.add('jump', [`${this.data.name}_jump.png`], 1, true);
     this.animations.add(
       'run',
-      [this.data.name + '_walk1.png', this.data.name + '_walk2.png'],
+      [`${this.data.name}_walk1.png`, `${this.data.name}_walk2.png`],
       10,
       true
     );
-    this.animations.add('hurt', [this.data.name + '_hurt.png'], 1, true);
-    this.animations.add('ready', [this.data.name + '_ready.png'], 1, true);
-    this.animations.add('stand', [this.data.name + '_stand.png'], 1, true);
+    this.animations.add('hurt', [`${this.data.name}_hurt.png`], 1, true);
+    this.animations.add('ready', [`${this.data.name}_ready.png`], 1, true);
+    this.animations.add('stand', [`${this.data.name}_stand.png`], 1, true);
   }
 
   activateGod() {
     this.data.god = true;
 
     if (!this.data.jetPack) {
-      this.godTimeout = setTimeout(
-        this.diactivateGod.bind(this),
-        Bunny.GODMODE_TIME
-      );
+      this.godTimeout = setTimeout(this.diactivateGod, Bunny.GODMODE_TIME);
     }
 
     const animationTime = 400;
@@ -298,11 +295,11 @@ class Bunny extends Phaser.Sprite {
     }, this);
   }
 
-  diactivateGod() {
+  diactivateGod = () => {
     this.data.god = false;
 
     this.godAnimation.stop(true);
-  }
+  };
 
   jump() {
     if (this.data.isDead || this.data.jetPack) return;
@@ -311,7 +308,7 @@ class Bunny extends Phaser.Sprite {
 
     if (this.data.countJump > 0) {
       this.body.velocity.y = -jumpImpulse;
-      this.data.countJump--;
+      this.data.countJump -= 1;
       this.jumpSound.play();
     }
   }
@@ -329,5 +326,3 @@ Bunny.JETPACK_TIME = 5000;
 Bunny.MAX_VELOCITY = new Phaser.Point(400, 20000);
 Bunny.GRAVITY = new Phaser.Point(0, 2500);
 Bunny.JETPACK_VELOCITY = new Phaser.Point(40000, 20000);
-
-Engine.Bunny = Bunny;

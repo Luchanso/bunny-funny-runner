@@ -1,4 +1,7 @@
-class FlyMan extends Engine.Enemy {
+import Enemy from './enemy';
+import { config } from '../../config';
+
+export default class FlyMan extends Enemy {
   constructor(game, x, y) {
     super(game, x, y, 'flyMan_fly.png');
 
@@ -11,11 +14,12 @@ class FlyMan extends Engine.Enemy {
     const burstInterval = 100;
 
     this.smoke = this.game.add.emitter(0, 0, maxSmoke);
-    this.smoke.makeParticles(Engine.spritesheet, ['smoke.png'], maxSmoke);
+    this.smoke.makeParticles(config.spritesheet, ['smoke.png'], maxSmoke);
     this.smoke.gravity = 0;
     this.smoke.setAlpha(1, 0, 2000);
-    this.smoke.setScale(0, Engine.scaleRatio, 0, Engine.scaleRatio, 2000);
+    this.smoke.setScale(0, config.scaleRatio, 0, config.scaleRatio, 2000);
     this.smoke.forEach(item => {
+      // eslint-disable-next-line
       item.tint = 0x777777;
     });
     this.smoke.lifespan = 2000;
@@ -32,7 +36,7 @@ class FlyMan extends Engine.Enemy {
       this.smoke.emitParticle(
         this.x + this.width / 2,
         this.y + this.height / 2,
-        Engine.spritesheet,
+        config.spritesheet,
         'smoke.png'
       );
     }
@@ -93,5 +97,3 @@ class FlyMan extends Engine.Enemy {
     super.kill();
   }
 }
-
-Engine.FlyMan = FlyMan;

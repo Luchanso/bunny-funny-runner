@@ -1,9 +1,12 @@
-class Fire extends Phaser.Sprite {
-  constructor(game) {
-    super(game, 0, 0, Engine.spritesheet, 'flame.png');
+import Phaser from 'phaser';
+import { config } from '../../config';
 
-    this.width /= Engine.scaleRatio;
-    this.height /= Engine.scaleRatio;
+export default class Fire extends Phaser.Sprite {
+  constructor(game) {
+    super(game, 0, 0, config.spritesheet, 'flame.png');
+
+    this.width /= config.scaleRatio;
+    this.height /= config.scaleRatio;
 
     this.addAnimation();
   }
@@ -17,7 +20,7 @@ class Fire extends Phaser.Sprite {
   }
 
   fade(alpha) {
-    let animation = 100;
+    const animation = 100;
 
     this.game.add
       .tween(this)
@@ -31,7 +34,7 @@ class Fire extends Phaser.Sprite {
   }
 
   addAnimation() {
-    let animation = 100;
+    const animation = 100;
 
     this.game.add
       .tween(this)
@@ -60,5 +63,3 @@ class Fire extends Phaser.Sprite {
       .start();
   }
 }
-
-Engine.Fire = Fire;

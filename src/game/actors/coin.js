@@ -1,9 +1,12 @@
-class Coin extends Phaser.Sprite {
-  constructor(game, x, y, type = Coin.type.GOLD) {
-    super(game, x, y, Engine.spritesheet, type + '_1.png');
+import Phaser from 'phaser';
+import { config } from '../../config';
 
-    this.width *= Engine.scaleRatio / 1.5;
-    this.height *= Engine.scaleRatio / 1.5;
+export default class Coin extends Phaser.Sprite {
+  constructor(game, x, y, type = Coin.type.GOLD) {
+    super(game, x, y, config.spritesheet, `${type}_1.png`);
+
+    this.width *= config.scaleRatio / 1.5;
+    this.height *= config.scaleRatio / 1.5;
     this.anchor.setTo(0.5);
 
     this.autoCull = true;
@@ -13,14 +16,15 @@ class Coin extends Phaser.Sprite {
     this.data.type = type;
 
     switch (type) {
-      case Engine.Coin.type.BRONZE:
-        this.data.nominal = 1;
-        break;
-      case Engine.Coin.type.SILVER:
+      case Coin.type.SILVER:
         this.data.nominal = 4;
         break;
-      case Engine.Coin.type.GOLD:
+      case Coin.type.GOLD:
         this.data.nominal = 8;
+        break;
+      case Coin.type.BRONZE:
+      default:
+        this.data.nominal = 1;
         break;
     }
 
@@ -35,7 +39,7 @@ class Coin extends Phaser.Sprite {
   createAnimation() {
     const countCoinsFrame = 7;
 
-    let animationFrames = [];
+    const animationFrames = [];
 
     for (let i = 1; i < countCoinsFrame; i++) {
       // if (i === 4) continue
@@ -50,7 +54,7 @@ class Coin extends Phaser.Sprite {
     super.reset(x, y);
 
     this.type = type;
-    this.frame = type + '_1.png';
+    this.frame = `${type}_1.png`;
     // this.animations.currentAnim.destroy()
 
     this.createAnimation();
@@ -66,5 +70,3 @@ Coin.type = {
   SILVER: 'silver',
   BRONZE: 'bronze'
 };
-
-Engine.Coin = Coin;

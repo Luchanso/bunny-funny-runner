@@ -1,0 +1,22 @@
+{
+  "frames": [
+    {
+      "filename": "unmute",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      }
+    },
+    {
+      "filename": "mute",
+      "frame": {
+        "x": 96,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      }
+    }
+  ]
+}

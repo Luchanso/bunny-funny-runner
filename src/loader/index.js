@@ -1,20 +1,14 @@
-class Loader extends Phaser.State {
-  constructor() {
-    super();
-  }
+import Phaser from 'phaser';
 
+export default class Loader extends Phaser.State {
   preload() {}
 
   create() {
-    if (CloudAPI) {
-      CloudAPI.play();
-    }
-
-    this.state.start('Game');
+    this.state.start('Main');
   }
 
   addProgressLabel() {
-    let style = {
+    const style = {
       font: '41px Open Sans',
       fill: '#00E676'
     };
@@ -32,5 +26,3 @@ class Loader extends Phaser.State {
     this.progressLabel.text = `Loading ${progress}% (${totalLoaded}/${totalFiles})`;
   }
 }
-
-Engine.Loader = Loader;

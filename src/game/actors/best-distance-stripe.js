@@ -1,4 +1,6 @@
-class BestDistanceStripe extends Phaser.Graphics {
+import Phaser from 'phaser';
+
+export default class BestDistanceStripe extends Phaser.Graphics {
   constructor(game, x) {
     super(game, x, -BestDistanceStripe.ANTI_MARGIN);
     this.y = this.game.world.bounds.y;
@@ -9,7 +11,7 @@ class BestDistanceStripe extends Phaser.Graphics {
   draw() {
     const width = 6;
     const height = 32;
-    const summHeight = game.world.bounds.height;
+    const summHeight = this.game.world.bounds.height;
 
     this.beginFill(0xffffff, 0.7);
 
@@ -21,5 +23,3 @@ class BestDistanceStripe extends Phaser.Graphics {
     this.endFill();
   }
 }
-
-Engine.BestDistanceStripe = BestDistanceStripe;

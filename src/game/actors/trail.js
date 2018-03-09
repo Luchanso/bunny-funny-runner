@@ -1,30 +1,34 @@
-class Trail extends Phaser.Particles.Arcade.Emitter {
+import Phaser from 'phaser';
+
+export default class Trail extends Phaser.Particles.Arcade.Emitter {
   constructor(game, follow) {
     const maxParticles = 20;
 
     super(game, 0, 0, maxParticles);
+
+    if (process.env.OPTIMIZATION) return;
 
     this.makeParticles('particles', 0, maxParticles, true);
     this.lifespan = 500;
     this.setAlpha(1, 0, this.lifespan);
     this.bounce.setTo(1);
 
-    this._particlesEmit = 2;
-    this._delayEmit = 50;
-    this._follow = follow;
+    this.particlesEmit = 2;
+    this.delayEmit = 50;
+    this.follow = follow;
 
-    this._timerEmmiting = this.game.time.create();
-    this._timerEmmiting.loop(this._delayEmit, this.emit, this);
-    this._timerEmmiting.start();
+    this.timerEmmiting = this.game.time.create();
+    this.timerEmmiting.loop(this.delayEmit, this.emit, this);
+    this.timerEmmiting.start();
   }
 
   emit() {
-    for (let i = 0; i < this._particlesEmit; i++) {
+    for (let i = 0; i < this.particlesEmit; i++) {
       const particleFrame = this.game.rnd.between(0, 4);
 
       this.emitParticle(
-        this._follow.x,
-        this._follow.y + this._follow.height / 1.1,
+        this.follow.x,
+        this.follow.y + this.follow.height / 1.1,
         'particles',
         particleFrame
       );
@@ -32,12 +36,12 @@ class Trail extends Phaser.Particles.Arcade.Emitter {
   }
 
   stopEmitt() {
-    this._timerEmmiting.pause();
+    if (process.env.OPTIMIZATION) return;
+    this.timerEmmiting.pause();
   }
 
   startEmitt() {
-    this._timerEmmiting.resume();
+    if (process.env.OPTIMIZATION) return;
+    this.timerEmmiting.resume();
   }
 }
-
-Engine.Trail = Trail;

@@ -1,5 +1,9 @@
-class NominalGenerator extends Generator {
-  constructor(game, bunny) {
+import Generator from './generator';
+import Nominal from '../../actors/nominal';
+
+export default class NominalGenerator extends Generator {
+  constructor(...props) {
+    const [game, bunny] = props;
     super(game, bunny);
   }
 
@@ -7,7 +11,7 @@ class NominalGenerator extends Generator {
     let item = this.getFirstDead();
 
     if (item == null) {
-      item = new Engine.Nominal(this.game, x, y, nominal);
+      item = new Nominal(this.game, x, y, nominal);
       this.add(item);
     } else {
       item.reset(x, y, nominal);
@@ -16,5 +20,3 @@ class NominalGenerator extends Generator {
     return item;
   }
 }
-
-Engine.Component.NominalGenerator = NominalGenerator;

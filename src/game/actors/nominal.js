@@ -1,4 +1,6 @@
-class Nominal extends Phaser.Text {
+import Phaser from 'phaser';
+
+export default class Nominal extends Phaser.Text {
   constructor(game, x, y, nominal) {
     super(game, x, y, `+${nominal}`, Nominal.getStyle(nominal));
 
@@ -12,6 +14,7 @@ class Nominal extends Phaser.Text {
   static getStyle(nominal) {
     let color;
 
+    // TODO: remove this magic (1, 4, 8)
     switch (nominal) {
       case 8:
         color = 'orange';
@@ -20,6 +23,7 @@ class Nominal extends Phaser.Text {
         color = 'silver';
         break;
       case 1:
+      default:
         color = '#CD7F32';
         break;
     }
@@ -55,7 +59,7 @@ class Nominal extends Phaser.Text {
   reset(x, y, nominal) {
     super.reset(x, y);
 
-    let style = Nominal.getStyle(nominal);
+    const style = Nominal.getStyle(nominal);
 
     this.text = `+${nominal}`;
     this.fill = style.fill;
@@ -63,5 +67,3 @@ class Nominal extends Phaser.Text {
     this.addAnimation();
   }
 }
-
-Engine.Nominal = Nominal;

@@ -1,4 +1,6 @@
-class ProgressBar extends Phaser.Graphics {
+import Phaser from 'phaser';
+
+export default class ProgressBar extends Phaser.Graphics {
   constructor(game, x, y, text, color) {
     super(game, x, y);
 
@@ -18,7 +20,7 @@ class ProgressBar extends Phaser.Graphics {
       font: '21px Open Sans'
     };
 
-    let label = new Phaser.Text(this.game, 0, -30, text, style);
+    const label = new Phaser.Text(this.game, 0, -30, text, style);
 
     this.addChild(label);
   }
@@ -86,5 +88,3 @@ class ProgressBar extends Phaser.Graphics {
 }
 
 ProgressBar.WIDTH = 500;
-
-Engine.ProgressBar = ProgressBar;

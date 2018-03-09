@@ -1,9 +1,12 @@
-class Jumper extends Phaser.Sprite {
-  constructor(game, x, y) {
-    super(game, x, y, Engine.spritesheet, 'spring_in.png');
+import Phaser from 'phaser';
+import { config } from '../../config';
 
-    this.width *= Engine.scaleRatio;
-    this.height *= Engine.scaleRatio;
+export default class Jumper extends Phaser.Sprite {
+  constructor(game, x, y) {
+    super(game, x, y, config.spritesheet, 'spring_in.png');
+
+    this.width *= config.scaleRatio;
+    this.height *= config.scaleRatio;
 
     this.anchor.setTo(0, 1);
 
@@ -31,5 +34,3 @@ class Jumper extends Phaser.Sprite {
     this.animations.play('in');
   }
 }
-
-Engine.Jumper = Jumper;

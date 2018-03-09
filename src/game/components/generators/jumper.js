@@ -1,29 +1,33 @@
-class JumperGenerator extends Engine.Component.Generator {
+import Phaser from 'phaser';
+import Generator from './generator';
+import Jumper from '../../actors/jumper';
+
+export default class JumperGenerator extends Generator {
   constructor(game, bunny, grounds) {
     super(game, bunny);
 
     this.grounds = grounds;
     this.grounds.signals.generate.add(this.generate, this);
 
-    this.prototype = new Engine.Jumper(this.game, 0, 0);
+    this.prototype = new Jumper(this.game, 0, 0);
   }
 
   generate(ground) {
     const absoluteY = this.game.world.height - this.game.height + ground.y;
 
-    if (absoluteY < JumperGenerator.MIN_HEIGHT) return;
-    if (!Phaser.Utils.chanceRoll(15)) return;
+    if (absoluteY < JumperGenerator.MIN_HEIGHT) return null;
+    if (!Phaser.Utils.chanceRoll(15)) return null;
 
     const x = this.game.rnd.between(
       ground.x,
       ground.x + ground.width - this.prototype.width
     );
-    const y = ground.y;
+    const { y } = ground;
 
     let jumper = this.getFirstDead();
 
     if (jumper == null) {
-      jumper = new Engine.Jumper(this.game, x, y);
+      jumper = new Jumper(this.game, x, y);
       this.add(jumper);
     } else {
       jumper.reset(x, y);
@@ -38,5 +42,3 @@ class JumperGenerator extends Engine.Component.Generator {
  * @type {[type]}
  */
 JumperGenerator.MIN_HEIGHT = 750;
-
-Engine.Component.JumperGenerator = JumperGenerator;

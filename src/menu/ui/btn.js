@@ -1,4 +1,6 @@
-class Btn extends Phaser.Graphics {
+import Phaser from 'phaser';
+
+export default class Btn extends Phaser.Graphics {
   constructor(game, x, y, color, icon) {
     super(game, x, y);
 
@@ -40,7 +42,7 @@ class Btn extends Phaser.Graphics {
       );
     }
 
-    let tween = this.game.add
+    const tween = this.game.add
       .tween(this)
       .to(
         {
@@ -67,5 +69,3 @@ class Btn extends Phaser.Graphics {
     tween.onUpdateCallback(this.draw, this);
   }
 }
-
-Engine.Btn = Btn;

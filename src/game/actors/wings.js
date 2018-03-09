@@ -1,4 +1,7 @@
-class Wings extends Phaser.Group {
+import Phaser from 'phaser';
+import Wing from './wing';
+
+export default class Wings extends Phaser.Group {
   constructor(game, bunny) {
     const wingsOffset = 35;
 
@@ -10,12 +13,13 @@ class Wings extends Phaser.Group {
     this.alpha = 0;
     this.bunny = bunny;
 
-    this.leftWing = new Engine.Wing(this.game, 'wing_left.png');
-    this.rightWing = new Engine.Wing(this.game, 'wing_right.png');
+    this.leftWing = new Wing(this.game, 'wing_left.png');
+    this.rightWing = new Wing(this.game, 'wing_right.png');
 
     this.leftWing.x = this.bunny.width / 2 - wingsOffset;
     this.rightWing.x = this.bunny.width / 2 + wingsOffset;
-    this.rightWing.y = this.leftWing.y = this.bunny.height / 2;
+    this.rightWing.y = this.bunny.height / 2;
+    this.leftWing.y = this.bunny.height / 2;
 
     this.leftWing.anchor.setTo(1, 0.611);
     this.rightWing.anchor.setTo(0, 0.611);
@@ -57,12 +61,10 @@ class Wings extends Phaser.Group {
       .tween(this)
       .to(
         {
-          alpha: alpha
+          alpha
         },
         time
       )
       .start();
   }
 }
-
-Engine.Wings = Wings;

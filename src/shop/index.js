@@ -1,8 +1,6 @@
-class Shop extends Phaser.State {
-  constructor() {
-    super();
-  }
+import Phaser from 'phaser';
 
+export default class Shop extends Phaser.State {
   create() {
     this.game.stage.backgroundColor = 0xbf360c;
 
@@ -32,5 +30,3 @@ class Shop extends Phaser.State {
       .start();
   }
 }
-
-Engine.Shop = Shop;

@@ -1,11 +1,16 @@
-class BestDistance {
+import Service from '../../service';
+import Score from '../../service/score';
+import BestDistanceStripe from './best-distance-stripe';
+
+export default class BestDistance {
   constructor(game) {
-    this.score = Engine.Service.get('Score');
+    this.score = Service.get('Score');
 
     if (this.score.bestDistance === 0) return;
 
     this.game = game;
-    this.x = this.score.bestDistance * Engine.Score.MULTIPER_DISTANCE;
+    // TODO: Разобраться что тут происходит
+    this.x = this.score.bestDistance * Score.MULTIPER_DISTANCE;
 
     this.createLabel();
     this.createStripe();
@@ -31,9 +36,7 @@ class BestDistance {
   }
 
   createStripe() {
-    this.stripe = new Engine.BestDistanceStripe(this.game, this.x);
+    this.stripe = new BestDistanceStripe(this.game, this.x);
     this.game.add.existing(this.stripe);
   }
 }
-
-Engine.BestDistance = BestDistance;

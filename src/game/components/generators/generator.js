@@ -1,4 +1,6 @@
-class Generator extends Phaser.Group {
+import Phaser from 'phaser';
+
+export default class Generator extends Phaser.Group {
   constructor(game, bunny) {
     super(game);
 
@@ -29,6 +31,3 @@ class Generator extends Phaser.Group {
     });
   }
 }
-
-Engine.Component = {};
-Engine.Component.Generator = Generator;

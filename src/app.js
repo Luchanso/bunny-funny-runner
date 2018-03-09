@@ -1,15 +1,22 @@
-Engine.game = new Phaser.Game(Engine.width, Engine.height, Phaser.AUTO);
+import './init';
+import './fix';
+// eslint-disable-next-line
+import { Game, AUTO } from 'phaser';
+import { config } from './config';
 
-Engine.game.state.add('Boot', Engine.Boot);
-Engine.game.state.add('Game', Engine.Game);
-// Engine.game.state.add('Menu', Engine.Menu)
-Engine.game.state.add('Shop', Engine.Shop);
-Engine.game.state.add('Settings', Engine.Settings);
-Engine.game.state.add('Loader', Engine.Loader);
+import Boot from './boot';
+import Main from './game';
+import Shop from './shop';
+import Settings from './settings';
+import Loader from './loader';
 
-Engine.game.state.start('Boot');
+const game = new Game(config.width, config.height, AUTO);
 
-CloudAPI.init({
-  id: 291,
-  splash: false
-});
+game.state.add('Boot', Boot);
+game.state.add('Main', Main);
+// game.state.add('Menu', Menu);
+game.state.add('Shop', Shop);
+game.state.add('Settings', Settings);
+game.state.add('Loader', Loader);
+
+game.state.start('Boot');

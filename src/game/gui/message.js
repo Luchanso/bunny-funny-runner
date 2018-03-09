@@ -1,4 +1,6 @@
-class Message extends Phaser.Text {
+import Phaser from 'phaser';
+
+export default class Message extends Phaser.Text {
   constructor(game, x, y, text) {
     const style = {
       fill: 'white',
@@ -23,7 +25,7 @@ class Message extends Phaser.Text {
   }
 
   animate(alpha, animationTime = 300) {
-    let tween = this.game.add.tween(this).to({ alpha }, animationTime);
+    const tween = this.game.add.tween(this).to({ alpha }, animationTime);
 
     if (this.tween && this.tween.isRunning) {
       this.tween.chain(tween);
@@ -33,5 +35,3 @@ class Message extends Phaser.Text {
     }
   }
 }
-
-Engine.Message = Message;

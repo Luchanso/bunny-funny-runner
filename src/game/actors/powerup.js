@@ -1,11 +1,14 @@
-class PowerUp extends Phaser.Sprite {
+import Phaser from 'phaser';
+import { config } from '../../config';
+
+export default class PowerUp extends Phaser.Sprite {
   constructor(game, x, y, type = PowerUp.type.MAGNET) {
-    super(game, x, y, Engine.spritesheet, type);
+    super(game, x, y, config.spritesheet, type);
 
     const customRatio = 0.25;
 
-    this.width *= Engine.scaleRatio + customRatio;
-    this.height *= Engine.scaleRatio + customRatio;
+    this.width *= config.scaleRatio + customRatio;
+    this.height *= config.scaleRatio + customRatio;
 
     this.type = type;
 
@@ -28,5 +31,3 @@ PowerUp.type = {
   WINGS: 'powerup_wings.png',
   JETPACK: 'powerup_jetpack.png'
 };
-
-Engine.PowerUp = PowerUp;

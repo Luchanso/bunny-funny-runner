@@ -6,8 +6,10 @@
   "scripts": {
     "snyk-protect": "snyk protect",
     "precommit": "lint-staged",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "gulp",
-    "build": "webpack",
+    "build": "NODE_ENV=production webpack",
     "dev": "webpack-dev-server"
   },
   "keywords": [
@@ -50,6 +52,7 @@
     "eslint-plugin-import": "^2.9.0",
     "expose-loader": "^0.7.4",
     "file-loader": "^1.1.11",
+    "gh-pages": "^1.1.0",
     "html-webpack-plugin": "^3.0.6",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",

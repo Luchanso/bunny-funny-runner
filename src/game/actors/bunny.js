@@ -17,14 +17,15 @@ export default class Bunny extends Phaser.Sprite {
     this.data.running = false;
     this.data.jetPack = false;
     this.data.countJump = Bunny.MAX_JUMPS;
+    this.data.isWingActive = false;
 
     this.game.physics.arcade.enable([this]);
 
     this.width *= config.scaleRatio;
     this.height *= config.scaleRatio;
 
-    this.body.gravity = { ...Bunny.GRAVITY };
-    this.body.maxVelocity = { ...Bunny.MAX_VELOCITY };
+    this.body.gravity = Bunny.GRAVITY.clone();
+    this.body.maxVelocity = Bunny.MAX_VELOCITY.clone();
     this.body.collideWorldBounds = true;
 
     this.onDied = new Phaser.Signal();
@@ -54,7 +55,7 @@ export default class Bunny extends Phaser.Sprite {
     this.data.trail.stopEmitt();
 
     this.body.velocity.setTo(0);
-    this.body.maxVelocity = { ...Bunny.JETPACK_VELOCITY };
+    this.body.maxVelocity = Bunny.JETPACK_VELOCITY.clone();
     this.body.gravity.setTo(0, 0);
 
     this.jetPackSprite.alpha = 1;
@@ -89,7 +90,7 @@ export default class Bunny extends Phaser.Sprite {
     tween.onComplete.add(() => {
       this.data.jetPack = false;
       this.data.trail.startEmitt();
-      this.body.gravity = { ...Bunny.GRAVITY };
+      this.body.gravity = Bunny.GRAVITY.clone();
 
       this.body.velocity.setTo(Bunny.BASE_MAX_SPEED, 0);
       this.body.acceleration.setTo(Bunny.ACCELERATION, 0);
@@ -113,11 +114,12 @@ export default class Bunny extends Phaser.Sprite {
   };
 
   activateWings() {
-    const wingsJumps = 100;
+    // const wingsJumps = 100;
 
     this.wings.show();
 
-    this.data.countJump = wingsJumps;
+    // this.data.countJump = wingsJumps;
+    this.data.isWingActive = true;
 
     if (this.wingTimeout != null) {
       clearTimeout(this.wingTimeout);
@@ -130,6 +132,7 @@ export default class Bunny extends Phaser.Sprite {
 
   diactivateWings = () => {
     this.data.countJump = Bunny.BASE_MAX_JUMPS;
+    this.data.isWingActive = false;
 
     this.wings.hide();
   };
@@ -263,14 +266,18 @@ export default class Bunny extends Phaser.Sprite {
   activateGod() {
     this.data.god = true;
 
+    if (this.godTimeout) {
+      clearTimeout(this.godTimeout);
+    }
+
     if (!this.data.jetPack) {
       this.godTimeout = setTimeout(this.diactivateGod, Bunny.GODMODE_TIME);
     }
 
     const animationTime = 400;
 
-    if (this.godAnimation) {
-      this.godAnimation.stop(true);
+    if (this.godAnimation && this.godAnimation.isRunning) {
+      this.godAnimation.stop();
     }
 
     this.godAnimation = this.game.add
@@ -292,7 +299,7 @@ export default class Bunny extends Phaser.Sprite {
 
     this.godAnimation.onComplete.add(() => {
       this.alpha = 1;
-    }, this);
+    });
   }
 
   diactivateGod = () => {
@@ -306,7 +313,7 @@ export default class Bunny extends Phaser.Sprite {
 
     const jumpImpulse = 900;
 
-    if (this.data.countJump > 0) {
+    if (this.data.countJump > 0 || this.data.isWingActive) {
       this.body.velocity.y = -jumpImpulse;
       this.data.countJump -= 1;
       this.jumpSound.play();

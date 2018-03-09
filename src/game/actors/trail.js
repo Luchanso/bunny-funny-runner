@@ -6,6 +6,8 @@ export default class Trail extends Phaser.Particles.Arcade.Emitter {
 
     super(game, 0, 0, maxParticles);
 
+    if (process.env.OPTIMIZATION) return;
+
     this.makeParticles('particles', 0, maxParticles, true);
     this.lifespan = 500;
     this.setAlpha(1, 0, this.lifespan);
@@ -34,10 +36,12 @@ export default class Trail extends Phaser.Particles.Arcade.Emitter {
   }
 
   stopEmitt() {
+    if (process.env.OPTIMIZATION) return;
     this.timerEmmiting.pause();
   }
 
   startEmitt() {
+    if (process.env.OPTIMIZATION) return;
     this.timerEmmiting.resume();
   }
 }

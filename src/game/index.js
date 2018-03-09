@@ -603,6 +603,10 @@ export default class Game extends Phaser.State {
   }
 
   createBackground() {
+    if (process.env.OPTIMIZATION) {
+      return;
+    }
+
     this.backgrounds = this.add.group();
 
     this.backgrounds.add(new Background(this.game, 0, 0, 'layer2', -0.05));

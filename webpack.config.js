@@ -6,6 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // const phaserModulePath = path.join(__dirname, '/node_modules/phaser/');
 const { NODE_ENV = 'development' } = process.env;
+const OPTIMIZATION = !!process.env.OPTIMIZATION || false;
 
 module.exports = {
   entry: [packageJSON.main],
@@ -77,7 +78,8 @@ module.exports = {
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify(NODE_ENV)
+      'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+      'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION)
     }),
     new CleanWebpackPlugin(['build'])
   ]

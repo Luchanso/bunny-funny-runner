@@ -21,6 +21,7 @@ import CoinCounter from './gui/coin-counter';
 import Ground from './actors/ground';
 import Background from '../common/actors/background';
 import Score from '../service/score';
+import LoseModal from './gui/lose-modal';
 
 import spritesheetImg from './assets/spritesheet/jumper.png';
 import spritesheetXML from './assets/spritesheet/jumper.xml';
@@ -115,6 +116,8 @@ export default class Game extends Phaser.State {
     this.createStartLabel();
     this.createBestDistance();
     this.createNominals();
+
+    this.createLoseModal();
     this.createSoundControll();
   }
 
@@ -199,6 +202,12 @@ export default class Game extends Phaser.State {
         this.unmute();
       }
     });
+  }
+
+  createLoseModal() {
+    this.loseModal = new LoseModal(this.game, 0, 0);
+    this.loseModal.visible = false;
+    this.game.add.existing(this.loseModal);
   }
 
   mute() {
@@ -413,9 +422,8 @@ export default class Game extends Phaser.State {
   }
 
   lose() {
-    this.loseLabel.show();
-
-    // this.addButtonMore();
+    // this.loseLabel.show();
+    this.loseModal.visible = true;
 
     // TODO: Need incapsulation
     if (this.score.bestDistance < this.score.currentDistance) {
@@ -450,6 +458,7 @@ export default class Game extends Phaser.State {
     return 'Touch the screen';
   }
 
+  // TODO: remove it
   createLoseLabel() {
     this.loseLabel = new Message(
       this.game,

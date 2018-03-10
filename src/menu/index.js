@@ -33,7 +33,7 @@ export default class Menu extends Phaser.State {
   createLogo() {
     const style = {
       font: '50px Open Sans',
-      fill: '#91d4fa'
+      fill: 'white'
     };
 
     this.logo = this.add.text(

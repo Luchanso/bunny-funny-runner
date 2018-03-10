@@ -11,6 +11,7 @@ export default class Btn extends Phaser.Graphics {
     this.addChild(this.icon);
 
     this.inputEnabled = true;
+    this.input.useHandCursor = true;
     this.events.onInputDown.add(this.click, this);
 
     this.radius = this.icon.width;

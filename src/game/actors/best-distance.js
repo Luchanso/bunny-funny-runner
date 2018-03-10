@@ -19,7 +19,7 @@ export default class BestDistance {
   createLabel() {
     const style = {
       fill: 'white',
-      font: '26px Arial'
+      font: '26px Open Sans'
     };
     const marginLeft = 10;
     const marginTop = 150;

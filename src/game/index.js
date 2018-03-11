@@ -29,7 +29,6 @@ import layer2Img from '../common/assets/background/layer2.png';
 import layer3Img from '../common/assets/background/layer3.png';
 import layer4Img from '../common/assets/background/layer4.png';
 import tutorialImg from './assets/tutorial/2xjump-2.png';
-import btnMoreImg from './assets/ui/buttonMore.png';
 import soundControllImg from './assets/ui/soundControll.png';
 import soundControllJSON from './assets/ui/soundControll.json';
 import coinMP3 from './assets/sounds/coin.mp3';
@@ -49,7 +48,6 @@ export default class Game extends Phaser.State {
     this.load.image('layer4', layer4Img);
 
     this.load.image('tutorial', tutorialImg);
-    this.load.image('buttonMore', btnMoreImg);
 
     this.load.atlasJSONArray(
       'soundControll',
@@ -205,10 +203,18 @@ export default class Game extends Phaser.State {
   }
 
   createLoseModal() {
-    this.loseModal = new LoseModal(this.game, 0, 0);
+    this.loseModal = new LoseModal(this.game, 0, 0, this.restart, this.reset);
     this.loseModal.visible = false;
     this.game.add.existing(this.loseModal);
   }
+
+  restart = () => {
+    this.state.restart(true, false);
+  };
+
+  reset = () => {
+    // TODO: Make logic
+  };
 
   mute() {
     this.game.sound.mute = true;
@@ -409,21 +415,10 @@ export default class Game extends Phaser.State {
     this.bestDistance = new BestDistance(this.game);
   }
 
-  addButtonMore() {
-    const { camera } = this.game;
-    const marginBottom = 50;
-    const button = this.game.add.sprite(0, 0, 'buttonMore');
-
-    button.inputEnabled = true;
-    button.anchor.setTo(0.5, 1);
-    button.x = camera.x + camera.width / 2;
-    button.y = camera.y + camera.height - marginBottom;
-    button.input.useHandCursor = true;
-  }
-
   lose() {
     // this.loseLabel.show();
     this.loseModal.visible = true;
+    this.loseModal.reset(this.score.currentDistance, this.score.coins, '999');
 
     // TODO: Need incapsulation
     if (this.score.bestDistance < this.score.currentDistance) {
@@ -513,33 +508,30 @@ export default class Game extends Phaser.State {
   }
 
   addControl() {
-    const hotkey2 = this.input.keyboard.addKey(Phaser.KeyCode.Q);
-    hotkey2.onDown.add(() => {
-      this.bunny.playDieAnimation();
-    }, this);
+    const { touch, keyboard, mouse } = this.input;
+    const hotkeySpacebar = keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+    const hotkeyEnter = keyboard.addKey(Phaser.KeyCode.ENTER);
 
-    const { touch } = this.input;
-    touch.touchStartCallback = this.spacebarDown.bind(this);
+    touch.touchStartCallback = this.handleSpacebarDown;
+    mouse.mouseDownCallback = this.handleSpacebarDown;
 
-    const hotkey = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-    hotkey.onDown.add(this.spacebarDown, this);
-
-    // let mouse = this.input.mouse
-    // mouse.mouseDownCallback = () => {
-    //   this.spacebarDown()
-    // }
+    hotkeySpacebar.onDown.add(this.handleSpacebarDown);
+    hotkeyEnter.onDown.add(this.handleEnterDown);
   }
 
-  spacebarDown() {
-    if (this.bunny.data.isDead) {
-      this.state.restart(true, false);
-    }
+  handleSpacebarDown = () => {
     if (this.bunny.data.running) {
       this.bunny.jump();
     } else {
       this.start();
     }
-  }
+  };
+
+  handleEnterDown = () => {
+    if (this.bunny.data.isDead) {
+      this.state.restart(true, false);
+    }
+  };
 
   createStartGround() {
     const marginBottom = 250;

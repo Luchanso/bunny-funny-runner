@@ -1,7 +1,13 @@
 import Phaser from 'phaser';
 
+import imgReplay from '../common/assets/icons/replay.png';
+import imgPlay from '../common/assets/icons/play.png';
+
 export default class Loader extends Phaser.State {
-  preload() {}
+  preload() {
+    this.load.image('replay', imgReplay);
+    this.load.image('play', imgPlay);
+  }
 
   create() {
     this.state.start('Menu');

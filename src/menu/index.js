@@ -15,8 +15,8 @@ export default class Menu extends Phaser.State {
     this.load.image('layer2', layer2Img);
     this.load.image('layer3', layer3Img);
     this.load.image('layer4', layer4Img);
+    // TODO: remove duplication
     this.load.image('i-play', playImg);
-    // this.load.image('i-settings', 'assets/sprites/icons/settings.png');
     this.load.image('i-shop', shopImg);
   }
 

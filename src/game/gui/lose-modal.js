@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
-import Button from '../../common/gui/button';
+
+const formatLabelScoreText = (distance, coins, rank) =>
+  `Coins: ${coins}\nDistance: ${distance} m.\nRank: ${rank}`;
 
 export default class LoseModal extends Phaser.Sprite {
-  constructor(game, distance, coins) {
+  constructor(game, distance, coins, onRestart = () => {}, onReset = () => {}) {
     super(game, 0, 0);
 
     this.data = {
@@ -12,20 +14,25 @@ export default class LoseModal extends Phaser.Sprite {
     };
     this.fixedToCamera = true;
 
+    this.onReset = onReset;
+    this.onRestart = onRestart;
+
+    this.drawBackground();
+
     this.createLabelInfo();
     this.createLabelHint();
     this.createButtons();
   }
 
-  reset(distance, coins) {
+  reset(distance, coins, rank) {
     const data = {
       distance,
-      coins
+      coins,
+      rank
     };
     this.data = data;
 
-    this.labelDistance.setText(data.distance);
-    this.labelCoins.setText(data.coins);
+    this.labelScore.setText(formatLabelScoreText(distance, coins, rank));
   }
 
   drawBackground() {
@@ -33,11 +40,7 @@ export default class LoseModal extends Phaser.Sprite {
     const { width, height } = game;
     const bitmap = new Phaser.BitmapData(width, height);
 
-    const gradient = bitmap.context.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, '#ade6ff');
-    gradient.addColorStop(1, '#c6edff');
-
-    bitmap.context.fillStyle = gradient;
+    bitmap.context.fillStyle = 'rgba(0, 0, 0, 0.6)';
     bitmap.context.fillRect(0, 0, width, height);
 
     const sprite = new Phaser.Sprite(game, 0, 0, bitmap);
@@ -49,29 +52,26 @@ export default class LoseModal extends Phaser.Sprite {
 
   createButtons() {
     const { game } = this;
-    const btnWidth = 150;
-    const btnPositionY = 400;
-    const paddingCenter = 200;
+    const btnPositionY = 375;
+    const paddingCenter = 100;
 
-    const restartBtn = new Button(
+    const restartBtn = new Phaser.Button(
+      game,
+      game.width / 2 + paddingCenter,
+      btnPositionY,
+      'play',
+      this.onRestart
+    );
+    const resetBtn = new Phaser.Button(
       game,
       game.width / 2 - paddingCenter,
       btnPositionY,
-      'Restart',
-      this.handleClickRestart,
-      btnWidth
-    );
-    const resetBtn = new Button(
-      game,
-      game.width / 2,
-      btnPositionY,
-      'Reset',
-      this.handleClickReset,
-      btnWidth
+      'replay',
+      this.onReset
     );
 
-    // restartBtn.anchor.setTo(0.5);
-    // resetBtn.anchor.setTo(0.5);
+    restartBtn.anchor.setTo(0.5);
+    resetBtn.anchor.setTo(0.5);
 
     this.addChild(restartBtn);
     this.addChild(resetBtn);
@@ -81,16 +81,16 @@ export default class LoseModal extends Phaser.Sprite {
     this.labelHint = this.createLabel(
       this.game.width / 2,
       500,
-      'Press Spacebar to restart'
+      'Or press enter to restart'
     );
   }
 
   createLabelInfo() {
     const { coins, distance, rank } = this.data;
-    this.labelCoins = this.createLabel(
+    this.labelScore = this.createLabel(
       this.game.width / 2,
       200,
-      `Coins: ${coins}\nDistance: ${distance} m.\nRank: ${rank}`
+      formatLabelScoreText(distance, coins, rank)
     );
   }
 
@@ -102,11 +102,11 @@ export default class LoseModal extends Phaser.Sprite {
       align: 'center'
     };
 
-    const labelDistance = new Phaser.Text(game, x, y, text, style);
-    labelDistance.setShadow(0, 2, 'rgba(0, 0, 0, 0.2)', 6);
-    labelDistance.anchor.setTo(0.5);
+    const label = new Phaser.Text(game, x, y, text, style);
+    label.setShadow(0, 2, 'rgba(0, 0, 0, 0.2)', 6);
+    label.anchor.setTo(0.5);
 
-    return this.addChild(labelDistance);
+    return this.addChild(label);
   }
 
   handleClickReset() {}

@@ -57,16 +57,16 @@ export default class LoseModal extends Phaser.Sprite {
 
     const restartBtn = new Phaser.Button(
       game,
-      game.width / 2 + paddingCenter,
+      game.width / 2 - paddingCenter,
       btnPositionY,
-      'play',
+      'replay',
       this.onRestart
     );
     const resetBtn = new Phaser.Button(
       game,
-      game.width / 2 - paddingCenter,
+      game.width / 2 + paddingCenter,
       btnPositionY,
-      'replay',
+      'play',
       this.onReset
     );
 

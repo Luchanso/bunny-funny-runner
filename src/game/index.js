@@ -213,6 +213,7 @@ export default class Game extends Phaser.State {
   };
 
   reset = () => {
+    this.bunny.reset(500, 500);
     // TODO: Make logic
   };
 

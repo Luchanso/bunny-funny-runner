@@ -213,6 +213,13 @@ export default class Bunny extends Phaser.Sprite {
     return !this.body.touching.down;
   }
 
+  reset(x, y) {
+    super.reset(x, y);
+    this.body.gravity.setTo(0, 0);
+    this.body.velocity.setTo(0, 0);
+    this.data.isDead = false;
+  }
+
   die() {
     if (this.data.isDead) return;
 

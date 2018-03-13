@@ -13,3 +13,22 @@ git clone https://github.com/Luchanso/bunny-funny-runner
 cd bunny-funny-runner
 npm install
 npm run build
+
+
+WIP: DB Structure
+Casandra
+  > User Data
+    - id (Primary, Index)
+    - coins
+    - distance
+    - game data
+  > Score
+    - id Array
+    - distance (Index)
+    - timestemp
+
+ 342 Loshadka
+  343 Nagibatro228
+   344 Me
+  345 Anonimus
+ 346 Durov

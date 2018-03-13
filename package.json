@@ -8,7 +8,6 @@
     "precommit": "lint-staged",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "gulp",
     "build": "webpack",
     "dev": "webpack-dev-server"
   },
@@ -21,13 +20,6 @@
   "dependencies": {
     "babel-eslint": "^8.2.2",
     "dat.gui": "^0.7.1",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-concat": "^2.6.0",
-    "gulp-connect": "^5.0.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^2.0.0",
-    "gulp-watch": "^4.3.9",
     "phaser": "^2.6.2"
   },
   "lint-staged": {

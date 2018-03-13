@@ -4,7 +4,7 @@ const formatLabelScoreText = (distance, coins, rank) =>
   `Coins: ${coins}\nDistance: ${distance} m.\nRank: ${rank}`;
 
 export default class LoseModal extends Phaser.Sprite {
-  constructor(game, distance, coins, onRestart = () => {}, onReset = () => {}) {
+  constructor(game, distance, coins, onRestart = () => {}) {
     super(game, 0, 0);
 
     this.data = {
@@ -13,12 +13,9 @@ export default class LoseModal extends Phaser.Sprite {
       rank: 'Loading...'
     };
     this.fixedToCamera = true;
-
-    this.onReset = onReset;
     this.onRestart = onRestart;
 
     this.drawBackground();
-
     this.createLabelInfo();
     this.createLabelHint();
     this.createButtons();
@@ -53,28 +50,16 @@ export default class LoseModal extends Phaser.Sprite {
   createButtons() {
     const { game } = this;
     const btnPositionY = 375;
-    const paddingCenter = 100;
 
     const restartBtn = new Phaser.Button(
       game,
-      game.width / 2 - paddingCenter,
-      btnPositionY,
-      'replay',
-      this.onRestart
-    );
-    const resetBtn = new Phaser.Button(
-      game,
-      game.width / 2 + paddingCenter,
+      game.width / 2,
       btnPositionY,
       'play',
-      this.onReset
+      this.onRestart
     );
-
     restartBtn.anchor.setTo(0.5);
-    resetBtn.anchor.setTo(0.5);
-
     this.addChild(restartBtn);
-    this.addChild(resetBtn);
   }
 
   createLabelHint() {

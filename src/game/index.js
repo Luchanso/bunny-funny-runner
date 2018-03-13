@@ -203,18 +203,13 @@ export default class Game extends Phaser.State {
   }
 
   createLoseModal() {
-    this.loseModal = new LoseModal(this.game, 0, 0, this.restart, this.reset);
+    this.loseModal = new LoseModal(this.game, 0, 0, this.restart);
     this.loseModal.visible = false;
     this.game.add.existing(this.loseModal);
   }
 
   restart = () => {
     this.state.restart(true, false);
-  };
-
-  reset = () => {
-    this.bunny.reset(500, 500);
-    // TODO: Make logic
   };
 
   mute() {

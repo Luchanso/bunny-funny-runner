@@ -8,6 +8,7 @@ export const runVKAds = () => {
     };
     function vkAdsInit() {
       VK.Widgets.Ads('vk_ads_102296', {}, adsParams);
+      console.log('vk ads runned');
     }
     if (window.VK && VK.Widgets) {
       vkAdsInit();

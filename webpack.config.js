@@ -6,7 +6,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // const phaserModulePath = path.join(__dirname, '/node_modules/phaser/');
 const { NODE_ENV = 'development' } = process.env;
-const OPTIMIZATION = !!process.env.OPTIMIZATION || false;
+const OPTIMIZATION = !!process.env.OPTIMIZATION;
+const IS_VK = !!process.env.IS_VK;
 
 module.exports = {
   entry: [packageJSON.main],
@@ -87,7 +88,8 @@ module.exports = {
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-      'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION)
+      'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION),
+      'process.env.IS_VK': JSON.stringify(IS_VK)
     }),
     new CleanWebpackPlugin(['build']),
   ],

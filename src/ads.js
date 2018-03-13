@@ -4,7 +4,9 @@ export const runVKAds = () => {
   setTimeout(function() {
     var adsParams = {
       ad_unit_id: 102296,
-      ad_unit_hash: 'cd03259b32fb224628362b0fdabb4254'
+      ad_unit_hash: 'cd03259b32fb224628362b0fdabb4254',
+      // TODO: remove it,
+      preview: 1 // Test ADS from vk
     };
     function vkAdsInit() {
       VK.Widgets.Ads('vk_ads_102296', {}, adsParams);

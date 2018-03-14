@@ -1,0 +1,12 @@
+language: node_js
+node_js: lts
+cache:
+  yarn: true
+  timeout: 1000
+
+jobs:
+  include:
+    - stage: build
+      script: yarn build
+      on:
+        branch: master

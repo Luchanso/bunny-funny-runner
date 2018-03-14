@@ -2,22 +2,11 @@ import Phaser from 'phaser';
 import { config } from '../config';
 import Btn from './ui/btn';
 import Background from '../common/actors/background';
-
-import layer2Img from '../common/assets/background/layer2.png';
-import layer3Img from '../common/assets/background/layer3.png';
-import layer4Img from '../common/assets/background/layer4.png';
-
-import playImg from '../common/assets/icons/play.png';
-import shopImg from '../common/assets/icons/shop.png';
+import preload from './preload';
 
 export default class Menu extends Phaser.State {
   preload() {
-    this.load.image('layer2', layer2Img);
-    this.load.image('layer3', layer3Img);
-    this.load.image('layer4', layer4Img);
-    // TODO: remove duplication
-    this.load.image('i-play', playImg);
-    this.load.image('i-shop', shopImg);
+    preload(this.load);
   }
 
   create() {

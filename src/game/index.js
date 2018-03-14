@@ -22,45 +22,11 @@ import Ground from './actors/ground';
 import Background from '../common/actors/background';
 import Score from '../service/score';
 import LoseModal from './gui/lose-modal';
-
-import spritesheetImg from './assets/spritesheet/jumper.png';
-import spritesheetXML from './assets/spritesheet/jumper.xml';
-import layer2Img from '../common/assets/background/layer2.png';
-import layer3Img from '../common/assets/background/layer3.png';
-import layer4Img from '../common/assets/background/layer4.png';
-import tutorialImg from './assets/tutorial/2xjump-2.png';
-import soundControllImg from './assets/ui/soundControll.png';
-import soundControllJSON from './assets/ui/soundControll.json';
-import coinMP3 from './assets/sounds/coin.mp3';
-import coinOGG from './assets/sounds/coin.ogg';
-import jumpMP3 from './assets/sounds/jump.mp3';
-import jumpOGG from './assets/sounds/jump.ogg';
-import loseMP3 from './assets/sounds/lose.mp3';
-import loseOGG from './assets/sounds/lose.ogg';
-import particlesImg from './assets/sprites/particles.png';
+import preload from './preload';
 
 export default class Game extends Phaser.State {
   preload() {
-    this.load.atlasXML(config.spritesheet, spritesheetImg, spritesheetXML);
-
-    this.load.image('layer2', layer2Img);
-    this.load.image('layer3', layer3Img);
-    this.load.image('layer4', layer4Img);
-
-    this.load.image('tutorial', tutorialImg);
-
-    this.load.atlasJSONArray(
-      'soundControll',
-      soundControllImg,
-      null,
-      soundControllJSON
-    );
-
-    this.load.audio('lose', [loseMP3, loseOGG]);
-    this.load.audio('coin', [coinMP3, coinOGG]);
-    this.load.audio('jump', [jumpMP3, jumpOGG]);
-
-    this.load.spritesheet('particles', particlesImg, 8, 8);
+    preload(this.load);
   }
 
   init() {

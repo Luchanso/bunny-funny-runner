@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
+import { config } from '../config';
 
 export default class Shop extends Phaser.State {
   create() {
-    this.game.stage.backgroundColor = 0xbf360c;
+    this.game.stage.backgroundColor = config.backgroundColor;
 
     this.createHeadLabel();
   }
@@ -10,7 +11,7 @@ export default class Shop extends Phaser.State {
   createHeadLabel() {
     const margin = 100;
     const animation = 400;
-    const text = 'BUY MORE COINS 💰';
+    const text = 'Unicorne Shop 🦄';
     const style = {
       font: '41px Open Sans',
       fill: 'white'

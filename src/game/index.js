@@ -33,7 +33,6 @@ export default class Game extends Phaser.State {
     this.distanceBetweenGrounds = 1285 * config.scaleRatio;
 
     this.score = Service.get('Score');
-    this.score.coins = 0;
 
     this.paddingLeftCamera = 200;
 

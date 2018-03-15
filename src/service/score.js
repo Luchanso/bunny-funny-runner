@@ -1,55 +1,66 @@
 import Phaser from 'phaser';
+import Service from './service';
+
+const SCORE_STORAGE_KEY = 'score.data';
 
 export default class Score {
   constructor() {
-    this.pBestDistance = 0;
     this.pCurrentDistance = 0;
     this.pCoins = 0;
+    this.data = {
+      coins: 0,
+      currentDistance: 0,
+      bestDistance: 0
+    };
 
     this.load();
+
     this.onUpdate = new Phaser.Signal();
     this.updateCoins = new Phaser.Signal();
   }
 
-  save() {
-    window.localStorage.bestDistance = this.pBestDistance.toString();
+  async save() {
+    const Storage = await Service.asyncGet('Storage');
+    Storage.save(SCORE_STORAGE_KEY, this.data);
   }
 
-  load() {
-    this.pBestDistance =
-      Number.parseInt(window.localStorage.bestDistance, 10) || 0;
+  async load() {
+    const Storage = await Service.asyncGet('Storage');
+    const data = Storage.load(SCORE_STORAGE_KEY);
+    if (data) {
+      this.data = data;
+    }
   }
 
   set coins(val) {
-    this.pCoins = val;
-
+    this.data.coins = val;
     this.updateCoins.dispatch();
 
-    return this.pCoins;
+    return this.data.coins;
   }
   get coins() {
-    return this.pCoins;
+    return this.data.coins;
   }
 
   set bestDistance(val) {
-    this.pBestDistance = val;
+    this.data.bestDistance = val;
     this.onUpdate.dispatch();
     this.save();
 
-    return this.pBestDistance;
+    return this.data.bestDistance;
   }
   get bestDistance() {
-    return this.pBestDistance;
+    return this.data.bestDistance;
   }
 
   set currentDistance(val) {
-    this.pCurrentDistance = val;
+    this.data.currentDistance = val;
     this.onUpdate.dispatch();
 
-    return this.pCurrentDistance;
+    return this.data.currentDistance;
   }
   get currentDistance() {
-    return this.pCurrentDistance;
+    return this.data.currentDistance;
   }
 }
 

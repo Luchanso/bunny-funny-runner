@@ -40,6 +40,7 @@ export default class CoinCounter extends Phaser.Text {
     const offsetY = this.cameraOffset.y;
 
     this.cameraOffset.setTo(offsetX, offsetY);
+    this.text = `${this.score.coins}`;
   }
 
   updateCoinsCount() {

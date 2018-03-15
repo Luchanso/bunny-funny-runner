@@ -16,11 +16,11 @@ export default class Coin extends Phaser.Sprite {
     this.data.type = type;
 
     switch (type) {
-      case Coin.type.SILVER:
-        this.data.nominal = 4;
-        break;
       case Coin.type.GOLD:
-        this.data.nominal = 8;
+        this.data.nominal = 3;
+        break;
+      case Coin.type.SILVER:
+        this.data.nominal = 2;
         break;
       case Coin.type.BRONZE:
       default:

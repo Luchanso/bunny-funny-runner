@@ -12,7 +12,6 @@ export default class Menu extends Phaser.State {
   create() {
     this.stage.backgroundColor = config.backgroundColor;
 
-    // this.createSettingsBtn();
     this.createBackground();
     this.createPlayBtn();
     this.createShopBtn();
@@ -51,28 +50,11 @@ export default class Menu extends Phaser.State {
     this.logo.anchor.setTo(0.5);
   }
 
-  createSettingsBtn() {
-    const btnColor = 0xade6ff;
-    const icon = 'i-settings';
-    const margin = 150;
-
-    this.settings = new Btn(
-      this.game,
-      this.game.width / 2 + margin,
-      this.game.height / 2,
-      btnColor,
-      icon
-    );
-    this.settings.icon.tint = 0x26c6da;
-    // this.settings.clicked.add(this.startGame, this)
-    this.add.existing(this.settings);
-  }
-
   createShopBtn() {
     const btnColor = 0xffffff;
     const icon = 'i-shop';
 
-    this.settings = new Btn(
+    this.shopBtn = new Btn(
       this.game,
       this.game.width / 2 - 100,
       this.game.height / 2,
@@ -80,8 +62,8 @@ export default class Menu extends Phaser.State {
       icon
     );
 
-    this.settings.clicked.add(this.openShop, this);
-    this.add.existing(this.settings);
+    this.shopBtn.clicked.add(this.openShop, this);
+    this.add.existing(this.shopBtn);
   }
 
   createPlayBtn() {

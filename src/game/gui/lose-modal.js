@@ -3,6 +3,8 @@ import Phaser from 'phaser';
 const formatLabelScoreText = (distance, coins, rank) =>
   `Coins: ${coins}\nDistance: ${distance} m.\nRank: ${rank}`;
 
+const CENTERAL_PADDING = 100;
+
 export default class LoseModal extends Phaser.Sprite {
   constructor(game, distance, coins, onRestart = () => {}) {
     super(game, 0, 0);
@@ -53,13 +55,25 @@ export default class LoseModal extends Phaser.Sprite {
 
     const restartBtn = new Phaser.Button(
       game,
-      game.width / 2,
+      game.width / 2 + CENTERAL_PADDING,
       btnPositionY,
       'play',
       this.onRestart
     );
+
+    const shopBtn = new Phaser.Button(
+      game,
+      game.width / 2 - CENTERAL_PADDING,
+      btnPositionY,
+      'shop',
+      this.onOpenShop
+    );
+
     restartBtn.anchor.setTo(0.5);
+    shopBtn.anchor.setTo(0.5);
+
     this.addChild(restartBtn);
+    this.addChild(shopBtn);
   }
 
   createLabelHint() {
@@ -94,7 +108,7 @@ export default class LoseModal extends Phaser.Sprite {
     return this.addChild(label);
   }
 
-  handleClickReset() {}
-
-  handleClickRestart() {}
+  onOpenShop = () => {
+    this.game.state.start('Shop');
+  };
 }

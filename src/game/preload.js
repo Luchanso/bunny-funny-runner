@@ -13,6 +13,8 @@ import jumpOGG from './assets/sounds/jump.ogg';
 import loseMP3 from './assets/sounds/lose.mp3';
 import loseOGG from './assets/sounds/lose.ogg';
 import particlesImg from './assets/sprites/particles.png';
+import shopImg from '../common/assets/icons/shop.png';
+import playImg from '../common/assets/icons/play.png';
 import { config } from '../config';
 
 const preload = load => {
@@ -34,6 +36,9 @@ const preload = load => {
   load.audio('lose', [loseMP3, loseOGG]);
   load.audio('coin', [coinMP3, coinOGG]);
   load.audio('jump', [jumpMP3, jumpOGG]);
+
+  load.image('shop', shopImg);
+  load.image('play', playImg);
 
   load.spritesheet('particles', particlesImg, 8, 8);
 };

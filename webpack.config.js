@@ -14,9 +14,23 @@ module.exports = {
   output: {
     filename: 'bundle.[hash].js',
     path: path.resolve(__dirname, 'build'),
-    chunkFilename: '[name].[hash].js',
+    chunkFilename: '[name].[chunkhash].js',
   },
   mode: NODE_ENV,
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        default: false,
+        phaser: {
+          test: /phaser/,
+          name: 'phaser',
+          chunks: 'initial',
+          minSize: 1,
+          reuseExistingChunk: true
+        }
+      }
+    }
+  },
   module: {
     rules: [
       {
@@ -45,24 +59,8 @@ module.exports = {
           }
         ]
       },
-      // {
-      //   test: require.resolve(path.join(phaserModulePath, 'build/custom/pixi.js')),
-      //   use: [{
-      //     loader: 'expose-loader',
-      //     options: 'PIXI'
-      //   }]
-      // },
-      // { test: /phaser-split\.js$/, loader: 'expose-loader?Phaser' },
-      // { test: /p2\.js/, loader: 'expose-loader?p2' },
     ],
   },
-  // resolve: {
-  //     alias: {
-  //       'phaser': path.join(phaserModulePath, 'build/custom/phaser-split.js'),
-  //       'pixi': path.join(phaserModulePath, 'build/custom/pixi.js'),
-  //       'p2': path.join(phaserModulePath, 'build/custom/p2.js')
-  //     }
-  // },
   plugins: [
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:

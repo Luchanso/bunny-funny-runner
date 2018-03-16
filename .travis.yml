@@ -9,8 +9,6 @@ jobs:
   include:
     - stage: build
       script: yarn build
-      on:
-        branch: master
 
 deploy:
   local-dir: build

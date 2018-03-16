@@ -1,6 +1,6 @@
 {
   "name": "bunny-funny-runner",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Runner about bunny",
   "main": "./src/app.js",
   "scripts": {
@@ -9,7 +9,10 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "webpack",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "new-patch": "yarn version --new-version patch",
+    "new-minor": "yarn version --new-version minor",
+    "new-major": "yarn version --new-version major"
   },
   "keywords": [
     "game",

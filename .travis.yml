@@ -4,6 +4,8 @@ cache:
   yarn: true
   timeout: 1000
 
+install: yarn install --production=false
+
 jobs:
   include:
     - stage: build

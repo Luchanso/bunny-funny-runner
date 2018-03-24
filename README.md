@@ -14,6 +14,7 @@ git clone https://github.com/Luchanso/bunny-funny-runner
 cd bunny-funny-runner
 npm install
 npm run build
+```
 
 
 WIP: DB Structure

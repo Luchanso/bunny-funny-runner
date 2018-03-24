@@ -16,6 +16,9 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     chunkFilename: '[name].[chunkhash].js'
   },
+  resolve: {
+    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx']
+  },
   mode: NODE_ENV,
   optimization: {
     splitChunks: {
@@ -28,7 +31,7 @@ module.exports = {
           minSize: 1,
           reuseExistingChunk: true
         },
-        modules: {
+        vendor: {
           test: /node_modules\/(?!phaser)/,
           name: 'vendor',
           chunks: 'initial',

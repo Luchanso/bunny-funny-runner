@@ -27,6 +27,13 @@ module.exports = {
           chunks: 'initial',
           minSize: 1,
           reuseExistingChunk: true
+        },
+        modules: {
+          test: /node_modules\/(?!phaser)/,
+          name: 'vendor',
+          chunks: 'initial',
+          minSize: 1,
+          reuseExistingChunk: true
         }
       }
     }

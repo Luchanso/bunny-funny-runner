@@ -14,7 +14,7 @@ module.exports = {
   output: {
     filename: 'bundle.[hash].js',
     path: path.resolve(__dirname, 'build'),
-    chunkFilename: '[name].[chunkhash].js',
+    chunkFilename: '[name].[chunkhash].js'
   },
   mode: NODE_ENV,
   optimization: {
@@ -41,32 +41,35 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            plugins: [
-              'transform-class-properties',
-              'syntax-dynamic-import',
-              'transform-runtime'
-            ],
-            presets: ['babel-preset-env']
+        use: [
+          require.resolve('thread-loader'),
+          {
+            loader: require.resolve('babel-loader'),
+            options: {
+              plugins: [
+                'transform-class-properties',
+                'syntax-dynamic-import',
+                'transform-runtime'
+              ],
+              presets: [require.resolve('babel-preset-env')]
+            }
           }
-        }
+        ]
       },
       {
         test: /\.(png|jpg|gif|ogg|mp3|xml)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: require.resolve('file-loader'),
             options: {
               name: '[path][name].[hash].[ext]'
             }
           }
         ]
-      },
-    ],
+      }
+    ]
   },
   plugins: [
     // Makes some environment variables available in index.html.
@@ -83,7 +86,7 @@ module.exports = {
         html5: true,
         minifyCSS: true,
         removeComments: true,
-        removeEmptyAttributes: true,
+        removeEmptyAttributes: true
       },
       template: 'public/index.html'
     }),
@@ -96,10 +99,10 @@ module.exports = {
       'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION),
       'process.env.IS_VK': JSON.stringify(IS_VK)
     }),
-    new CleanWebpackPlugin(['build']),
+    new CleanWebpackPlugin(['build'])
   ],
   devServer: {
-    contentBase: path.join(__dirname, "build"),
+    contentBase: path.join(__dirname, 'build'),
     compress: true,
     port: 3000
   }

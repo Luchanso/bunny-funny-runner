@@ -12,9 +12,10 @@ const IS_VK = !!process.env.IS_VK;
 module.exports = {
   entry: [packageJSON.main],
   output: {
-    filename: 'bundle.[hash].js',
+    filename: 'static/js/bundle.[hash].js',
     path: path.resolve(__dirname, 'build'),
-    chunkFilename: '[name].[chunkhash].js'
+    publicPath: '/',
+    chunkFilename: 'static/js/[name].[chunkhash].js'
   },
   resolve: {
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx']
@@ -105,8 +106,10 @@ module.exports = {
     new CleanWebpackPlugin(['build'])
   ],
   devServer: {
-    contentBase: path.join(__dirname, 'build'),
     compress: true,
-    port: 3000
+    port: 3000,
+    historyApiFallback: {
+      disableDotRule: true,
+    }
   }
 };

@@ -3,10 +3,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import { Route } from 'react-router';
+import { Route, Redirect, Switch } from 'react-router';
 
 import store, { history } from './store';
-import SceneSwitcher from './containers/SceneSwitcher';
+import GameScene from './components/GameScene';
+import ReactScene from './components/ReactScene';
 
 export default class App extends React.Component {
   render() {
@@ -14,8 +15,20 @@ export default class App extends React.Component {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <div>
-            <Route path="/" component={ SceneSwitcher } />
-            <Route exact path="/:platform/:scene" component={ SceneSwitcher } />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                component={() => <Redirect from="/" to="/web/boot" />}
+              />
+              <Route path="/:platform/boot" component={GameScene} />
+              <Route path="/:platform/menu" component={GameScene} />
+              <Route path="/:platform/loader" component={GameScene} />
+              <Route path="/:platform/game" component={GameScene} />
+              <Route path="/:platform/shop">
+                <ReactScene scene={'shop'} />
+              </Route>
+            </Switch>
           </div>
         </ConnectedRouter>
       </Provider>

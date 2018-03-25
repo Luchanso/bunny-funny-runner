@@ -1,6 +1,7 @@
 import React from 'react';
 import { string } from 'prop-types';
-import initGame, { SCENE } from '../../game/init';
+import initGame from '../../game/index';
+import { GAME_SCENES } from '../../model/scene';
 
 export default class GameScene extends React.Component {
   static propTypes = {
@@ -8,7 +9,7 @@ export default class GameScene extends React.Component {
   };
 
   static defaultProps = {
-    scene: SCENE.BOOT
+    scene: GAME_SCENES.BOOT
   };
 
   componentDidMount() {
@@ -16,8 +17,6 @@ export default class GameScene extends React.Component {
   }
 
   render() {
-    return (
-      <div id="game" />
-    );
+    return <div id="game" />;
   }
 }

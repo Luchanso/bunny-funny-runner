@@ -49,7 +49,6 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules)/,
         use: [
-          require.resolve('thread-loader'),
           {
             loader: require.resolve('babel-loader'),
             options: {

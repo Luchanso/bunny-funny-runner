@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import imgReplay from '../common/assets/icons/replay.png';
 import imgPlay from '../common/assets/icons/play.png';
+import { GAME_SCENES } from '../../model/scene';
 
 export default class Loader extends Phaser.State {
   preload() {
@@ -10,7 +11,7 @@ export default class Loader extends Phaser.State {
   }
 
   create() {
-    this.state.start('Menu');
+    this.state.start(GAME_SCENES.MENU);
   }
 
   addProgressLabel() {

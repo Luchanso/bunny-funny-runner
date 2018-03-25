@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { string } from 'prop-types';
+
+import { REACT_SCENES } from '../../model/scene';
+
+const SCENE_MAP = {
+  [REACT_SCENES.SHOP]: 'Shop'
+};
 
 export default class ReactScene extends React.Component {
   static propTypes = {
-    scene: string
-  };
-
-  static defaultProps = {
-    scene: ''
+    scene: string.isRequired
   };
 
   state = {
     isLoading: true
-  }
+  };
 
   componentDidMount() {
     this.initContainer();
@@ -22,9 +24,10 @@ export default class ReactScene extends React.Component {
 
   async initContainer() {
     const { scene } = this.props;
+    const ContrainerName = SCENE_MAP[scene];
 
     // TODO: Проверить на уязвимости XSS
-    this.SceneContainer = (await import(`../containers/${scene}`)).default;
+    this.SceneContainer = (await import(`../../containers/${ContrainerName}`)).default;
     this.setState({
       isLoading: false
     });
@@ -35,11 +38,11 @@ export default class ReactScene extends React.Component {
     const { isLoading } = state;
 
     return (
-      <div>
+      <Fragment>
         {/* TODO: Написать лоадер для сцены */}
-        { isLoading && <h1>Loading</h1> }
-        { !isLoading && <SceneContainer /> }
-      </div>
+        {isLoading && <h1>Loading</h1>}
+        {!isLoading && <SceneContainer />}
+      </Fragment>
     );
   }
 }

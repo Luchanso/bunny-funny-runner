@@ -3,6 +3,7 @@ import { config } from '../config';
 import Btn from './ui/btn';
 import Background from '../common/actors/background';
 import preload from './preload';
+import { GAME_SCENES, REACT_SCENES } from '../../model/scene';
 
 export default class Menu extends Phaser.State {
   preload() {
@@ -95,10 +96,10 @@ export default class Menu extends Phaser.State {
   }
 
   startGame() {
-    this.state.start('Main');
+    this.state.start(GAME_SCENES.MAIN);
   }
 
   openShop() {
-    this.state.start('Shop');
+    this.state.start(REACT_SCENES.SHOP);
   }
 }

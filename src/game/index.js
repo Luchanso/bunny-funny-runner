@@ -2,16 +2,10 @@ import './init';
 import './fix';
 import { config } from '../config';
 import { runVKAds } from './ads';
-
-export const SCENES = {
-  BOOT: 'Boot',
-  MAIN: 'Main',
-  MENU: 'Menu',
-  LOADER: 'Loader'
-};
+import { GAME_SCENES } from '../model/scene';
 
 // TODO: Start Scene не будет работать
-const init = async (startScene = SCENES.BOOT) => {
+const init = async (startScene = GAME_SCENES.BOOT) => {
   const { Game, AUTO } = await import('phaser');
 
   const game = new Game(
@@ -28,10 +22,10 @@ const init = async (startScene = SCENES.BOOT) => {
   const Loader = (await import('./loader')).default;
 
   // TODO: Можно оптимизировать, чтобы бут отображался пока всё остальное загружается
-  game.state.add(SCENES.BOOT, Boot);
-  game.state.add(SCENES.MAIN, Main);
-  game.state.add(SCENES.MENU, Menu);
-  game.state.add(SCENES.LOADER, Loader);
+  game.state.add(GAME_SCENES.BOOT, Boot);
+  game.state.add(GAME_SCENES.MAIN, Main);
+  game.state.add(GAME_SCENES.MENU, Menu);
+  game.state.add(GAME_SCENES.LOADER, Loader);
 
   game.state.start(startScene);
 

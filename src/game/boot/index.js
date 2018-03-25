@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { GAME_SCENES } from '../../model/scene';
 
 export default class Boot extends Phaser.State {
   create() {
@@ -6,6 +7,6 @@ export default class Boot extends Phaser.State {
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
 
-    this.state.start('Loader');
+    this.state.start(GAME_SCENES.LOADER);
   }
 }

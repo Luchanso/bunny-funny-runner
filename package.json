@@ -23,6 +23,7 @@
   "dependencies": {
     "dat.gui": "^0.7.1",
     "history": "^4.7.2",
+    "material-ui": "^1.0.0-beta.38",
     "phaser": "^2.6.2",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
@@ -34,7 +35,8 @@
     "redux-actions": "^2.3.0"
   },
   "lint-staged": {
-    "./src/**/*.js": [
+    "./src/**/*.(js|jsx)": [
+      "eslint",
       "prettier-eslint --write",
       "git add"
     ]
@@ -67,7 +69,6 @@
     "lint-staged": "^7.0.0",
     "prettier-eslint-cli": "^4.7.1",
     "snyk": "^1.69.10",
-    "thread-loader": "^1.1.5",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^3.1.0"

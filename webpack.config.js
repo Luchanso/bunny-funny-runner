@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const packageJSON = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // const phaserModulePath = path.join(__dirname, '/node_modules/phaser/');
 const { NODE_ENV = 'development' } = process.env;
@@ -68,20 +69,14 @@ module.exports = {
           {
             loader: require.resolve('file-loader'),
             options: {
-              name: '[path][name].[hash].[ext]'
+              name: 'static/media/[path][name].[hash].[ext]'
             }
           }
         ]
-      }
+      },
     ]
   },
   plugins: [
-    // Makes some environment variables available in index.html.
-    // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
-    // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    // In development, this will be an empty string.
-    // new InterpolateHtmlPlugin(env.raw),
-    // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
       minify: {
@@ -94,16 +89,14 @@ module.exports = {
       },
       template: 'public/index.html'
     }),
-    // Add module names to factory functions so they appear in browser profiler.
     new webpack.NamedModulesPlugin(),
-    // Makes some environment variables available to the JS code, for example:
-    // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION),
       'process.env.IS_VK': JSON.stringify(IS_VK)
     }),
-    new CleanWebpackPlugin(['build'])
+    new CleanWebpackPlugin(['build']),
+    new CopyWebpackPlugin([{ from: 'public' }])
   ],
   devServer: {
     compress: true,

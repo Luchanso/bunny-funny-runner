@@ -1,31 +1,40 @@
 import './init';
 import './fix';
-// eslint-disable-next-line
-import { Game, AUTO } from 'phaser';
 import { config } from '../config';
 import { runVKAds } from './ads';
 
-import Boot from './boot';
-import Main from './game';
-// import Shop from './shop';
-import Menu from './menu';
-import Loader from './loader';
+export const SCENES = {
+  BOOT: 'Boot',
+  MAIN: 'Main',
+  MENU: 'Menu',
+  LOADER: 'Loader'
+};
 
-const game = new Game(
-  config.width,
-  config.height,
-  AUTO,
-  document.querySelector('#game')
-);
+// TODO: Start Scene не будет работать
+const init = async (startScene = SCENES.BOOT) => {
+  const { Game, AUTO } = await import('phaser');
 
-game.state.add('Boot', Boot);
-game.state.add('Main', Main);
-game.state.add('Menu', Menu);
-game.state.add('Loader', Loader);
+  const game = new Game(
+    config.width,
+    config.height,
+    AUTO,
+    // TODO: Вынести в конфигурацию айдишник дива
+    document.querySelector('#game')
+  );
 
-game.state.start('Boot');
+  const Boot = (await import('./boot')).default;
+  const Main = (await import('./game')).default;
+  const Menu = (await import('./menu')).default;
+  const Loader = (await import('./loader')).default;
 
-const init = () => {
+  // TODO: Можно оптимизировать, чтобы бут отображался пока всё остальное загружается
+  game.state.add(SCENES.BOOT, Boot);
+  game.state.add(SCENES.MAIN, Main);
+  game.state.add(SCENES.MENU, Menu);
+  game.state.add(SCENES.LOADER, Loader);
+
+  game.state.start(startScene);
+
   // TODO: Перенести в роутер и убрать переменную окружения
   if (process.env.IS_VK) {
     runVKAds();

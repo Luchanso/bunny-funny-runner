@@ -1,5 +1,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/b6aa083dbe907b36c22e/maintainability)](https://codeclimate.com/github/Luchanso/bunny-funny-runner/maintainability)
 [![Build Status](https://travis-ci.org/Luchanso/bunny-funny-runner.svg?branch=master)](https://travis-ci.org/Luchanso/bunny-funny-runner)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Luchanso/bunny-funny-runner.svg)](https://greenkeeper.io/)
 
 Configurations:
 * Jump distance x: 280px - 560px

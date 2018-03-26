@@ -23,7 +23,7 @@
   "dependencies": {
     "babel-eslint": "^8.2.2",
     "dat.gui": "^0.7.1",
-    "phaser": "^3.3.0"
+    "phaser": "^2.6.2"
   },
   "lint-staged": {
     "./src/**/*.js": [

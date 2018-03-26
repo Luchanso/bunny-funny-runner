@@ -34,3 +34,6 @@ Casandra
    344 Me
   345 Anonimus
  346 Durov
+
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Luchanso/bunny-funny-runner.svg)](https://greenkeeper.io/)

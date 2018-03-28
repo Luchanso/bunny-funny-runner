@@ -1,4 +1,4 @@
-import {} from 'react-router-redux';
+import { push } from 'react-router-redux';
 
 export const SCENE_TYPES = {
   GAME: 'game',
@@ -16,6 +16,8 @@ export const GAME_SCENES = {
 export const REACT_SCENES = {
   SHOP: 'shop'
 };
+
+export const switchScene = scene => push(scene);
 
 export const sceneSelector = scene => {
   if (Object.values(GAME_SCENES).find(gameScene => scene === gameScene)) {

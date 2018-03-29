@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// const phaserModulePath = path.join(__dirname, '/node_modules/phaser/');
 const { NODE_ENV = 'development' } = process.env;
 const OPTIMIZATION = !!process.env.OPTIMIZATION;
 const PUBLIC_PATH = process.env.PUBLIC_PATH || packageJSON.homepage;

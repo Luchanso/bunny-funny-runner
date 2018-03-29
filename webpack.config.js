@@ -15,7 +15,7 @@ module.exports = {
   output: {
     filename: 'static/js/bundle.[hash].js',
     path: path.resolve(__dirname, 'build'),
-    publicPath: '/',
+    publicPath: packageJSON.homepage,
     chunkFilename: 'static/js/[name].[chunkhash].js'
   },
   resolve: {

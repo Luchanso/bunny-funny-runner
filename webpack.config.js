@@ -8,6 +8,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const phaserModulePath = path.join(__dirname, '/node_modules/phaser/');
 const { NODE_ENV = 'development' } = process.env;
 const OPTIMIZATION = !!process.env.OPTIMIZATION;
+const PUBLIC_PATH = process.env.PUBLIC_PATH || packageJSON.homepage;
 const IS_VK = !!process.env.IS_VK;
 
 module.exports = {
@@ -15,7 +16,7 @@ module.exports = {
   output: {
     filename: 'static/js/bundle.[hash].js',
     path: path.resolve(__dirname, 'build'),
-    publicPath: packageJSON.homepage,
+    publicPath: PUBLIC_PATH,
     chunkFilename: 'static/js/[name].[chunkhash].js'
   },
   resolve: {

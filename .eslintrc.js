@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['airbnb-base', 'prettier'],
+  extends: ['airbnb', 'prettier'],
   parser: 'babel-eslint',
   env: {
     browser: true

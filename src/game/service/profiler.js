@@ -5,7 +5,7 @@ export default class Profiler {
 
   start(name) {
     this.array[name] = {
-      start: Date.now(),
+      start: Date.now()
     };
   }
 

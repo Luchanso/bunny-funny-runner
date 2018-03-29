@@ -1,5 +1,3 @@
-// import Phaser from 'phaser';
-
 window.PIXI.DisplayObjectContainer.prototype.removeChildren = function fix(
   beginIndex,
   endIndex

@@ -5,11 +5,23 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+function ensureSlash(pathUrl, needsSlash) {
+  const hasSlash = pathUrl.endsWith('/');
+  if (hasSlash && !needsSlash) {
+    return pathUrl.substr(pathUrl, pathUrl.length - 1);
+  } else if (!hasSlash && needsSlash) {
+    return `${pathUrl}/`;
+  }
+
+  return pathUrl;
+}
+
 const { NODE_ENV = 'development' } = process.env;
 const OPTIMIZATION = !!process.env.OPTIMIZATION;
 const IS_VK = !!process.env.IS_VK;
 const IS_DEVELOPMENT = NODE_ENV === 'development';
-const PUBLIC_PATH = process.env.PUBLIC_PATH || (IS_DEVELOPMENT ? '/' : packageJSON.homepage);
+const rowPath = process.env.PUBLIC_PATH || (IS_DEVELOPMENT ? '/' : packageJSON.homepage);
+const PUBLIC_PATH = ensureSlash(rowPath, true);
 
 module.exports = {
   entry: [packageJSON.main],
@@ -93,7 +105,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION),
-      'pricess.env.PUBLIC_PATH': JSON.stringify(PUBLIC_PATH),
+      'process.env.PUBLIC_PATH': JSON.stringify(PUBLIC_PATH),
       'process.env.IS_VK': JSON.stringify(IS_VK)
     }),
     new CleanWebpackPlugin(['build']),

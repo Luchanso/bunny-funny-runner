@@ -9,7 +9,7 @@ const { NODE_ENV = 'development' } = process.env;
 const OPTIMIZATION = !!process.env.OPTIMIZATION;
 const IS_VK = !!process.env.IS_VK;
 const IS_DEVELOPMENT = NODE_ENV === 'development';
-const PUBLIC_PATH = IS_DEVELOPMENT ? '/' : packageJSON.homepage;
+const PUBLIC_PATH = process.env.PUBLIC_PATH || (IS_DEVELOPMENT ? '/' : packageJSON.homepage);
 
 module.exports = {
   entry: [packageJSON.main],

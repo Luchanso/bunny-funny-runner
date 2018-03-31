@@ -9,13 +9,14 @@ const { NODE_ENV = 'development' } = process.env;
 const OPTIMIZATION = !!process.env.OPTIMIZATION;
 const PUBLIC_PATH = process.env.PUBLIC_PATH || packageJSON.homepage;
 const IS_VK = !!process.env.IS_VK;
+const IS_DEVELOPMENT = NODE_ENV === 'development';
 
 module.exports = {
   entry: [packageJSON.main],
   output: {
     filename: 'static/js/bundle.[hash].js',
     path: path.resolve(__dirname, 'build'),
-    publicPath: PUBLIC_PATH,
+    publicPath: IS_DEVELOPMENT ? '/' : PUBLIC_PATH,
     chunkFilename: 'static/js/[name].[chunkhash].js'
   },
   resolve: {

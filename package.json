@@ -3,7 +3,7 @@
   "version": "1.6.2",
   "description": "Runner about bunny",
   "main": "./src/index.js",
-  "homepage": "http://luchanso.github.io/bunny-funny-runner",
+  "homepage": "https://luchanso.github.io/bunny-funny-runner",
   "scripts": {
     "snyk-protect": "snyk protect",
     "precommit": "lint-staged",

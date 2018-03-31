@@ -7,16 +7,16 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const { NODE_ENV = 'development' } = process.env;
 const OPTIMIZATION = !!process.env.OPTIMIZATION;
-const PUBLIC_PATH = process.env.PUBLIC_PATH || packageJSON.homepage;
 const IS_VK = !!process.env.IS_VK;
 const IS_DEVELOPMENT = NODE_ENV === 'development';
+const PUBLIC_PATH = IS_DEVELOPMENT ? '/' : packageJSON.homepage;
 
 module.exports = {
   entry: [packageJSON.main],
   output: {
     filename: 'static/js/bundle.[hash].js',
     path: path.resolve(__dirname, 'build'),
-    publicPath: IS_DEVELOPMENT ? '/' : PUBLIC_PATH,
+    publicPath: PUBLIC_PATH,
     chunkFilename: 'static/js/[name].[chunkhash].js'
   },
   resolve: {
@@ -93,6 +93,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION),
+      'pricess.env.PUBLIC_PATH': JSON.stringify(PUBLIC_PATH),
       'process.env.IS_VK': JSON.stringify(IS_VK)
     }),
     new CleanWebpackPlugin(['build']),

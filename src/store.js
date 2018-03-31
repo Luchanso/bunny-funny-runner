@@ -3,7 +3,9 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import debug from 'debug';
 
-export const history = createHistory();
+const { PUBLIC_PATH } = process.env;
+
+export const history = createHistory({ basename: PUBLIC_PATH });
 const routerMiddlewareInstance = routerMiddleware(history);
 const reduxLog = debug('redux');
 

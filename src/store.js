@@ -3,10 +3,16 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import debug from 'debug';
 
-// const { PUBLIC_PATH } = process.env;
-// const basename = new URL(PUBLIC_PATH).pathname;
+const { PUBLIC_PATH } = process.env;
+let basename;
 
-export const history = createHistory({ basename: '/bunny-funny-runner' });
+try {
+  basename = new URL(PUBLIC_PATH).pathname;
+} catch (error) {
+  basename = PUBLIC_PATH;
+}
+
+export const history = createHistory({ basename });
 const routerMiddlewareInstance = routerMiddleware(history);
 const reduxLog = debug('redux');
 

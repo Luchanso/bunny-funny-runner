@@ -12,7 +12,11 @@ export const config = {
   scaleRatio: 0.25, // 0.35
   magnetDistace: 300,
 
-  backgroundColor: 0xade6ff
+  backgroundColor: 0xade6ff,
+
+  adWidth: 1000,
+  adHeight: 125,
+  adId: 102296
 };
 
 export default config;

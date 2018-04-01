@@ -1,7 +1,6 @@
 import './init';
 import './fix';
 import { config } from '../config';
-import { runVKAds } from './ads';
 import ReactSwitcherCreator from './react-switcher';
 import { GAME_SCENES, REACT_SCENES } from '../model/scene';
 
@@ -31,11 +30,6 @@ const init = async (startScene = GAME_SCENES.BOOT, store) => {
   game.state.add(REACT_SCENES.SHOP, ReactSwitcher);
 
   game.state.start(startScene);
-
-  // TODO: Перенести в роутер и убрать переменную окружения
-  if (process.env.IS_VK) {
-    runVKAds();
-  }
 };
 
 export default init;

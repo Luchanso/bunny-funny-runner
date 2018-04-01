@@ -11,6 +11,11 @@ export default () => (
       path="/"
       component={() => <Redirect from="/" to="/web/boot" />}
     />
+    <Route
+      exact
+      path="/vk"
+      component={() => <Redirect from="/vk" to="/vk/boot" />}
+    />
     <Route path="/:platform/boot" component={GameScene} />
     <Route path="/:platform/menu" component={GameScene} />
     <Route path="/:platform/loader" component={GameScene} />

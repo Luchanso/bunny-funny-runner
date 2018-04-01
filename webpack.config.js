@@ -20,8 +20,22 @@ const { NODE_ENV = 'development' } = process.env;
 const OPTIMIZATION = !!process.env.OPTIMIZATION;
 const IS_VK = !!process.env.IS_VK;
 const IS_DEVELOPMENT = NODE_ENV === 'development';
-const rowPath = process.env.PUBLIC_PATH || (IS_DEVELOPMENT ? '/' : packageJSON.homepage);
+const rowPath =
+  process.env.PUBLIC_PATH || (IS_DEVELOPMENT ? '/' : packageJSON.homepage);
 const PUBLIC_PATH = ensureSlash(rowPath, true);
+
+const htmlWebpackPluginOptions = {
+  inject: true,
+  minify: {
+    removeAttributeQuotes: true,
+    collapseWhitespace: true,
+    html5: true,
+    minifyCSS: true,
+    removeComments: true,
+    removeEmptyAttributes: true
+  },
+  template: 'public/index.html'
+};
 
 module.exports = {
   entry: [packageJSON.main],
@@ -85,22 +99,12 @@ module.exports = {
             }
           }
         ]
-      },
+      }
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      inject: true,
-      minify: {
-        removeAttributeQuotes: true,
-        collapseWhitespace: true,
-        html5: true,
-        minifyCSS: true,
-        removeComments: true,
-        removeEmptyAttributes: true
-      },
-      template: 'public/index.html'
-    }),
+    new HtmlWebpackPlugin(htmlWebpackPluginOptions),
+    new HtmlWebpackPlugin({ ...htmlWebpackPluginOptions, filename: '404.html' }),
     new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
@@ -115,7 +119,7 @@ module.exports = {
     compress: true,
     port: 3000,
     historyApiFallback: {
-      disableDotRule: true,
+      disableDotRule: true
     }
   }
 };

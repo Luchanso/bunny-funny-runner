@@ -20,7 +20,7 @@ const styles = {
   },
   body: {
     width: config.width,
-    height: config.height
+    height: config.height + config.adHeight
   }
 };
 

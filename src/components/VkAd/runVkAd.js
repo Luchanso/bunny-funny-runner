@@ -1,21 +1,28 @@
 /* eslint-disable */
 
-export const runVKAds = () => {
+import debug from 'debug';
+
+const vkLog = debug('vk');
+
+const runVkAd = id => {
+  vkLog(`run vk ad with id ${id}`);
   setTimeout(function() {
     var adsParams = {
-      ad_unit_id: 102296,
+      ad_unit_id: id,
       ad_unit_hash: 'cd03259b32fb224628362b0fdabb4254'
     };
     function vkAdsInit() {
-      VK.Widgets.Ads('vk_ads_102296', {}, adsParams);
+      vkLog('call vkAdsInit()', id, {}, adsParams);
+      VK.Widgets.Ads(`vk_ads_${id}`, {}, adsParams);
     }
     if (window.VK && VK.Widgets) {
       vkAdsInit();
     } else {
+      vkLog('load vk scripts');
       if (!window.vkAsyncInitCallbacks) window.vkAsyncInitCallbacks = [];
       vkAsyncInitCallbacks.push(vkAdsInit);
       var protocol = location.protocol === 'https:' ? 'https:' : 'http:';
-      var adsElem = document.getElementById('vk_ads_102296');
+      var adsElem = document.getElementById(`vk_ads_${id}`);
       var scriptElem = document.createElement('script');
       scriptElem.type = 'text/javascript';
       scriptElem.async = true;
@@ -24,3 +31,5 @@ export const runVKAds = () => {
     }
   }, 0);
 };
+
+export default runVkAd;

@@ -9,14 +9,11 @@ import UnicorneEmoji from './UnicorneEmoji';
 const styles = {
   container: {
     width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center'
+    height: '100%'
   },
   header: {
     textAlign: 'center',
-    marginBottom: 60
+    margin: '60px 0 60px'
   }
 };
 

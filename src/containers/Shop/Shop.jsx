@@ -3,13 +3,20 @@ import { shape } from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 
-import ShopItem from '../../components/ShopItem';
-// import { config } from '../../config';
+import ShopItemList from './ShopItemList';
+import UnicorneEmoji from './UnicorneEmoji';
 
 const styles = {
   container: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  header: {
+    textAlign: 'center',
+    marginBottom: 60
   }
 };
 
@@ -49,22 +56,10 @@ class Shop extends React.Component {
 
     return (
       <div className={classes.container}>
-        <Typography variant="display3">
-          Awesome Shop{' '}
-          <span role="img" aria-label="unicorne">
-            🦄
-          </span>
+        <Typography variant="display3" className={classes.header}>
+          Awesome Shop <UnicorneEmoji />
         </Typography>
-        {items.map(item => (
-          <ShopItem
-            id={item.id}
-            title={item.title}
-            price={item.price}
-            description={item.description}
-            onBuy={this.handleBuy}
-            img={item.img}
-          />
-        ))}
+        <ShopItemList onBuy={this.handleBuy} items={items} />
       </div>
     );
   }

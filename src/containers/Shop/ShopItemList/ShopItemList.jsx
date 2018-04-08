@@ -1,30 +1,26 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
-import { shape, arrayOf, func } from 'prop-types';
+import { shape, arrayOf, func, string } from 'prop-types';
+import classNames from 'classnames';
 
 import ShopItem from '../../../components/ShopItem';
 import styles from './styles';
 
-const ShopItemList = ({ items, classes, onBuy }) => (
-  <div className={classes.list}>
-    {items.map(item => (
-      <ShopItem
-        key={item.id}
-        id={item.id}
-        title={item.title}
-        price={item.price}
-        description={item.description}
-        onBuy={onBuy}
-        img={item.img}
-      />
-    ))}
+const ShopItemList = ({ items, classes, onBuy, className, ...otherArgs }) => (
+  <div className={classNames(classes.list, className)} {...otherArgs}>
+    {items.map(item => <ShopItem key={item.id} onBuy={onBuy} {...item} />)}
   </div>
 );
 
 ShopItemList.propTypes = {
   items: arrayOf(shape({})).isRequired,
   classes: shape({}).isRequired,
-  onBuy: func.isRequired
+  onBuy: func.isRequired,
+  className: string
+};
+
+ShopItemList.defaultProps = {
+  className: ''
 };
 
 export default withStyles(styles)(ShopItemList);

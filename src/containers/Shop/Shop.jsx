@@ -50,7 +50,6 @@ class Shop extends React.Component {
           Awesome Shop <UnicorneEmoji />
         </Typography>
         <div className={classes.list}>
-          {/* TODO: Сделать кнопки перелистывания */}
           <IconButton
             className={classes.navigationIcon}
             onClick={this.handlePrevPage}

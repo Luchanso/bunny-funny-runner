@@ -1,5 +1,6 @@
 export default {
   container: {
+    // TODO: remove this background
     background: 'aliceblue',
     width: '100%',
     height: '100%'

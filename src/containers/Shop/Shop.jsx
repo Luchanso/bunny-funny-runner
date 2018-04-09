@@ -2,12 +2,10 @@ import React from 'react';
 import { shape } from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import ChevronLeft from 'material-ui-icons/ChevronLeft';
-import ChevronRight from 'material-ui-icons/ChevronRight';
 
 import ShopItemList from './ShopItemList';
 import UnicorneEmoji from './UnicorneEmoji';
+import NavigationButton, { DIRECTION } from './NavigationButton';
 import styles from './styles';
 import { items } from './expiremental-data';
 
@@ -50,12 +48,10 @@ class Shop extends React.Component {
           Awesome Shop <UnicorneEmoji />
         </Typography>
         <div className={classes.list}>
-          <IconButton
-            className={classes.navigationIcon}
+          <NavigationButton
             onClick={this.handlePrevPage}
-          >
-            <ChevronLeft className={classes.navigationIcon} />
-          </IconButton>
+            direction={DIRECTION.LEFT}
+          />
           <div className={classes.scroll}>
             <ShopItemList
               style={{
@@ -66,12 +62,10 @@ class Shop extends React.Component {
               items={items}
             />
           </div>
-          <IconButton
-            className={classes.navigationIcon}
+          <NavigationButton
             onClick={this.handleNextPage}
-          >
-            <ChevronRight className={classes.navigationIcon} />
-          </IconButton>
+            direction={DIRECTION.RIGHT}
+          />
         </div>
       </div>
     );

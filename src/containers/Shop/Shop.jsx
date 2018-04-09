@@ -58,7 +58,9 @@ class Shop extends React.Component {
           </IconButton>
           <div className={classes.scroll}>
             <ShopItemList
-              style={{ marginLeft: -OFFSET_DISTANCE * offset }}
+              style={{
+                transform: `translateX(${-OFFSET_DISTANCE * offset}px)`
+              }}
               className={classes.items}
               onBuy={this.handleBuy}
               items={items}

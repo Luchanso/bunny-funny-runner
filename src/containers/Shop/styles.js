@@ -21,7 +21,7 @@ export default {
   },
   items: {
     flexShrink: '0',
-    transition: '0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28)'
+    transition: '0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28)'
   },
   navigationIcon: {
     width: 100,

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{"./src/containers/Shop/ShopItemList/styles.js":function(e,s,o){"use strict";Object.defineProperty(s,"__esModule",{value:!0}),s.default={list:{display:"flex",justifyContent:"space-around"},scroll:{display:"flex",overflow:"hidden",paddingBottom:5,minWidth:800}}}}]);

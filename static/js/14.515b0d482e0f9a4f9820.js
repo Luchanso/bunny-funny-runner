@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[14],{"./src/containers/Shop/Header/styles.js":function(e,n,s){"use strict";Object.defineProperty(n,"__esModule",{value:!0}),n.default={header:{textAlign:"center",padding:"60px 0 60px"}}}}]);

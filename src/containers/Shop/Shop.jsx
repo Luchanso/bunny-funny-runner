@@ -1,62 +1,78 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
 
 import ShopItemList from './ShopItemList';
-import UnicorneEmoji from './UnicorneEmoji';
+import Header from './Header';
+import NavigationButton, { DIRECTION } from './NavigationButton';
+import styles from './styles';
+import { items } from './expiremental-data';
 
-const styles = {
-  container: {
-    width: '100%',
-    height: '100%'
-  },
-  header: {
-    textAlign: 'center',
-    margin: '60px 0 60px'
-  }
-};
-
-const LOREM =
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est, quisquam? Eos praesentium perferendis hic eius optio impedit expedita architecto nobis corrupti quod, blanditiis at ducimus ipsam in natus iure eaque!';
-
-const items = [
-  {
-    id: '123',
-    title: 'Title',
-    price: 99000,
-    description: LOREM,
-    img:
-      'https://images.unsplash.com/photo-1522093537031-3ee69e6b1746?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a634781c01d2dd529412c2d1e2224ec0&auto=format&fit=crop&w=1498&q=80'
-  },
-  {
-    id: '1234',
-    title: 'Unicorne Item 2',
-    price: 232000,
-    description: LOREM,
-    img:
-      'https://images.unsplash.com/photo-1495900158145-fa1e1786861b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=d2cb8ee4de153b83ed42e3ab1943e6e5&auto=format&fit=crop&w=1193&q=80'
-  }
-];
+// Сколько элементов магазина показывать на странице
+const SHOW_ITEMS = 2;
+const OFFSET_DISTANCE = 400;
 
 class Shop extends React.Component {
   static propTypes = {
     classes: shape({}).isRequired
   };
 
+  state = {
+    offset: 0
+  };
+
   handleBuy = id => {
     console.log(id);
   };
 
+  handleNextPage = () => {
+    this.setState(({ offset }) => ({
+      offset: offset + SHOW_ITEMS
+    }));
+  };
+
+  handlePrevPage = () => {
+    this.setState(({ offset }) => ({
+      offset: offset - SHOW_ITEMS
+    }));
+  };
+
+  canScrollSelector() {
+    const { offset } = this.state;
+    const isCanScrollLeft = offset > 0;
+    const isCanScrollRight = items.length - SHOW_ITEMS - offset > 0;
+
+    return { isCanScrollLeft, isCanScrollRight };
+  }
+
   render() {
     const { classes } = this.props;
+    const { offset } = this.state;
+    const { isCanScrollLeft, isCanScrollRight } = this.canScrollSelector();
 
     return (
       <div className={classes.container}>
-        <Typography variant="display3" className={classes.header}>
-          Awesome Shop <UnicorneEmoji />
-        </Typography>
-        <ShopItemList onBuy={this.handleBuy} items={items} />
+        <Header />
+        <div className={classes.list}>
+          <NavigationButton
+            onClick={this.handlePrevPage}
+            direction={DIRECTION.LEFT}
+            isVisibility={isCanScrollLeft}
+          />
+          <ShopItemList
+            style={{
+              transform: `translateX(${-OFFSET_DISTANCE * offset}px)`
+            }}
+            className={classes.items}
+            onBuy={this.handleBuy}
+            items={items}
+          />
+          <NavigationButton
+            onClick={this.handleNextPage}
+            direction={DIRECTION.RIGHT}
+            isVisibility={isCanScrollRight}
+          />
+        </div>
       </div>
     );
   }

@@ -1,10 +1,9 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
 
 import ShopItemList from './ShopItemList';
-import UnicorneEmoji from './UnicorneEmoji';
+import Header from './Header';
 import NavigationButton, { DIRECTION } from './NavigationButton';
 import styles from './styles';
 import { items } from './expiremental-data';
@@ -38,33 +37,40 @@ class Shop extends React.Component {
     }));
   };
 
+  canScrollSelector() {
+    const { offset } = this.state;
+    const isCanScrollLeft = offset > 0;
+    const isCanScrollRight = items.length - SHOW_ITEMS - offset > 0;
+
+    return { isCanScrollLeft, isCanScrollRight };
+  }
+
   render() {
     const { classes } = this.props;
     const { offset } = this.state;
+    const { isCanScrollLeft, isCanScrollRight } = this.canScrollSelector();
 
     return (
       <div className={classes.container}>
-        <Typography variant="display3" className={classes.header}>
-          Awesome Shop <UnicorneEmoji />
-        </Typography>
+        <Header />
         <div className={classes.list}>
           <NavigationButton
             onClick={this.handlePrevPage}
             direction={DIRECTION.LEFT}
+            isVisibility={isCanScrollLeft}
           />
-          <div className={classes.scroll}>
-            <ShopItemList
-              style={{
-                transform: `translateX(${-OFFSET_DISTANCE * offset}px)`
-              }}
-              className={classes.items}
-              onBuy={this.handleBuy}
-              items={items}
-            />
-          </div>
+          <ShopItemList
+            style={{
+              transform: `translateX(${-OFFSET_DISTANCE * offset}px)`
+            }}
+            className={classes.items}
+            onBuy={this.handleBuy}
+            items={items}
+          />
           <NavigationButton
             onClick={this.handleNextPage}
             direction={DIRECTION.RIGHT}
+            isVisibility={isCanScrollRight}
           />
         </div>
       </div>

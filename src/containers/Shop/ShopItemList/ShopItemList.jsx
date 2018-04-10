@@ -7,8 +7,10 @@ import ShopItem from '../../../components/ShopItem';
 import styles from './styles';
 
 const ShopItemList = ({ items, classes, onBuy, className, ...otherArgs }) => (
-  <div className={classNames(classes.list, className)} {...otherArgs}>
-    {items.map(item => <ShopItem key={item.id} onBuy={onBuy} {...item} />)}
+  <div className={classes.scroll}>
+    <div className={classNames(classes.list, className)} {...otherArgs}>
+      {items.map(item => <ShopItem key={item.id} onBuy={onBuy} {...item} />)}
+    </div>
   </div>
 );
 

@@ -1,10 +1,9 @@
 import Phaser from 'phaser';
 import { GAME_SCENES } from '../../model/scene';
 
-export default class Boot extends Phaser.State {
+export default class Boot extends Phaser.Scene {
   create() {
-    this.game.stage.disableVisibilityChange = true;
-
-    this.state.start(GAME_SCENES.LOADER);
+    // this.game.stage.disableVisibilityChange = true;
+    // this.state.start(GAME_SCENES.LOADER);
   }
 }

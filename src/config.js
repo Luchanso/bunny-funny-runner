@@ -1,4 +1,5 @@
 export const config = {
+  canvasSelector: '#game',
   minWidth: 640,
   minHeight: 360,
 

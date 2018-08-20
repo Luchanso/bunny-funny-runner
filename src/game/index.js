@@ -1,20 +1,20 @@
 import Phaser from 'phaser';
 import { config } from '../config';
-import ReactSwitcherCreator from './react-switcher';
-import { GAME_SCENES, REACT_SCENES } from '../model/scene';
 import Boot from './boot';
+import Loader from './loader';
+import Menu from './menu';
 
-// TODO: Start Scene не будет работать
-const init = async (startScene = GAME_SCENES.BOOT, store) => {
-  const { Game, AUTO } = Phaser;
+const init = async () => {
+  const { Game } = Phaser;
   const gameConfig = {
     width: config.width,
     height: config.height,
     canvas: document.querySelector('#test-game'),
-    scene: [Boot]
+    scene: [Boot, Loader, Menu]
   };
 
   const game = new Game(gameConfig);
+  window.game = game;
 
   // const Boot = (await import('./boot')).default;
   // const Main = (await import('./game')).default;

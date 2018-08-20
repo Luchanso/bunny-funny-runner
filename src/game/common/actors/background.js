@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 
-export default class Background extends Phaser.TileSprite {
-  constructor(game, x, y, name, speed, autoScroll = false) {
-    super(game, x, y, 1024, 1024, name);
+export default class Background extends Phaser.GameObjects.TileSprite {
+  constructor(sceen, x, y, name, speed, autoScroll = false) {
+    super(sceen, x, y, 1024, 1024, name);
 
     this.tileScale.setTo(this.game.height / this.height);
     this.fixedToCamera = true;

@@ -23,6 +23,7 @@ const IS_DEVELOPMENT = NODE_ENV === 'development';
 const rowPath =
   process.env.PUBLIC_PATH || (IS_DEVELOPMENT ? '/' : packageJSON.homepage);
 const PUBLIC_PATH = ensureSlash(rowPath, true);
+const devtool = IS_DEVELOPMENT ? 'cheap-module-source-map' : false;
 
 const htmlWebpackPluginOptions = {
   inject: true,
@@ -49,6 +50,7 @@ module.exports = {
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx']
   },
   mode: NODE_ENV,
+  devtool,
   optimization: {
     splitChunks: {
       cacheGroups: {
@@ -104,8 +106,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginOptions),
-    new HtmlWebpackPlugin({ ...htmlWebpackPluginOptions, filename: '404.html' }),
-    new webpack.NamedModulesPlugin(),
+    new HtmlWebpackPlugin({
+      ...htmlWebpackPluginOptions,
+      filename: '404.html'
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.OPTIMIZATION': JSON.stringify(OPTIMIZATION),

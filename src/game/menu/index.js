@@ -1,22 +1,27 @@
 import Phaser from 'phaser';
-import { config } from '../config';
+import Config from '../../config';
 import Btn from './ui/btn';
 import Background from '../common/actors/background';
 import preload from './preload';
-import { GAME_SCENES, REACT_SCENES } from '../../model/scene';
+import { GAME_SCENES } from '../../model/scene';
 
-export default class Menu extends Phaser.State {
+export default class Menu extends Phaser.Scene {
+  constructor() {
+    super(GAME_SCENES.MENU);
+  }
+
   preload() {
     preload(this.load);
   }
 
   create() {
-    this.stage.backgroundColor = config.backgroundColor;
+    this.cameras.main.setBackgroundColor(Config.backgroundColor);
+    global.test = this.cameras.main;
 
     this.createBackground();
-    this.createPlayBtn();
-    this.createShopBtn();
-    this.createLogo();
+    // this.createPlayBtn();
+    // this.createShopBtn();
+    // this.createLogo();
   }
 
   createLogo() {
@@ -51,22 +56,6 @@ export default class Menu extends Phaser.State {
     this.logo.anchor.setTo(0.5);
   }
 
-  createShopBtn() {
-    const btnColor = 0xffffff;
-    const icon = 'i-shop';
-
-    this.shopBtn = new Btn(
-      this.game,
-      this.game.width / 2 - 100,
-      this.game.height / 2,
-      btnColor,
-      icon
-    );
-
-    this.shopBtn.clicked.add(this.openShop, this);
-    this.add.existing(this.shopBtn);
-  }
-
   createPlayBtn() {
     const btnColor = 0xffffff;
     const icon = 'i-play';
@@ -85,21 +74,23 @@ export default class Menu extends Phaser.State {
 
   createBackground() {
     this.backgrounds = this.add.group();
+    const addToScene = true;
 
-    this.backgrounds.add(
-      new Background(this.game, 0, 0, 'layer2', -0.05, true)
+    this.add.existing(
+      new Background(this, 0, 0, 'layer2', -0.05, true),
+      addToScene
     );
-    this.backgrounds.add(new Background(this.game, 0, 0, 'layer3', -0.1, true));
     this.backgrounds.add(
-      new Background(this.game, 0, 0, 'layer4', -0.25, true)
+      new Background(this, 0, 0, 'layer3', -0.1, true),
+      addToScene
+    );
+    this.backgrounds.add(
+      new Background(this, 0, 0, 'layer4', -0.25, true),
+      addToScene
     );
   }
 
   startGame() {
-    this.state.start(GAME_SCENES.MAIN);
-  }
-
-  openShop() {
-    this.state.start(REACT_SCENES.SHOP);
+    this.scene.start(GAME_SCENES.MAIN);
   }
 }

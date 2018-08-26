@@ -3,7 +3,7 @@ node_js: node
 cache:
   yarn: true
 
-install: yarn install --production=false
+install: yarn install --ignore-engines --production=false
 
 jobs:
   include:

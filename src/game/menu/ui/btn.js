@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-export default class Btn extends Phaser.Graphics {
+export default class Btn extends Phaser.GameObjects.Graphics {
   constructor(game, x, y, color, icon) {
     super(game, x, y);
 

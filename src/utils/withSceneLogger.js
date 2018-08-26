@@ -3,7 +3,6 @@ import debug from 'debug';
 export default sceneName => SceneClass =>
   class SceneWithLogger extends SceneClass {
     constructor(...props) {
-      console.log('test');
       super(...props);
       this.log = debug(`scene:${sceneName}`);
       this.log('call constructor');

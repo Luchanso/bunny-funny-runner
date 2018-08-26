@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import { GAME_SCENES } from '../../model/scene';
+// import withSceneLogger from '../../utils/withSceneLogger';
 
-export default class Boot extends Phaser.Scene {
+class Boot extends Phaser.Scene {
   constructor() {
     super(GAME_SCENES.BOOT);
   }
@@ -10,3 +11,6 @@ export default class Boot extends Phaser.Scene {
     this.scene.start(GAME_SCENES.LOADER);
   }
 }
+
+// export default withSceneLogger(GAME_SCENES.BOOT)(Boot);
+export default Boot;

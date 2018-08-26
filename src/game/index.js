@@ -1,19 +1,20 @@
 import Phaser from 'phaser';
-import { config } from '../config';
+import Config from '../config';
 import Boot from './boot';
 import Loader from './loader';
 import Menu from './menu';
 
-const init = async () => {
+const init = () => {
   const { Game } = Phaser;
   const gameConfig = {
-    width: config.width,
-    height: config.height,
+    width: Config.width,
+    height: Config.height,
     canvas: document.querySelector('#test-game'),
     scene: [Boot, Loader, Menu]
   };
 
   const game = new Game(gameConfig);
+  // TODO: Удалить, нужно только для тестов
   window.game = game;
 
   // const Boot = (await import('./boot')).default;

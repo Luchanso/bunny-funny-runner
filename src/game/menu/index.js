@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { config } from '../config';
+import Config from '../../config';
 import Btn from './ui/btn';
 import Background from '../common/actors/background';
 import preload from './preload';
@@ -15,15 +15,13 @@ export default class Menu extends Phaser.Scene {
   }
 
   create() {
-    // this.stage.backgroundColor = config.backgroundColor;
-    const graphics = this.add.graphics();
-    graphics.fillStyle(config.backgroundColor, 1);
-    graphics.fillRect(0, 0, config.width, config.height);
+    this.cameras.main.setBackgroundColor(Config.backgroundColor);
+    global.test = this.cameras.main;
 
     this.createBackground();
-    this.createPlayBtn();
-    this.createShopBtn();
-    this.createLogo();
+    // this.createPlayBtn();
+    // this.createShopBtn();
+    // this.createLogo();
   }
 
   createLogo() {
@@ -76,10 +74,20 @@ export default class Menu extends Phaser.Scene {
 
   createBackground() {
     this.backgrounds = this.add.group();
+    const addToScene = true;
 
-    this.backgrounds.add(new Background(this, 0, 0, 'layer2', -0.05, true));
-    this.backgrounds.add(new Background(this, 0, 0, 'layer3', -0.1, true));
-    this.backgrounds.add(new Background(this, 0, 0, 'layer4', -0.25, true));
+    this.add.existing(
+      new Background(this, 0, 0, 'layer2', -0.05, true),
+      addToScene
+    );
+    this.backgrounds.add(
+      new Background(this, 0, 0, 'layer3', -0.1, true),
+      addToScene
+    );
+    this.backgrounds.add(
+      new Background(this, 0, 0, 'layer4', -0.25, true),
+      addToScene
+    );
   }
 
   startGame() {

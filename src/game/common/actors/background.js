@@ -1,36 +1,35 @@
 import Phaser from 'phaser';
+import Config from '../../../config';
 
 export default class Background extends Phaser.GameObjects.TileSprite {
-  constructor(sceen, x, y, name, speed, autoScroll = false) {
-    super(sceen, x, y, 1024, 1024, name);
+  constructor(scene, x, y, name, speed, autoScroll = false) {
+    super(scene, x, y, 1024, 1024, name);
 
-    this.tileScale.setTo(this.game.height / this.height);
-    this.fixedToCamera = true;
-    this.width = this.game.width;
-    this.autoScroll = autoScroll;
+    this.tileScaleX = Config.height / this.height;
+    this.tileScaleY = Config.height / this.height;
+    this.setOrigin(0);
+    // https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.TileSprite.html#scrollFactorX__anchor
+    // like this.fixedToCamera = true;
+    this.setScrollFactor(0);
 
-    this.data.speed = speed;
-    this.data.isStoped = true;
+    this.data = {
+      autoScroll,
+      speed,
+      isStoped: true
+    };
 
-    if (this.autoScroll) {
-      this.tween = this.game.add
-        .tween(this.tilePosition)
-        .to(
-          {
-            x: -1000
-          },
-          50000,
-          null,
-          false,
-          0,
-          -1,
-          true
-        )
-        .start();
+    if (this.data.autoScroll) {
+      this.tween = this.scene.add.tween({
+        targets: this,
+        duration: 50000,
+        tilePositionX: -1000,
+        repeat: -1,
+        easy: 'Sine.easeInOut'
+      });
     }
   }
 
   update() {
-    this.tilePosition.x = this.game.camera.x * this.data.speed;
+    // this.tilePositionX = this.camera.x * this.data.speed;
   }
 }

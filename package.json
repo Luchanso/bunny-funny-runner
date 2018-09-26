@@ -74,7 +74,7 @@
     "lint-staged": "^7.0.0",
     "prettier-eslint-cli": "^4.7.1",
     "snyk": "^1.69.10",
-    "webpack": "^4.1.1",
+    "webpack": "^4.20.2",
     "webpack-cli": "^3.0.0",
     "webpack-dev-server": "^3.1.0"
   },

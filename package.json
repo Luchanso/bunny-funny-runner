@@ -76,7 +76,7 @@
     "snyk": "^1.69.10",
     "webpack": "^4.1.1",
     "webpack-cli": "^3.0.0",
-    "webpack-dev-server": "^3.1.0"
+    "webpack-dev-server": "^3.7.0"
   },
   "snyk": true
 }
